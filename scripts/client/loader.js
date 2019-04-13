@@ -16,17 +16,16 @@ MyGame = {
 //------------------------------------------------------------------
 MyGame.loader = (function () {
     'use strict';
-    let scriptOrder = [
-        {
-            scripts: ['queue'],
+    let scriptOrder = [{
+            scripts: ['helper/helperFunctions', 'helper/queue'],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
-            scripts: ['input'],
+            scripts: ['input/input'],
             message: 'Input loaded',
             onComplete: null
         }, {
-            scripts: ['player', 'player-remote'],
+            scripts: ['objects/player', 'objects/player-remote'],
             message: 'Player models loaded',
             onComplete: null
         }, {
@@ -50,10 +49,10 @@ MyGame.loader = (function () {
             source: 'assets/images/players/playerShip1_red.png'
         }];
 
-
-
-
-
+    function numberPad(number, padding){
+        number += '';
+        return number.padStart(padding, '0');
+    }
 
     /// Loads the tiled Image
     function prepareTiledImage(assetArray, rootName, rootKey, sizeX, sizeY, tileSize) {
@@ -79,7 +78,7 @@ MyGame.loader = (function () {
         }
     }
 
-    prepareTiledImage(assetOrder, '/assets/images/background/tiles', 'background', 3840, 3840, 384);
+
     //------------------------------------------------------------------
     //
     // Helper function used to load scripts in the order specified by the
@@ -200,6 +199,7 @@ MyGame.loader = (function () {
     //
     // Start with loading the assets, then the scripts.
     console.log('Starting to dynamically load project assets');
+    prepareTiledImage(assetOrder, '/assets/images/background/tiles/tiles', 'background', 3840, 3840, 384);
     loadAssets(assetOrder,
         function (source, asset) {    // Store it on success
             MyGame.assets[source.key] = asset;
@@ -213,5 +213,6 @@ MyGame.loader = (function () {
             loadScripts(scriptOrder, mainComplete);
         }
     );
+    console.log(MyGame.assets);
 
 }());
