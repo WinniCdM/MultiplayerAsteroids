@@ -71,7 +71,7 @@ MyGame.graphics = (function() {
             y: center.y * canvas.width
         };
         let localSize = {
-            width: size.width * canvas.width,
+            width: size.width * canvas.width / 2,
             height: size.height * canvas.height
         };
 
