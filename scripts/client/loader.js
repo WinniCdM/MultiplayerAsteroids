@@ -44,10 +44,10 @@ MyGame.loader = (function() {
         }],
         assetOrder = [{
             key: 'player-self',
-            source: 'assets/playerShip1_blue.png'
+            source: 'assets/images/players/playerShip1_blue.png'
         }, {
             key: 'player-other',
-            source: 'assets/playerShip1_red.png'
+            source: 'assets/images/players/playerShip1_red.png'
         }];
 
     //------------------------------------------------------------------
