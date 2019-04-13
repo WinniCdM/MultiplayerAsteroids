@@ -1,6 +1,9 @@
 body{
     padding: 0;
     margin: 0;
+    height: 100%;
+    width: 100%;
+    background-color: black;
 }
 
 #container{
@@ -16,5 +19,5 @@ body{
 }
 
 #canvas-main {
-    border: solid 1px black;
+    border: solid 1px white;
 }
