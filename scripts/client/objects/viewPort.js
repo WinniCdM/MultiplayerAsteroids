@@ -35,20 +35,14 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
     });
 
     that.update = function(elapsedTime) {
-
         // TODO: update position of viewport based on player position
         playerLocalPosition.x = playerGlobalPosition.x - position.x 
         playerLocalPosition.y = playerGlobalPosition.y - position.y
 
-        
-
-        console.log(playerGlobalPosition);
-
-
         if (playerLocalPosition.x < slidingWindowMargin){ 
             //move viewport to the left
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
-        } else if (playerLocalPosition.x > 1 - slidingWindowMargin){
+        } else if (playerLocalPosition.x > 2 - slidingWindowMargin){
             //move to the right
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
         }
