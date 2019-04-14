@@ -70,6 +70,8 @@ MyGame.graphics = (function() {
             x: center.x/2 * canvas.width,
             y: center.y * canvas.height
         };
+        // console.log("Player global Position: ", center)
+        // console.log("canvas position: ", localCenter);
         let localSize = {
             width: size.width * canvas.width / 2,
             height: size.height * canvas.height
@@ -82,11 +84,36 @@ MyGame.graphics = (function() {
             localSize.height);
     }
 
+    // --------------------------------------------------------------
+    //
+    // Draws a sub-texture to the canvas with the following specification:
+    //    image: Image
+    //    imageCorner: {x: , y: } upperLeft corner of pixel location on image of where to clip
+    //    imageSize: {width:, height: } size of image to clip
+    //    canvasCorner: {x: , y: } upperLeft corner of where to place on canvas
+    //    canvasSize: {width:, height: } // Size to render to Canvas
+    //
+    // --------------------------------------------------------------
+    function drawSubTexture(image, imageCorner, imageSize, canvasCorner, canvasSize) {
+        context.save();
+
+        // Pick the selected sprite from the sprite sheet to render
+        context.drawImage(
+            image,
+            imageCorner.x, imageCorner.y,        //Where to start clipping image
+            imageSize.width, imageSize.height,   //Size of clipping
+            canvasCorner.x,canvasCorner.y,       //Where to put on canvas    
+            canvasSize.width, canvasSize.width); //Size to put on Canvas
+
+        context.restore();
+    }
+
     return {
         clear: clear,
         saveContext: saveContext,
         restoreContext: restoreContext,
         rotateCanvas: rotateCanvas,
-        drawImage: drawImage
+        drawImage: drawImage,
+        drawSubTexture:drawSubTexture
     };
 }());

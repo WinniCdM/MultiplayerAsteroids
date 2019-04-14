@@ -37,7 +37,7 @@ MyGame.loader = (function () {
             message: 'Graphics loaded',
             onComplete: null
         }, {
-            scripts: ['rendering/player', 'rendering/player-remote'],
+            scripts: ['rendering/player', 'rendering/player-remote', 'rendering/viewPort'],
             message: 'Renderers loaded',
             onComplete: null
         }, {
@@ -228,5 +228,7 @@ MyGame.loader = (function () {
             loadScripts(scriptOrder, mainComplete);
         }
     );
+
+    //console.log("assets: ", MyGame.assets);
 
 }());
