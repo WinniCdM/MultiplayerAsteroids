@@ -173,11 +173,13 @@ MyGame.main = (function(graphics, renderer, input, components) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
+        renderer.ViewPort.render(viewPort);
         renderer.Player.render(playerSelf.model, playerSelf.texture);
         for (let id in playerOthers) {
             let player = playerOthers[id];
             renderer.PlayerRemote.render(player.model, player.texture);
         }
+        
     }
 
     //------------------------------------------------------------------
