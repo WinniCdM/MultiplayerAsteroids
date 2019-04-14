@@ -38,7 +38,8 @@ MyGame.main = (function(graphics, renderer, input, components) {
         playerSelf.model.thrustRate = data.thrustRate;
         playerSelf.model.rotateRate = data.rotateRate;
 
-        viewPort = components.ViewPort(playerSelf.model.position);
+        viewPort.position.x = playerSelf.model.position.x -1;
+        viewPort.position.y = playerSelf.model.position.y -.5;
     });
 
     //------------------------------------------------------------------

@@ -6,10 +6,9 @@
 MyGame.components.ViewPort = function(playerGlobalPosition) {
     'use strict';
     let that = {};
-    let initialSetupComplete = false;
     let position = { // world units 0-10
-        x: playerGlobalPosition.x - 1,
-        y: playerGlobalPosition.y - .5
+        x: 0,
+        y: 0
     };
     
     let size = { // world units 0-10
@@ -36,17 +35,17 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
     });
 
     that.update = function(elapsedTime) {
+
         // TODO: update position of viewport based on player position
         playerLocalPosition.x = playerGlobalPosition.x - position.x 
         playerLocalPosition.y = playerGlobalPosition.y - position.y
 
-        if (!initialSetupComplete){ // if the port hasn't been setup, center the player on the view port
-            position.x = playerGlobalPosition.x - 1;
-            position.y = playerGlobalPosition.y - .5
-            initialSetupComplete = true;
-        }
+        
 
-        console.log(position);
+        // console.log('PlayerGP: ', playerGlobalPosition);
+        // console.log('ViewPortGP: ', position);
+        // console.log('Player local VPP: ', playerLocalPosition);
+
 
         if (playerLocalPosition.x < slidingWindowMargin){ 
             //move viewport to the left
