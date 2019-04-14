@@ -29,6 +29,10 @@ MyGame.loader = (function () {
             message: 'Player models loaded',
             onComplete: null
         }, {
+            scripts: ['objects/viewPort'],
+            message: 'ViewPort models loaded',
+            onComplete: null
+        }, {
             scripts: ['rendering/graphics'],
             message: 'Graphics loaded',
             onComplete: null
@@ -213,6 +217,5 @@ MyGame.loader = (function () {
             loadScripts(scriptOrder, mainComplete);
         }
     );
-    console.log(MyGame.assets);
 
 }());

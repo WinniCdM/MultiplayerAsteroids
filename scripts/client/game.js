@@ -12,6 +12,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
             model: components.Player(),
             texture: MyGame.assets['player-self']
         },
+        viewPort = components.ViewPort(playerSelf.model.position),
         playerOthers = {},
         messageHistory = MyGame.utilities.Queue(),
         messageId = 1,
@@ -36,6 +37,8 @@ MyGame.main = (function(graphics, renderer, input, components) {
         playerSelf.model.direction = data.direction;
         playerSelf.model.thrustRate = data.thrustRate;
         playerSelf.model.rotateRate = data.rotateRate;
+
+        viewPort = components.ViewPort(playerSelf.model.position);
     });
 
     //------------------------------------------------------------------
@@ -156,6 +159,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
     //------------------------------------------------------------------
     function update(elapsedTime) {
         playerSelf.model.update(elapsedTime);
+        viewPort.update(elapsedTime);
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
         }
