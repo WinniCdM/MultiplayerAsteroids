@@ -39,10 +39,16 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         playerLocalPosition.x = playerGlobalPosition.x - position.x 
         playerLocalPosition.y = playerGlobalPosition.y - position.y
 
+        if (!initialSetupComplete){ // if the port hasn't been setup, center the player on the view port
+            position.x = playerGlobalPosition.x - 1;
+            position.y = playerGlobalPosition.y - .5
+            initialSetupComplete = true;
+        }
+
         if (playerLocalPosition.x < slidingWindowMargin){ 
             //move viewport to the left
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
-        } else if (playerLocalPosition.x > 2 - slidingWindowMargin){
+        } else if (playerLocalPosition.x > 1 - slidingWindowMargin){
             //move to the right
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
         }
