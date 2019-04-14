@@ -115,7 +115,11 @@ function createPlayer() {
         }
 
         position.x += (momentum.x * elapsedTime);
+        if (position.x < 0) { position.x = 0; momentum.x = 0; } //lower left bound
+        if (position.x > 10) { position.x = 10; momentum.x = 0; } //upper right bound
         position.y += (momentum.y * elapsedTime);
+        if (position.y < 0) { position.y = 0; momentum.y = 0; } //lower up bound
+        if (position.y > 10) { position.y = 10; momentum.y = 0; } //upper down bound
     };
 
     return that;
