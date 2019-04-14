@@ -1,10 +1,12 @@
 let HelperFunctions = (function(){
-    function numberPad(numDigits, padding){
-        padding -= numDigits.length;
-        if (padding > 0){
-            return new Array( padding + (/\./.test( numDigits ) ? 2 : 1) ).join( '0' ) + numDigits;
-        }
-        return numDigits + "";
+    //------------------------------------------------------------------
+    //
+    // Helper function to pad a number with 0s
+    //
+    //------------------------------------------------------------------
+    function numberPad(number, padding){
+        number += '';
+        return number.padStart(padding, '0');
     }
 
     return {

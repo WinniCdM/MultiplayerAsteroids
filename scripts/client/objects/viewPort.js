@@ -20,7 +20,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         y: .5
     }
 
-    let slidingWindowMargin = .1;
+    let slidingWindowMargin = .2;
 
     Object.defineProperty(that, 'position', {
         get: () => position
@@ -42,15 +42,13 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
 
         
 
-        // console.log('PlayerGP: ', playerGlobalPosition);
-        // console.log('ViewPortGP: ', position);
-        // console.log('Player local VPP: ', playerLocalPosition);
+        console.log(playerGlobalPosition);
 
 
         if (playerLocalPosition.x < slidingWindowMargin){ 
             //move viewport to the left
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
-        } else if (playerLocalPosition.x > 2 - slidingWindowMargin){
+        } else if (playerLocalPosition.x > 1 - slidingWindowMargin){
             //move to the right
             console.log("HIT WINDOW X MARGIN ", playerLocalPosition);
         }

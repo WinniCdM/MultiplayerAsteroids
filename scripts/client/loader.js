@@ -53,12 +53,22 @@ MyGame.loader = (function () {
             source: 'assets/images/players/playerShip1_red.png'
         }];
 
+        
+    //------------------------------------------------------------------
+    //
+    // Helper function to pad a number with 0s
+    //
+    //------------------------------------------------------------------
     function numberPad(number, padding){
         number += '';
         return number.padStart(padding, '0');
     }
 
-    /// Loads the tiled Image
+    //------------------------------------------------------------------
+    //
+    // Loads a tiled image
+    //
+    //------------------------------------------------------------------
     function prepareTiledImage(assetArray, rootName, rootKey, sizeX, sizeY, tileSize) {
         let numberX = sizeX / tileSize;
         let numberY = sizeY / tileSize;
