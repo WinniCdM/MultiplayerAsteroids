@@ -55,9 +55,9 @@ MyGame.graphics = (function() {
     //
     //------------------------------------------------------------------
     function rotateCanvas(center, rotation) {
-        context.translate(center.x/2 * canvas.width, center.y * canvas.height);
+        context.translate(center.x / 2 * canvas.width, center.y * canvas.height);
         context.rotate(rotation);
-        context.translate(-center.x/2 * canvas.width, -center.y * canvas.height);
+        context.translate(-center.x / 2 * canvas.width, -center.y * canvas.height);
     }
 
     //------------------------------------------------------------------
