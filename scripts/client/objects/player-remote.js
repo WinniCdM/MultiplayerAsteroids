@@ -67,6 +67,10 @@ MyGame.components.PlayerRemote = function() {
             state.position.x += (state.momentum.x * elapsedTime);
             state.position.y += (state.momentum.y * elapsedTime);
         }
+        if (state.position.x < 0) { state.position.x = 0; state.momentum.x = 0; } //lower left bound
+        if (state.position.x > 10) { state.position.x = 10; state.momentum.x = 0; } //upper right bound
+        if (state.position.y < 0) { state.position.y = 0; state.momentum.y = 0; } //lower up bound
+        if (state.position.y > 10) { state.position.y = 10; state.momentum.y = 0; } //upper down bound
     };
 
     return that;

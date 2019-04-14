@@ -9,6 +9,8 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
 
     let initialSetupComplete = false;
 
+    let objectsWithinViewPort = [];
+
     let position = { // world units 0-10
         x: 0,
         y: 0
@@ -18,6 +20,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         width: 2,
         height: 1
     };
+
     let playerLocalPosition = { // viewport units x: 0-2 & y: 0-1
         x: 1,
         y: .5
@@ -39,6 +42,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
 
     that.update = function(elapsedTime) {
         updateViewPortAndPlayerPosition();
+        updateViewPortObjects(elapsedTime);
     };
 
     //------------------------------------------------------------------
@@ -95,6 +99,45 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
                 playerLocalPosition.y = 2 - slidingWindowMargin;
             }
         }
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Updates the list of objects found within the viewPort
+    //
+    //------------------------------------------------------------------
+    let updateViewPortObjects = function(elapsedTime){
+        objectsWithinViewPort = { 
+            "playerSelf": null,
+            "playerOthers": []
+         } //clear viewport objects
+        objectsWithinViewPort["playerSelf"] = MyGame.main.that.playerSelf; //add player
+
+        for (let index in MyGame.main.that.playerOthers){
+            let currOtherPlayer = MyGame.main.that.playerOthers[index];
+            if (checkIfWithinViewPort(currOtherPlayer.model.state.position)){
+                objectsWithinViewPort["playerOthers"].push(currOtherPlayer);
+            }
+        }
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Checks to see if the provide center is within the viewport
+    //
+    // Adds a buffer of world units around the edges
+    //
+    //------------------------------------------------------------------
+    let checkIfWithinViewPort = function(objectCenter){
+        let isWithinViewPort = false;
+        let buffer = .1 // extra space around the edges of the viewport, so things don't just pop up!
+        if (objectCenter.x > position.x - buffer && objectCenter.x < position.x + 2 + buffer){ // if within x bounds
+            if (objectCenter.y > position.y - buffer && objectCenter.y < position.y + 1 + buffer){ //if within y bounds
+                isWithinViewPort = true;
+            } 
+        }
+
+        return isWithinViewPort;
     }
 
     return that;

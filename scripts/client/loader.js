@@ -3,7 +3,7 @@ MyGame = {
     components: {},
     renderer: {},
     utilities: {},
-    assets: {}
+    assets: {},
 };
 
 //------------------------------------------------------------------
@@ -56,7 +56,8 @@ MyGame.loader = (function () {
         
     //------------------------------------------------------------------
     //
-    // Helper function to pad a number with 0s
+    // Helper function to pad a number with 0s - duplicate of 
+    // helperFunctions.js, for preloading
     //
     //------------------------------------------------------------------
     function numberPad(number, padding){
