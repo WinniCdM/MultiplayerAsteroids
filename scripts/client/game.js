@@ -16,7 +16,16 @@ MyGame.main = (function(graphics, renderer, input, components) {
         playerOthers = {},
         messageHistory = MyGame.utilities.Queue(),
         messageId = 1,
-        socket = io();
+        socket = io(),
+        that = {};
+
+    Object.defineProperty(that, 'playerSelf', {
+        get: () => playerSelf
+    });
+
+    Object.defineProperty(that, 'playerOthers', {
+        get: () => playerOthers
+    })
 
     //------------------------------------------------------------------
     //
@@ -139,7 +148,11 @@ MyGame.main = (function(graphics, renderer, input, components) {
             model.state.momentum.x = data.momentum.x;
             model.state.momentum.y = data.momentum.y
             model.goal.position.x = data.position.x;
+            if (model.goal.position.x < 0) { model.goal.position.x = 0; model.state.momentum.x = 0; } //lower left bound
+            if (model.goal.position.x > 10) { model.goal.position.x = 10; model.state.momentum.x = 0; } //upper right bound
             model.goal.position.y = data.position.y
+            if (model.goal.position.y < 0) { model.goal.position.y = 0; model.state.momentum.y = 0; } //lower up bound
+            if (model.goal.position.y > 10) { model.goal.position.y = 10; model.state.momentum.y = 0; } //upper down bound
             model.goal.direction = data.direction;
         }
     });
@@ -173,13 +186,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
-        renderer.ViewPort.render(viewPort);
-        renderer.Player.render(playerSelf.model, playerSelf.texture);
-        for (let id in playerOthers) {
-            let player = playerOthers[id];
-            renderer.PlayerRemote.render(player.model, player.texture);
-        }
-        
+        renderer.ViewPort.render(viewPort);        
     }
 
     //------------------------------------------------------------------
@@ -249,8 +256,10 @@ MyGame.main = (function(graphics, renderer, input, components) {
         requestAnimationFrame(gameLoop);
     }
 
-    return {
-        initialize: initialize
-    };
+    Object.defineProperty(that, 'initialize',{
+        get: () => initialize
+    })
+
+    return that
  
 }(MyGame.graphics, MyGame.renderer, MyGame.input, MyGame.components));
