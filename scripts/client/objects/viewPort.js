@@ -40,6 +40,10 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         get: () => size
     });
 
+    Object.defineProperty(that, 'objectsWithinViewPort', {
+        get: () => objectsWithinViewPort
+    });
+
     that.update = function(elapsedTime) {
         updateViewPortAndPlayerPosition();
         updateViewPortObjects(elapsedTime);
@@ -75,7 +79,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         } else if (playerLocalPosition.x > 2 - slidingWindowMargin){ // nudge right
             position.x += playerLocalPosition.x - (2 - slidingWindowMargin); //nudges the viewport to the right
             if (position.x + 2 > 10){ // if its beyond the right bound, return viewport to left bound, and do not update player local position
-                position.x = 10;
+                position.x = 8;
             }
             else{   //else update player local position
                 playerLocalPosition.x = 2 - slidingWindowMargin;
@@ -92,11 +96,11 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             }
         } else if (playerLocalPosition.y > 1 - slidingWindowMargin){ //nudge down
             position.y += playerLocalPosition.y - (1 - slidingWindowMargin); //nudges the viewport down
-            if (position.y + 1 > 10){ // if its beyond the south bound, return viewport to sotuh bound, and do not update player local position
-                position.y = 10;
+            if (position.y + 1 > 10){ // if its beyond the south bound, return viewport to south bound, and do not update player local position
+                position.y = 9;
             }
             else{   //else update player local position
-                playerLocalPosition.y = 2 - slidingWindowMargin;
+                playerLocalPosition.y = 1 - slidingWindowMargin;
             }
         }
     }
@@ -111,10 +115,10 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             "playerSelf": null,
             "playerOthers": []
          } //clear viewport objects
-        objectsWithinViewPort["playerSelf"] = MyGame.main.that.playerSelf; //add player
+        objectsWithinViewPort["playerSelf"] = MyGame.main.playerSelf; //add player
 
-        for (let index in MyGame.main.that.playerOthers){
-            let currOtherPlayer = MyGame.main.that.playerOthers[index];
+        for (let index in MyGame.main.playerOthers){
+            let currOtherPlayer = MyGame.main.playerOthers[index];
             if (checkIfWithinViewPort(currOtherPlayer.model.state.position)){
                 objectsWithinViewPort["playerOthers"].push(currOtherPlayer);
             }

@@ -186,13 +186,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
-        renderer.ViewPort.render(viewPort);
-        renderer.Player.render(playerSelf.model, playerSelf.texture);
-        for (let id in playerOthers) {
-            let player = playerOthers[id];
-            renderer.PlayerRemote.render(player.model, player.texture);
-        }
-        
+        renderer.ViewPort.render(viewPort);        
     }
 
     //------------------------------------------------------------------
@@ -262,9 +256,10 @@ MyGame.main = (function(graphics, renderer, input, components) {
         requestAnimationFrame(gameLoop);
     }
 
-    return {
-        initialize: initialize,
-        that: that
-    };
+    Object.defineProperty(that, 'initialize',{
+        get: () => initialize
+    })
+
+    return that
  
 }(MyGame.graphics, MyGame.renderer, MyGame.input, MyGame.components));
