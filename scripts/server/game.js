@@ -9,6 +9,13 @@ let present = require('present');
 let Player = require('./objects/player');
 let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
+let MissileHandler = require('./handlers/missileHandler');
+
+
+
+
+let missiles = MissileHandler.createMissileHandler();
+let ufos = UFOHandler.createUFOHandler(missiles);
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -229,7 +236,8 @@ function initializeSocketIO(httpServer) {
 // Entry point to get the game started.
 //
 //------------------------------------------------------------------
-function initialize(httpServer) {
+function initialize(httpServer) {\
+
     initializeSocketIO(httpServer);
     gameLoop(present(), 0);
 }
