@@ -14,8 +14,8 @@ let MissileHandler = require('./handlers/missileHandler');
 
 
 
-let missiles = MissileHandler.createMissileHandler();
-let ufos = UFOHandler.createUFOHandler(missiles);
+let missilesHandler = MissileHandler.createMissileHandler();
+let ufosHandler = UFOHandler.createUFOHandler(missilesHandler);
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -68,7 +68,77 @@ function update(elapsedTime) {
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
+    ufosHandler.update(elapsedTime);
 }
+//------------------------------------------------------------------
+//
+// Send new information about UFOs to the clients
+//
+//------------------------------------------------------------------
+function updateClientsAboutUFOs(elapsedTime){
+    //New UFO
+    if(ufosHandler.newUFOs.length){
+        for(let id in ufosHandler.newUFOs){
+            let currNewUFO = ufosHandler.ufos[id];
+            transmitMessageToAllClients(currNewUFO.state,'UFO-new');
+        }
+        ufosHandler.clearNewUFOS();
+    }
+
+    //UFO destroyed
+    if(ufosHandler.UFOsDestroyed.length){
+        for(let id in ufosHandler.UFOsDestroyed){
+            transmitMessageToAllClients(id,'UFO-Destroyed');  
+        }
+        ufosHandler.clearUFOsDestroyed();
+    }
+}
+//------------------------------------------------------------------
+//
+// Send new information about UFOs to the clients
+//
+//------------------------------------------------------------------
+function updateClientsAboutMissiles(elapsedTime){
+    //New Missiles
+    if(missilesHandler.newMissiles.length){
+
+        for(let id in missilesHandler.newMissiles){
+            let currNewMissile = missilesHandler.newMissiles[id];
+            let message = {
+                state:currNewMissile.state,
+                owner:currNewMissile.owner
+            }
+            transmitMessageToAllClients(message,'Missile-new');
+        }
+        missilesHandler.clearNewMissiles();
+    }
+
+    //Missiles destroyed
+    if(missilesHandler.missilesDestroyed.length){
+        for(let id in missilesHandler.missilesDestroyed){
+            transmitMessageToAllClients(id,'Missile-Destroyed');
+        }
+
+        missilesHandler.clearMissilesDestroyed();
+    }
+}
+
+//------------------------------------------------------------------
+//
+// Generic function used to send messages to all clients
+//
+//------------------------------------------------------------------
+function transmitMessageToAllClients(message, type){
+    for (let clientId in activeClients) {
+        let client = activeClients[clientId];
+        client.socket.emit('message', {
+                type: type,
+                message: message
+            }
+        )
+    }
+}
+
 
 //------------------------------------------------------------------
 //
@@ -118,6 +188,8 @@ function gameLoop(currentTime, elapsedTime) {
     processInput();
     update(elapsedTime);
     updateClients(elapsedTime);
+    updateClientsAboutUFOs(elapsedTime);
+    updateClientsAboutMissiles(elapsedTime);
 
     if (!quit) {
         setTimeout(() => {
@@ -236,7 +308,7 @@ function initializeSocketIO(httpServer) {
 // Entry point to get the game started.
 //
 //------------------------------------------------------------------
-function initialize(httpServer) {\
+function initialize(httpServer) {
 
     initializeSocketIO(httpServer);
     gameLoop(present(), 0);

@@ -10,29 +10,42 @@ let missile = require ('../objects/missile');
 
 
 function missileHandler(){
-    that = {};
+    let that = {};
 
-    let missiles = [];
+    let missiles = {};
     let missileLife = 100;
 
-    function deleteMissile(index){
-        missiles.splice(index, 1);
-    }
+    let nextID = 0;
+    let newMissiles = [];
+    let missilesDestroyed = [];
+
+
 
     Object.defineProperty(that, 'missiles', {
         get: () => missiles
     });
+    Object.defineProperty(that, 'newMissiles', {
+        get: () => newMissiles
+    });
+    Object.defineProperty(that, 'missilesDestroyed', {
+        get: () => missilesDestroyed
+    });
 
+    function getNextID(){
+        return nextID++;
+    }
 
     that.update = function(elapsedTime){
         let missilesToDelete = [];
 
-        for (let i = 0; i < missiles.length; i++){
-            missiles[i].update(elapsedTime);
 
-            if (missiles[i].remainingLife <= 0){
-                missilesToDelete.push(i);   
-                missiles[i].setRemainingLife(missileLife);
+
+        for(let id in missiles){
+            missiles[id].update(elapsedTime);
+
+            if(missiles[id].remainingLife <= 0){
+                missilesToDelete.push(id);
+                missiles[id].setRemainingLife(missileLife);
             }
         }
 
@@ -59,8 +72,10 @@ function missileHandler(){
             owner:"player"
         });
             
+        let id = getNextID();
         newMissile.setRemainingLife(missileLife);
-        missiles.push(newMissile);
+        missiles.push(id,newMissile);
+        newMissiles.push(id);
     }
 
     that.createEnemyMissile = function(rotation, spaceState, missileSpeed){
@@ -80,16 +95,26 @@ function missileHandler(){
             },
             owner:"enemy"
         });
-
+        let id = getNextID();
         newMissile.setRemainingLife(missileLife);
-        missiles.push(newMissile);
+        missiles.push(id,newMissile);
+        newMissiles.push(id);
     }
 
     that.reset = function(){
         missiles = [];
     }
+    that.deleteMissile = function(id){
+        delete missiles[id];
+        missilesDestroyed.push(id);
+    }
 
-
+    that.clearNewMissiles = function(){
+        newMissiles = [];
+    }
+    that.clearMissilesDestroyed = function(){
+        missilesDestroyed = [];
+    }
 
     
     return that;

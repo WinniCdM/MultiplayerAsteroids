@@ -21,7 +21,6 @@ function createUFO(spec,missileHandler) {
     let timeSinceLastShot = spec.fireRate;
     let smartShot = spec.smartShot;
     let missileSpeed = spec.missileSpeed;
-    let rotationRate = random.nextRange(Math.PI / 1000,Math.PI / 100);
 
 
     Object.defineProperty(that, 'state', {
@@ -65,7 +64,7 @@ function createUFO(spec,missileHandler) {
         }
     }
     function rotate(elapsedTime){
-        state.rotation += rotationRate;
+        state.rotation += state.rotationRate;
     }
 
     function fire(){

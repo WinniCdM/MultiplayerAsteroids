@@ -10,35 +10,49 @@ let helpers = require ('../../shared/helper/helperFunctions');
 let UFO = require ('../objects/ufo');
 
 
-function ufoHandler(missileHandler){
-    that = {};
 
-    let ufos = [];
+
+function ufoHandler(missileHandler){
+    let that = {};
+
+    let ufos = {};
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
     let smallUFOSpawnRate = 60000;
     let largeUFOSpawnRate = 40000;
 
-    that.update = function(elapsedTime){
-        handleUFOSpawning(elapsedTime);
-        for (let i = 0; i < ufos.length; i++){
-            ufos[i].update(elapsedTime);
-        }
+    let nextID = 0;
+    let newUFOs = [];
+    let UFOsDestroyed = [];
+
+    Object.defineProperty(that, 'ufos', {
+        get: () => ufos
+    });
+    Object.defineProperty(that, 'newUFOs', {
+        get: () => newUFOs
+    });
+    Object.defineProperty(that, 'UFOsDestroyed', {
+        get: () => UFOsDestroyed
+    });
+
+    function getNextID(){
+        return nextID++;
     }
 
-    that.createUFO = function(smart){
+    function createUFO(smart){
 
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(.1),//Should set x and y, not sure
+                momentum: random.nextCircleVector(.3),//Should set x and y, not sure
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
                 center: helpers.generateNewRandomCenter(),
+                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100);
             },
             fireRate: 1000,
-            smarthhot: false,
+            smartShot: false,
             missileSpeed: 1
         }
 
@@ -50,7 +64,9 @@ function ufoHandler(missileHandler){
             newUFOSpec.size = {width:.075,height:.075};
         }
 
-        ufos.push(UFO.create(newUFOSpec,missileHandler));
+        let id = getNextID();
+        ufos.push(id,UFO.create(newUFOSpec,missileHandler));
+        newUFOs.push(id);
     }
 
     function handleUFOSpawning(elapsedTime){
@@ -66,14 +82,30 @@ function ufoHandler(missileHandler){
         }
     }
 
-    that.deleteUFO = function(index){
-        ufos.splice(index, 1);
+    that.update = function(elapsedTime){
+        handleUFOSpawning(elapsedTime);
+        for (let i = 0; i < ufos.length; i++){
+            ufos[i].update(elapsedTime);
+        }
+    }
+
+    that.deleteUFO = function(id){
+        delete ufos[id];
+        UFOsDestroyed.push(id);
+
     }
 
     that.reset = function(){
         timeSinceLastLargeUFOSpawn = 0;
         timeSinceLastSmallUFOSpawn = 0;
         ufos = [];
+    }
+
+    that.clearNewUFOS = function(){
+        newUFOs = [];
+    }
+    that.clearUFOsDestroyed = function(){
+        UFOsDestroyed = [];
     }
 
 
