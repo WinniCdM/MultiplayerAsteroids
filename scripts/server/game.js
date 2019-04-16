@@ -6,7 +6,8 @@
 'use strict';
 
 let present = require('present');
-let Player = require('./player');
+let Player = require('./objects/player');
+let AsteroidHandler = require('./handlers/asteroidsHandler');
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -70,6 +71,7 @@ function updateClients(elapsedTime) {
     for (let clientId in activeClients) {
         let client = activeClients[clientId];
         let update = {
+            type: 'update-self',
             clientId: clientId,
             lastMessageId: client.lastMessageId,
             momentum: client.player.momentum,
@@ -78,14 +80,16 @@ function updateClients(elapsedTime) {
             updateWindow: elapsedTime
         };
         if (client.player.reportUpdate) {
-            client.socket.emit('update-self', update);
+            client.socket.emit('message', update);
+
+            update.type = 'update-other';
 
             //
             // Notify all other connected clients about every
             // other connected client status...but only if they are updated.
             for (let otherId in activeClients) {
                 if (otherId !== clientId) {
-                    activeClients[otherId].socket.emit('update-other', update);
+                    activeClients[otherId].socket.emit('message', update);
                 }
             }
         }
@@ -137,7 +141,8 @@ function initializeSocketIO(httpServer) {
             if (newPlayer.clientId !== clientId) {
                 //
                 // Tell existing about the newly connected player
-                client.socket.emit('connect-other', {
+                client.socket.emit('message', {
+                    type: 'connect-other',
                     clientId: newPlayer.clientId,
                     momentum: newPlayer.momentum,
                     direction: newPlayer.direction,
@@ -149,7 +154,8 @@ function initializeSocketIO(httpServer) {
 
                 //
                 // Tell the new player about the already connected player
-                socket.emit('connect-other', {
+                socket.emit('message', {
+                    type: 'connect-other',
                     clientId: client.player.clientId,
                     momentum: client.player.momentum,
                     direction: client.player.direction,
@@ -172,7 +178,8 @@ function initializeSocketIO(httpServer) {
         for (let clientId in activeClients) {
             let client = activeClients[clientId];
             if (playerId !== clientId) {
-                client.socket.emit('disconnect-other', {
+                client.socket.emit('message', {
+                    type: 'disconnect-other',
                     clientId: playerId
                 });
             }
@@ -189,7 +196,8 @@ function initializeSocketIO(httpServer) {
             socket: socket,
             player: newPlayer
         };
-        socket.emit('connect-ack', {
+        socket.emit('message', {
+            type: 'connect-ack',
             momentum: newPlayer.momentum,
             direction: newPlayer.direction,
             position: newPlayer.position,

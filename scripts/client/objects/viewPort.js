@@ -26,7 +26,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         y: .5
     }
 
-    let slidingWindowMargin = .2;
+    let slidingWindowMargin = .3;
 
     Object.defineProperty(that, 'position', {
         get: () => position
