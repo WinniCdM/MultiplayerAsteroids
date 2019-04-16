@@ -17,8 +17,8 @@ function createPlayer() {
     let that = {};
 
     let position = {
-        x: random.nextRange(0, 8),
-        y: random.nextRange(0, 9)
+        x: random.nextRange(1, 8), // TODO: randomly generate a safe space for this.
+        y: random.nextRange(1, 9)
     };
 
     let size = {
