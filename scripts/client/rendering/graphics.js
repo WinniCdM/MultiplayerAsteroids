@@ -94,16 +94,16 @@ MyGame.graphics = (function() {
     //    canvasSize: {width:, height: } // Size to render to Canvas
     //
     // --------------------------------------------------------------
-    function drawSubTexture(image, imageCorner, imageSize, canvasCorner, canvasSize) {
+    function drawSubTexture(tile) {
         context.save();
 
         // Pick the selected sprite from the sprite sheet to render
         context.drawImage(
-            image,
-            imageCorner.x, imageCorner.y,        //Where to start clipping image
-            imageSize.width, imageSize.height,   //Size of clipping
-            canvasCorner.x,canvasCorner.y,       //Where to put on canvas    
-            canvasSize.width, canvasSize.width); //Size to put on Canvas
+            tile.image,
+            tile.imageCorner.x, tile.imageCorner.y,        //Where to start clipping image
+            tile.imageSize.width, tile.imageSize.height,   //Size of clipping
+            tile.canvasCorner.x, tile.canvasCorner.y,       //Where to put on canvas    
+            tile.canvasSize.width, tile.canvasSize.height); //Size to put on Canvas
 
         context.restore();
     }

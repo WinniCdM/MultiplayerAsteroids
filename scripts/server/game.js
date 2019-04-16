@@ -6,7 +6,8 @@
 'use strict';
 
 let present = require('present');
-let Player = require('./player');
+let Player = require('./objects/player');
+let AsteroidHandler = require('./handlers/asteroidsHandler');
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
