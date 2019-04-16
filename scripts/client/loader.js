@@ -17,7 +17,7 @@ MyGame = {
 MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
-            scripts: ['helper/helperFunctions', 'helper/queue'],
+            scripts: ['../shared/helper/helperFunctions', '../shared/helper/queue'],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
