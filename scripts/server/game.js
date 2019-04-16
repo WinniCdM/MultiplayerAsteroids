@@ -8,6 +8,7 @@
 let present = require('present');
 let Player = require('./objects/player');
 let AsteroidHandler = require('./handlers/asteroidsHandler');
+let UFOHandler = require('./handlers/ufoHandler');
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
