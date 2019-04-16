@@ -9,11 +9,15 @@ let present = require('present');
 let Player = require('./objects/player');
 let AsteroidHandler = require('./handlers/asteroidsHandler');
 
+let asteroids = AsteroidHandler.create();
+
 const UPDATE_RATE_MS = 200;
 let quit = false;
 let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
+
+let asteroidGenerationRate = 1 / 10000 // 1 every 10000 milliseconds
 
 //------------------------------------------------------------------
 //
@@ -60,6 +64,7 @@ function update(elapsedTime) {
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
+    asteroids.update(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -101,6 +106,25 @@ function updateClients(elapsedTime) {
     lastUpdateTime = present();
 }
 
+function updateClientsAboutAsteroids(){
+    let newAsteroids = asteroids.newAsteroids;
+    for (let id in newAsteroids){
+        let currNewAsteroid = asteroids.asteroids[id];
+        transmitMessageToAllClients(currNewAsteroid.state, 'asteroid-new');
+    }
+}
+
+function transmitMessageToAllClients(message, type){
+    for (let clientId in activeClients) {
+        let client = activeClients[clientId];
+        client.socket.emit('message', {
+                type: type,
+                message: message
+            }
+        )
+    }
+}
+
 //------------------------------------------------------------------
 //
 // Server side game loop
@@ -110,6 +134,7 @@ function gameLoop(currentTime, elapsedTime) {
     processInput();
     update(elapsedTime);
     updateClients(elapsedTime);
+    updateClientsAboutAsteroids();
 
     if (!quit) {
         setTimeout(() => {
