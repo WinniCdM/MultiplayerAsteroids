@@ -1,6 +1,17 @@
+// ------------------------------------------------------------------
+//
+// Nodejs module that represents the model for an asteroid handler 
+// object.
+//
+// ------------------------------------------------------------------
 let Asteroid = require("../objects/asteroid");
 let Helper = require("../../shared/helper/helperFunctions");
 
+// ------------------------------------------------------------------
+//
+// Public function to create a new asteroid handler
+//
+// ------------------------------------------------------------------
 function asteroidHandler(){
     let that = {};
     let asteroids = [];
@@ -25,12 +36,24 @@ function asteroidHandler(){
         }
     }
 
+    that.createNewAsteroidAtCenter = function(size, center){
+        asteroids.push(Asteroid.create(center, size));
+    }
+
     that.handleAsteroidBreak = function(oldAsteroid){
         if (oldAsteroid.asteroidSize === "large"){
-            //create 3 medium asteroids
+            for (let i = 0; i < 3; i ++){
+                that.createNewAsteroidAtCenter("medium", oldAsteroid.center)
+            }
         } else if (oldAsteroid.asteroidSize === "medium"){
-            //create 4 small
+            for (let i = 0; i < 4; i ++){
+                that.createNewAsteroidAtCenter("small", oldAsteroid.center)
+            }
         }
+    }
+
+    that.deleteAsteroid = function(index){
+        asteroids.splice(index, 1);
     }
 
     return that;
