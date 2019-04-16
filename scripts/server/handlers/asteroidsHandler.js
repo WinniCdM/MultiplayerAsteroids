@@ -1,8 +1,7 @@
-
 function asteroidHandler(){
     that = {};
 
-    
+
 
 
     return that;

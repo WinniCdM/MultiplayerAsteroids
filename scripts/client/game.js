@@ -16,6 +16,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
         playerOthers = {},
         messageHistory = MyGame.utilities.Queue(),
         messageId = 1,
+        messageQueue = [],
         socket = io(),
         that = {};
 
@@ -29,11 +30,56 @@ MyGame.main = (function(graphics, renderer, input, components) {
 
     //------------------------------------------------------------------
     //
+    // Handler for all messages
+    //
+    //------------------------------------------------------------------
+    socket.on('message', function(data) {
+        messageQueue.push({
+            data: data
+        })
+    });
+
+    //------------------------------------------------------------------
+    //
+    // Processes network messages, utilizing the handler functions
+    //
+    //------------------------------------------------------------------
+    function processNetwork(elapsedTime){
+        //
+        // Double buffering on the queue so we don't asynchronously receive inputs
+        // while processing.
+        let processMe = messageQueue;
+        messageQueue = [];
+
+        for (let index in processMe){
+            let input = processMe[index];
+            switch (input.data.type){
+                case 'connect-ack':
+                    handleConnectAck(input.data);
+                    break;
+                case 'connect-other':
+                    handleConnectOther(input.data);
+                    break;
+                case 'disconnect-other':
+                    handleDisconnectOther(input.data);
+                    break;
+                case 'update-self':
+                    handleUpdateSelf(input.data);
+                    break;
+                case 'update-other':
+                    handleUpdateOther(input.data);
+                    break;
+            }
+        } 
+    }
+
+    //------------------------------------------------------------------
+    //
     // Handler for when the server ack's the socket connection.  We receive
     // the state of the newly connected player model.
     //
     //------------------------------------------------------------------
-    socket.on('connect-ack', function(data) {
+    function handleConnectAck(data){
         playerSelf.model.momentum.x = data.momentum.x;
         playerSelf.model.momentum.y = data.momentum.y;
 
@@ -49,7 +95,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
 
         viewPort.position.x = playerSelf.model.position.x -1;
         viewPort.position.y = playerSelf.model.position.y -.5;
-    });
+    }
 
     //------------------------------------------------------------------
     //
@@ -57,7 +103,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
     // the state of the newly connected player model.
     //
     //------------------------------------------------------------------
-    socket.on('connect-other', function(data) {
+    function handleConnectOther(data){
         let model = components.PlayerRemote();
         model.state.momentum.x = data.momentum.x;
         model.state.momentum.y = data.momentum.y;
@@ -78,23 +124,23 @@ MyGame.main = (function(graphics, renderer, input, components) {
             model: model,
             texture: MyGame.assets['player-other']
         };
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for when another player disconnects from the game.
     //
     //------------------------------------------------------------------
-    socket.on('disconnect-other', function(data) {
+    function handleDisconnectOther(data){
         delete playerOthers[data.clientId];
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for receiving state updates about the self player.
     //
     //------------------------------------------------------------------
-    socket.on('update-self', function(data) {
+    function handleUpdateSelf(data){
         playerSelf.model.momentum.x = data.momentum.x;
         playerSelf.model.momentum.y = data.momentum.y;
         playerSelf.model.position.x = data.position.x;
@@ -133,14 +179,14 @@ MyGame.main = (function(graphics, renderer, input, components) {
             memory.enqueue(message);
         }
         messageHistory = memory;
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for receiving state updates about other players.
     //
     //------------------------------------------------------------------
-    socket.on('update-other', function(data) {
+    function handleUpdateOther(data){
         if (playerOthers.hasOwnProperty(data.clientId)) {
             let model = playerOthers[data.clientId].model;
             model.goal.updateWindow = data.updateWindow;
@@ -155,7 +201,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
             if (model.goal.position.y > 10) { model.goal.position.y = 10; model.state.momentum.y = 0; } //upper down bound
             model.goal.direction = data.direction;
         }
-    });
+    }
 
     //------------------------------------------------------------------
     //
@@ -199,6 +245,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
+        processNetwork();
         update(elapsedTime);
         render();
 
