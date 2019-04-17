@@ -18,6 +18,7 @@ let inputQueue = [];
 let lastUpdateTime = present();
 
 let asteroidGenerationRate = 1 / 10000 // 1 every 10000 milliseconds
+let timeSinceLastAsteroid = 10000; // immediately spawn one
 
 //------------------------------------------------------------------
 //
@@ -106,14 +107,39 @@ function updateClients(elapsedTime) {
     lastUpdateTime = present();
 }
 
-function updateClientsAboutAsteroids(){
+//------------------------------------------------------------------
+//
+// Send state of the Asteroids to any connected clients.
+//
+//------------------------------------------------------------------
+function updateClientsAboutAsteroids(elapsedTime){
+    timeSinceLastAsteroid += elapsedTime;
+    if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
+        console.log("Generating a new Asteroid");
+        asteroids.createNewRandomAsteroid(10);
+        timeSinceLastAsteroid = 0;
+    }
+
+    // new asteroids
     let newAsteroids = asteroids.newAsteroids;
     for (let id in newAsteroids){
         let currNewAsteroid = asteroids.asteroids[id];
         transmitMessageToAllClients(currNewAsteroid.state, 'asteroid-new');
     }
+
+    // deleted asteroids
+    let deletedAsteroids = asteroids.deletedAsteroids;
+    for (let id in deletedAsteroids){
+        transmitMessageToAllClients(id, 'asteroid-delete');
+    }
 }
 
+
+//------------------------------------------------------------------
+//
+// Transmits a message of a certain type to all connected clients
+//
+//------------------------------------------------------------------
 function transmitMessageToAllClients(message, type){
     for (let clientId in activeClients) {
         let client = activeClients[clientId];
@@ -134,7 +160,7 @@ function gameLoop(currentTime, elapsedTime) {
     processInput();
     update(elapsedTime);
     updateClients(elapsedTime);
-    updateClientsAboutAsteroids();
+    updateClientsAboutAsteroids(elapsedTime);
 
     if (!quit) {
         setTimeout(() => {

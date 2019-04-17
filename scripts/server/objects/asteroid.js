@@ -38,7 +38,7 @@ function createAsteroid(position, size) {
         return size;
     }
 
-    let newSize = getSize(size);
+    let newSize = that.getSize(size);
     let newMomentum = random.nextCircleVector();
 
     that.state = {

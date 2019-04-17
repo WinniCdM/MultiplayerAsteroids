@@ -69,6 +69,8 @@ MyGame.main = (function(graphics, renderer, input, components) {
                 case 'update-other':
                     handleUpdateOther(input.data);
                     break;
+                case 'asteroid-new':
+                    console.log("A new Asteroid has spawned: ", input.data);
             }
         } 
     }

@@ -5,7 +5,7 @@
 //
 // ------------------------------------------------------------------
 let Asteroid = require("../objects/asteroid");
-let Helper = require("../../shared/helper/helperFunctions");
+let Helper = require("../helper/helperFunctions");
 
 // ------------------------------------------------------------------
 //
@@ -16,6 +16,7 @@ function asteroidHandler(){
     let that = {};
     let asteroids = {};
     let newAsteroids = []; //list of ids
+    let destroyedAsteroids = []; //list of ids
     let id = 0;
 
     Object.defineProperty(that, 'asteroids', {
@@ -24,6 +25,10 @@ function asteroidHandler(){
 
     Object.defineProperty(that, 'newAsteroids', {
         get: () => newAsteroids
+    });
+
+    Object.defineProperty(that, 'destroyedAsteroids', {
+        get: () => destroyedAsteroids
     });
 
     function getIdForNewAsteroid(){
@@ -40,13 +45,11 @@ function asteroidHandler(){
 
     that.createNewRandomAsteroid = function(number){
         for (let i = 0; i < number; i++){
-            asteroids.push(
-                getIdForNewAsteroid(), 
+            asteroids[getIdForNewAsteroid()] = 
                 Asteroid.create(
-                    HelperFunctions.generateNewRandomCenter(), 
+                    Helper.generateNewRandomCenter(), 
                     "large"
-                    )
-            );
+                    );
         }
     }
 
@@ -71,6 +74,12 @@ function asteroidHandler(){
 
     that.deleteAsteroid = function(id){
         delete asteroids[id];
+        deletedAsteroids.push(id);
+    }
+
+    that.clearNewAndDeletedAsteroids = function(){
+        deletedAsteroid = [];
+        newAsteroids = [];
     }
 
     return that;
