@@ -49,7 +49,7 @@ function ufoHandler(missileHandler){
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
                 center: helpers.generateNewRandomCenter(),
-                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100);
+                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100)
             },
             fireRate: 1000,
             smartShot: false,

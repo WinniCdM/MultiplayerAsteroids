@@ -88,7 +88,7 @@ function updateClientsAboutUFOs(elapsedTime){
     //UFO destroyed
     if(ufosHandler.UFOsDestroyed.length){
         for(let id in ufosHandler.UFOsDestroyed){
-            transmitMessageToAllClients(id,'UFO-Destroyed');  
+            transmitMessageToAllClients(id,'UFO-Destroyed'); 
         }
         ufosHandler.clearUFOsDestroyed();
     }
