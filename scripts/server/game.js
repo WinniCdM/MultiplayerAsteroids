@@ -11,6 +11,8 @@ let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 
+let asteroids = AsteroidHandler.create();
+
 
 
 
@@ -22,6 +24,9 @@ let quit = false;
 let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
+
+let asteroidGenerationRate = 1 / 10000 // 1 every 10000 milliseconds
+let timeSinceLastAsteroid = 10000; // immediately spawn one
 
 //------------------------------------------------------------------
 //
@@ -68,6 +73,7 @@ function update(elapsedTime) {
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
+    asteroids.update(elapsedTime);
     ufosHandler.update(elapsedTime);
 }
 //------------------------------------------------------------------
@@ -181,6 +187,50 @@ function updateClients(elapsedTime) {
 
 //------------------------------------------------------------------
 //
+// Send state of the Asteroids to any connected clients.
+//
+//------------------------------------------------------------------
+function updateClientsAboutAsteroids(elapsedTime){
+    timeSinceLastAsteroid += elapsedTime;
+    if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
+        console.log("Generating a new Asteroid");
+        asteroids.createNewRandomAsteroid(10);
+        timeSinceLastAsteroid = 0;
+    }
+
+    // new asteroids
+    let newAsteroids = asteroids.newAsteroids;
+    for (let id in newAsteroids){
+        let currNewAsteroid = asteroids.asteroids[id];
+        transmitMessageToAllClients(currNewAsteroid.state, 'asteroid-new');
+    }
+
+    // deleted asteroids
+    let deletedAsteroids = asteroids.deletedAsteroids;
+    for (let id in deletedAsteroids){
+        transmitMessageToAllClients(id, 'asteroid-delete');
+    }
+}
+
+
+//------------------------------------------------------------------
+//
+// Transmits a message of a certain type to all connected clients
+//
+//------------------------------------------------------------------
+function transmitMessageToAllClients(message, type){
+    for (let clientId in activeClients) {
+        let client = activeClients[clientId];
+        client.socket.emit('message', {
+                type: type,
+                message: message
+            }
+        )
+    }
+}
+
+//------------------------------------------------------------------
+//
 // Server side game loop
 //
 //------------------------------------------------------------------
@@ -188,6 +238,7 @@ function gameLoop(currentTime, elapsedTime) {
     processInput();
     update(elapsedTime);
     updateClients(elapsedTime);
+    updateClientsAboutAsteroids(elapsedTime);
     updateClientsAboutUFOs(elapsedTime);
     updateClientsAboutMissiles(elapsedTime);
 

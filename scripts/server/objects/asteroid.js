@@ -5,6 +5,8 @@
 // ------------------------------------------------------------------
 'use strict';
 
+let random = require("../random");
+
 //------------------------------------------------------------------
 //
 // Public function used to initially create a new asteroid 
@@ -18,7 +20,7 @@ function createAsteroid(position, size) {
         get: () => size
     })
     
-    that.setSize = function(sizeString){ // set size in world coordinates
+    that.getSize = function(sizeString){ // set size in world coordinates
         let size = { width: 0, height: 0 }
         switch (sizeString){
             case "large":
@@ -36,10 +38,11 @@ function createAsteroid(position, size) {
         return size;
     }
 
-    let newSize = setSize(size);
+    let newSize = that.getSize(size);
+    let newMomentum = random.nextCircleVector();
 
     that.state = {
-        position: {
+        center: {
             x: position.x, 
             y: position.y
         },
@@ -49,14 +52,33 @@ function createAsteroid(position, size) {
             height: newSize.height
         },
         momentum: {
-            x: 0,
-            y: 0
+            x: newMomentum.x,
+            y: newMomentum.y
         },
-        direction: random.nextDouble() * 2 * Math.PI,    // Angle in radians
-        rotateRate: Math.PI / 1000    // radians per millisecond
+        rotation: random.nextDouble() * 2 * Math.PI,    // Angle in radians
+        rotateRate: random.nextDouble() * Math.PI / 1000    // radians per millisecond
+    }
+
+    that.update = function(elapsedTime){
+        that.state.rotation += that.state.rotateRate * elapsedTime
+        that.state.center.x += that.state.momentum.deltaX * elapsedTime;
+        that.state.center.y += that.state.momentum.deltaY * elapsedTime;
+        if (that.state.center.x < -.1){
+            that.state.center.x = 10.1;
+        }
+        if (that.state.center.x > 10.1){
+            that.state.center.x = -.1;
+        }
+        
+        if (that.state.center.y < -.1){
+            that.state.center.y = 10.1;
+        }
+        if (that.state.center.y > 10.1){
+            that.state.center.y = -.1;
+        }
     }
 
     return that;
 }
 
-module.exports.create = () => createAsteroid();
+module.exports.create = (center, size) => createAsteroid(center, size);

@@ -17,7 +17,7 @@ MyGame = {
 MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
-            scripts: ['../shared/helper/helperFunctions', '../shared/helper/queue'],
+            scripts: ['helper/helperFunctions', 'helper/queue'],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
@@ -51,7 +51,10 @@ MyGame.loader = (function () {
         }, {
             key: 'player-other',
             source: 'assets/images/players/playerShip1_red.png'
-        }];
+        }, {
+            key: 'asteroid',
+            source: 'assets/images/other/asteroid.png'
+        },];
 
         
     //------------------------------------------------------------------
