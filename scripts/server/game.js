@@ -192,10 +192,10 @@ function updateClients(elapsedTime) {
 //
 //------------------------------------------------------------------
 function updateClientsAboutAsteroids(elapsedTime){
-    timeSinceLastAsteroid += elapsedTime;
+    timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
     if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
         console.log("Generating a new Asteroid");
-        asteroids.createNewRandomAsteroid(10);
+        asteroids.createNewRandomAsteroid(1);
         timeSinceLastAsteroid = 0;
     }
 
@@ -211,6 +211,8 @@ function updateClientsAboutAsteroids(elapsedTime){
     for (let id in deletedAsteroids){
         transmitMessageToAllClients(id, 'asteroid-delete');
     }
+
+    asteroids.clearNewAndDeletedAsteroids();
 }
 
 
@@ -352,6 +354,7 @@ function initializeSocketIO(httpServer) {
         });
 
         notifyConnect(socket, newPlayer);
+        //TODO: update new client of all existing objects on the field.
     });
 }
 
