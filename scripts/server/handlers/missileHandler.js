@@ -74,13 +74,13 @@ function missileHandler(){
             
         let id = getNextID();
         newMissile.setRemainingLife(missileLife);
-        missiles.push(id,newMissile);
+        missiles[id] = newMissile;
         newMissiles.push(id);
     }
 
     that.createEnemyMissile = function(rotation, spaceState, missileSpeed){
-        let vectorX = Math.cos(orientation);
-        let vectorY = Math.sin(orientation);
+        let vectorX = Math.cos(rotation);
+        let vectorY = Math.sin(rotation);
 
         let newMissile = missile.create({
             state : {
@@ -97,8 +97,10 @@ function missileHandler(){
         });
         let id = getNextID();
         newMissile.setRemainingLife(missileLife);
-        missiles.push(id,newMissile);
+        missiles[id] = newMissile;
         newMissiles.push(id);
+
+        //console.log("New missile generated state: ", missiles[id].state, );
     }
 
     that.reset = function(){
@@ -110,10 +112,13 @@ function missileHandler(){
     }
 
     that.clearNewMissiles = function(){
-        newMissiles = [];
+        // console.log('clear new missiles called, current length: ', newMissiles.length);
+        newMissiles.length = 0;
+        
+        // console.log('length after clearing: ', newMissiles.length);
     }
     that.clearMissilesDestroyed = function(){
-        missilesDestroyed = [];
+        missilesDestroyed.length = 0;
     }
 
     

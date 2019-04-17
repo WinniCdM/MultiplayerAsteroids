@@ -82,11 +82,12 @@ function update(elapsedTime) {
 //
 //------------------------------------------------------------------
 function updateClientsAboutUFOs(elapsedTime){
+    console.log('new ufos length: ', ufosHandler.newUFOs.length);
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
             let currNewUFO = ufosHandler.ufos[id];
-            transmitMessageToAllClients(currNewUFO.state,'UFO-new');
+            transmitMessageToAllClients(currNewUFO.state,'ufo-new');
         }
         ufosHandler.clearNewUFOS();
     }
@@ -94,7 +95,7 @@ function updateClientsAboutUFOs(elapsedTime){
     //UFO destroyed
     if(ufosHandler.UFOsDestroyed.length){
         for(let id in ufosHandler.UFOsDestroyed){
-            transmitMessageToAllClients(id,'UFO-Destroyed'); 
+            transmitMessageToAllClients(id,'ufo-destroyed'); 
         }
         ufosHandler.clearUFOsDestroyed();
     }
@@ -114,7 +115,7 @@ function updateClientsAboutMissiles(elapsedTime){
                 state:currNewMissile.state,
                 owner:currNewMissile.owner
             }
-            transmitMessageToAllClients(message,'Missile-new');
+            transmitMessageToAllClients(message,'missile-new');
         }
         missilesHandler.clearNewMissiles();
     }
@@ -122,7 +123,7 @@ function updateClientsAboutMissiles(elapsedTime){
     //Missiles destroyed
     if(missilesHandler.missilesDestroyed.length){
         for(let id in missilesHandler.missilesDestroyed){
-            transmitMessageToAllClients(id,'Missile-Destroyed');
+            transmitMessageToAllClients(id,'missile-destroyed');
         }
 
         missilesHandler.clearMissilesDestroyed();

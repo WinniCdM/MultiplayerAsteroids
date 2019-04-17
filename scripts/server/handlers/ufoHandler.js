@@ -6,7 +6,7 @@
 'use strict';
 
 let random = require ('../random');
-let helpers = require ('../../shared/helper/helperFunctions');
+let helpers = require ('../helper/helperFunctions');
 let UFO = require ('../objects/ufo');
 
 
@@ -19,8 +19,8 @@ function ufoHandler(missileHandler){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 60000;
-    let largeUFOSpawnRate = 40000;
+    let smallUFOSpawnRate = 6000;
+    let largeUFOSpawnRate = 4000;
 
     let nextID = 0;
     let newUFOs = [];
@@ -41,7 +41,6 @@ function ufoHandler(missileHandler){
     }
 
     function createUFO(smart){
-
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
@@ -57,16 +56,19 @@ function ufoHandler(missileHandler){
         }
 
         if(smart){
-            newUFOSpec.size = {width: .04, height: .04};
+            newUFOSpec.state.size = {width: .04, height: .04};
             newUFOSpec.smartShot = true;
         }
         else{
-            newUFOSpec.size = {width:.075,height:.075};
+            newUFOSpec.state.size = {width:.075,height:.075};
         }
 
         let id = getNextID();
-        ufos.push(id,UFO.create(newUFOSpec,missileHandler));
+        
+        ufos[id] = UFO.create(newUFOSpec,missileHandler);
         newUFOs.push(id);
+
+        //console.log("New UFO generated state: ", ufos[id].state, );
     }
 
     function handleUFOSpawning(elapsedTime){
@@ -84,8 +86,9 @@ function ufoHandler(missileHandler){
 
     that.update = function(elapsedTime){
         handleUFOSpawning(elapsedTime);
-        for (let i = 0; i < ufos.length; i++){
-            ufos[i].update(elapsedTime);
+        for(let id in ufos){
+            ufos[id].update(elapsedTime);
+            //console.log('ufo ', id, ' updating');
         }
     }
 
@@ -98,14 +101,14 @@ function ufoHandler(missileHandler){
     that.reset = function(){
         timeSinceLastLargeUFOSpawn = 0;
         timeSinceLastSmallUFOSpawn = 0;
-        ufos = [];
+        ufos.length = 0;
     }
 
     that.clearNewUFOS = function(){
-        newUFOs = [];
+        newUFOs.length = 0;
     }
     that.clearUFOsDestroyed = function(){
-        UFOsDestroyed = [];
+        UFOsDestroyed.length = 0;
     }
 
 

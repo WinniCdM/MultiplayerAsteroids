@@ -39,6 +39,7 @@ function createUFO(spec,missileHandler) {
 
 
     that.update = function(elapsedTime){
+
         timeSinceLastShot += elapsedTime;
         fire();
         //update the state of this object
@@ -68,6 +69,7 @@ function createUFO(spec,missileHandler) {
     }
 
     function fire(){
+        
         if(timeSinceLastShot >= spec.fireRate){
             timeSinceLastShot = 0;
             let missileRotation = 0;
@@ -82,9 +84,9 @@ function createUFO(spec,missileHandler) {
                 // if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
 
                 // missileOrientation = Random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
-                missileRotation = Random.nextDouble() * 2 * Math.PI;
+                missileRotation = random.nextDouble() * 2 * Math.PI;
             } else {
-                missileRotation = Random.nextDouble() * 2 * Math.PI;
+                missileRotation = random.nextDouble() * 2 * Math.PI;
             }
 
             missileHandler.createEnemyMissile(missileRotation,state,missileSpeed)
@@ -94,4 +96,4 @@ function createUFO(spec,missileHandler) {
     return that;
 }
 
-module.exports.create = () => createUFO();
+module.exports.create = (spec,missileHandler) => createUFO(spec,missileHandler);

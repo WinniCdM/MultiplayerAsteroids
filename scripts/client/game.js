@@ -71,6 +71,19 @@ MyGame.main = (function(graphics, renderer, input, components) {
                     break;
                 case 'asteroid-new':
                     console.log("A new Asteroid has spawned: ", input.data);
+                    break;
+                case 'ufo-new':
+                    console.log('A new ufo has been received');
+                    break;
+                case 'ufo-destroyed':
+                    console.log('ufo is destroyed');
+                    break;
+                case 'missile-new':
+                    console.log('missile generated');
+                    break;
+                case 'missile-destroyed':
+                    console.log('missile destroyed');
+                    break;
             }
         } 
     }
