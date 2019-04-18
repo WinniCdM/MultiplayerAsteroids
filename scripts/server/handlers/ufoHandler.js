@@ -41,7 +41,6 @@ function ufoHandler(missileHandler){
     }
 
     function createUFO(smart){
-        test = false;
         let id = getNextID();
         let newUFOSpec = {
             state: {
@@ -50,7 +49,7 @@ function ufoHandler(missileHandler){
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
                 center: helpers.generateNewRandomCenter(),
-                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100),
+                rotationRate: Math.PI / 1000,
                 id:id
             },
             fireRate: 1000,
