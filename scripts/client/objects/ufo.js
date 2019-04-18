@@ -23,8 +23,6 @@ MyGame.components.UFO = function(state,texture) {
         get: () => spriteTime
     });
 
-    state.center.x = MyGame.main.playerSelf.model.position.x;
-    state.center.y = MyGame.main.playerSelf.model.position.y;
 
     let animationTime = 0;
     let subImageIndex = 0;
