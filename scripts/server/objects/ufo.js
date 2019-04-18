@@ -13,7 +13,7 @@ let random = require ('../random');
 // Public function used to initially create a new UFO
 //
 //------------------------------------------------------------------
-function createUFO(spec,missileHandler) {
+function createUFO(spec,missileHandler,activeClients) {
     let that = {};
 
     that.state = spec.state;
@@ -69,13 +69,48 @@ function createUFO(spec,missileHandler) {
                 // if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
 
                 // missileOrientation = Random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
-                missileRotation = random.nextDouble() * 2 * Math.PI;
+                missileRotation = getSmartShotRotation();
             } else {
                 missileRotation = random.nextDouble() * 2 * Math.PI;
             }
 
             missileHandler.createEnemyMissile(missileRotation,that.state,missileSpeed)
         }
+    }
+
+
+    function getSmartShotRotation(){
+        let targetID = findNearestPlayer();
+        let targetCenter = activeClients[targetID].player.position;
+        let accuracyModifier = (1.5 / (activeClients[targetID].player.score + 1));
+
+        let absMissileOrientation = Math.atan((targetCenter.y - this.state.center.y)/(targetCenter.x - this.state.center.x));
+        while (absMissileOrientation < -Math.PI) absMissileOrientation += Math.PI;
+        while (absMissileOrientation >= Math.PI) absMissileOrientation -= Math.PI;
+        if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
+
+        return random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
+    }
+
+
+    function findNearestPlayer(){
+        let closestID = -1;
+        let closestDistance = 10;
+        for (let clientId in activeClients) {
+            let currentPlayerCenter = activeClients[clientId].player.position;
+            let currDistance = getDistance(currentPlayerCenter, this.state.center);
+            if(closestDistance > currDistance){
+                closestDistance = currDistance;
+                closestID = clientID;
+            }
+        }
+        return closestID;
+    }
+
+    function getDistance(center1, center2){
+        let x = center1.x - center2.x;
+        let y = center1.y - center2.y;
+        return Math.sqrt(x*x + y*y);
     }
 
     return that;

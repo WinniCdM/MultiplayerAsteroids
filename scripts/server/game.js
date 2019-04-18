@@ -11,9 +11,7 @@ let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 
-let asteroidsHandler = AsteroidHandler.create();
-let missilesHandler = MissileHandler.createMissileHandler();
-let ufosHandler = UFOHandler.createUFOHandler(missilesHandler);
+
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -23,6 +21,10 @@ let lastUpdateTime = present();
 
 let asteroidGenerationRate = 3 / 10000 // 1 every 10000 milliseconds
 let timeSinceLastAsteroid = 10000; // immediately spawn one
+
+let asteroidsHandler = AsteroidHandler.create();
+let missilesHandler = MissileHandler.createMissileHandler();
+let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
 
 //------------------------------------------------------------------
 //

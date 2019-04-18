@@ -9,7 +9,7 @@ let random = require ('../random');
 let helpers = require ('../helper/helperFunctions');
 let UFO = require ('../objects/ufo');
 
-function ufoHandler(missileHandler){
+function ufoHandler(missileHandler,activeClients){
     let that = {};
 
     let ufos = {};
@@ -62,7 +62,7 @@ function ufoHandler(missileHandler){
             newUFOSpec.state.size = {width:.075,height:.075};
         }
 
-        ufos[id] = UFO.create(newUFOSpec,missileHandler);
+        ufos[id] = UFO.create(newUFOSpec,missileHandler,activeClients);
         newUFOs.push(id);
     }
 
@@ -110,4 +110,4 @@ function ufoHandler(missileHandler){
     return that;
 };
 
-module.exports.createUFOHandler = (missileHandler) => ufoHandler(missileHandler);
+module.exports.createUFOHandler = (missileHandler,activeClients) => ufoHandler(missileHandler,activeClients);

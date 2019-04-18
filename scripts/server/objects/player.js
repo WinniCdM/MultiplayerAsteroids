@@ -34,6 +34,7 @@ function createPlayer() {
     let thrustRate = 0.0000004;         // unit acceleration per millisecond
     let reportUpdate = false;           // Indicates if this model was updated during the last update
     let lastUpdateDiff = 0;
+    let score = 0;
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
@@ -62,6 +63,10 @@ function createPlayer() {
     Object.defineProperty(that, 'reportUpdate', {
         get: () => reportUpdate,
         set: value => reportUpdate = value
+    });
+
+    Object.defineProperty(that, 'score', {
+        get: () => score
     });
 
     //------------------------------------------------------------------
