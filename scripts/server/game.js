@@ -107,14 +107,13 @@ function updateClientsAboutMissiles(elapsedTime){
     if(missilesHandler.newMissiles.length){
 
         for(let id in missilesHandler.newMissiles){
-            let currNewMissile = missilesHandler.newMissiles[id];
+            let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
             let message = {
                 state:currNewMissile.state,
                 owner:currNewMissile.owner,
                 clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
-            console.log('sending message about missile ', message);
         }
         missilesHandler.clearNewMissiles();
     }
@@ -122,7 +121,7 @@ function updateClientsAboutMissiles(elapsedTime){
     //Missiles destroyed
     if(missilesHandler.missilesDestroyed.length){
         for(let id in missilesHandler.missilesDestroyed){
-            transmitMessageToAllClients(id,'missile-destroyed');
+            transmitMessageToAllClients(missilesHandler.missilesDestroyed[id],'missile-destroyed');
         }
 
         missilesHandler.clearMissilesDestroyed();

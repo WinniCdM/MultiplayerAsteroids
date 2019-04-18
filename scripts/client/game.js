@@ -88,9 +88,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     //console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
+                    handleMissileNew(message.data);
                     //console.log('missile generated');
                     break;
                 case 'missile-destroyed':
+                    handleMissileDestroyed(message.data);
                     //console.log('missile destroyed');
                     break;
             }
@@ -251,6 +253,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFONew(data){
+        console.log('UFO generated, data: ', data);
         MyGame.handlers.UFOHandler.handleNewUFO(data.message);//send state info
     }
 
@@ -260,9 +263,28 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFODestroyed(data){
+        console.log('UFO destroyed, data: ', data);
         MyGame.handlers.UFOHandler.destroyUFO(data.id);//pass in only id of UFO
     }
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a new Missile
+    //
+    //------------------------------------------------------------------
+    function handleMissileNew(data){
+        console.log('missile generated, data: ', data);
+        MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send state info
+    }
 
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about Missile destructions
+    //
+    //------------------------------------------------------------------
+    function handleMissileDestroyed(data){
+        console.log('missile destroyed, data: ', data);
+        MyGame.handlers.MissileHandler.destroyMissile(data.id);//pass in only id of UFO
+    }
     //------------------------------------------------------------------
     //
     // Process the registered input handlers here.

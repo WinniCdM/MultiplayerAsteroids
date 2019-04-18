@@ -50,7 +50,8 @@ MyGame.loader = (function () {
                 'rendering/viewPort', 
                 'rendering/tiledBackground',
                 'rendering/ufo',
-                'rendering/asteroid'
+                'rendering/asteroid',
+                'rendering/missile'
             ],
             message: 'Renderers loaded',
             onComplete: null

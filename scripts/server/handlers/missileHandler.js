@@ -13,7 +13,7 @@ function missileHandler(){
     let that = {};
 
     let missiles = {};
-    let missileLife = 100;
+    let missileLife = 2000;
 
     let nextID = 0;
     let newMissiles = [];
@@ -101,8 +101,14 @@ function missileHandler(){
         });
         
         newMissile.setRemainingLife(missileLife);
+        // console.log('new missile generated: ', newMissile);
+        // console.log('current list of missiles: ', missiles);
         missiles[id] = newMissile;
+        // console.log('after adding new missile: ', missiles);
+
+        // console.log('newMissiles before: ', newMissiles);
         newMissiles.push(id);
+        // console.log('newMissiles after: ', newMissiles);
     }
 
     that.reset = function(){
