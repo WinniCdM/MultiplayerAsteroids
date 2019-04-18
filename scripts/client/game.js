@@ -34,6 +34,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     Object.defineProperty(that, 'ufoList', {
         get: () => UFOHandler.ufos
     })
+    //Missile handler
+    let MissileHandler = handlers.MissileHandler();
+    Object.defineProperty(that, 'missileList', {
+        get: () => MissileHandler.missiles
+    })
+
+
+
+
     //------------------------------------------------------------------
     //
     // Handler for all messages
@@ -59,6 +68,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
         for (let index in processMe){
             let input = processMe[index];
+            console.log('input: ', input);
             switch (input.data.type){
                 case 'connect-ack':
                     handleConnectAck(input.data);
@@ -83,14 +93,16 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     console.log('A new ufo has been received');
                     break;
                 case 'ufo-destroyed':
-                    UFOHandler.destroyUFO(input.data.message.id);//pass in only id of UFO
+                    UFOHandler.destroyUFO(input.data);//pass in only id of UFO
                     console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
-                    console.log('missile generated');
+                    MissileHandler.handleNewMissile(input.data.message)
+                    console.log('missile generated', input.data.message);
                     break;
                 case 'missile-destroyed':
-                    console.log('missile destroyed');
+                    MissileHandler.destroyMissile(input.data);
+                    console.log('missile destroyed id: ', input.data);
                     break;
             }
         } 
@@ -248,9 +260,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         }
 
         //Update animated Sprites
-        for(let id in UFOHandler.ufos){
-            UFOHandler.ufos[id].update(elapsedTime);
-        }
+        UFOHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

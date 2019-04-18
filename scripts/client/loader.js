@@ -70,6 +70,12 @@ MyGame.loader = (function () {
         }, {
             key: 'ufo-1',
             source: 'assets/images/other/ufo1.png'
+        }, {
+            key: 'enemy-missile',
+            source: 'assets/images/other/enemymissile.png'
+        }, {
+            key: 'player-missile',
+            source: 'assets/images/other/playermissile.png'
         },];
 
         

@@ -19,8 +19,8 @@ function ufoHandler(missileHandler){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 60000;
-    let largeUFOSpawnRate = 40000;
+    let smallUFOSpawnRate = 60000000;
+    let largeUFOSpawnRate = 400;
 
     let nextID = 0;
     let newUFOs = [];
@@ -74,10 +74,12 @@ function ufoHandler(missileHandler){
         console.log('New UFO generated');
     }
 
+    let test = true;
     function handleUFOSpawning(elapsedTime){
         timeSinceLastSmallUFOSpawn += elapsedTime;
         timeSinceLastLargeUFOSpawn += elapsedTime;
-        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate){
+        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate && test){
+            test = false;
             createUFO(false);
             timeSinceLastLargeUFOSpawn = 0;
         }

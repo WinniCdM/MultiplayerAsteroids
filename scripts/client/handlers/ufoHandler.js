@@ -25,13 +25,19 @@ MyGame.handlers.UFOHandler = function() {
     // id:      //unique UFO identifier, use to add to dictionary
     //---------------------------------------------------------------
     that.handleNewUFO = function (state){
-        console.log('ufo state: ', state.center);
+        //console.log('ufo state: ', state.center);
         //add the ufo to the dictionary using id
         ufos[state.id] = MyGame.components.UFO(state,MyGame.assets['ufo-1']);
     }
 
     that.destroyUFO = function(id){
         delete ufos[id];
+    }
+
+    that.update = function(elapsedTime){
+        for(let id in ufos){
+            ufos[id].update(elapsedTime);
+        }
     }
 
 

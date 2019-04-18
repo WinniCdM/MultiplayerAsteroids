@@ -13,12 +13,14 @@
 //------------------------------------------------------------------
 function createMissile(spec){
     let that = {};
-    let owner = spec.owner;
     let state = spec.state;
     let remainingLife = 0;
 
     Object.defineProperty(that, 'owner', {
-        get: () => owner
+        get: () => spec.owner
+    });
+    Object.defineProperty(that, 'clientID', {
+        get: () => spec.clientID
     });
     Object.defineProperty(that, 'state', {
         get: () => state

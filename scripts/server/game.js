@@ -75,6 +75,7 @@ function update(elapsedTime) {
     }
     asteroids.update(elapsedTime);
     ufosHandler.update(elapsedTime);
+    missilesHandler.update(elapsedTime);
 }
 //------------------------------------------------------------------
 //
@@ -113,9 +114,11 @@ function updateClientsAboutMissiles(elapsedTime){
             let currNewMissile = missilesHandler.newMissiles[id];
             let message = {
                 state:currNewMissile.state,
-                owner:currNewMissile.owner
+                owner:currNewMissile.owner,
+                clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
+            console.log('sending message about missile ', message);
         }
         missilesHandler.clearNewMissiles();
     }
