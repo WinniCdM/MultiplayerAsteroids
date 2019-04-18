@@ -41,6 +41,7 @@ function missileHandler(){
 
 
         for(let id in missiles){
+            
             missiles[id].update(elapsedTime);
 
             if(missiles[id].remainingLife <= 0){
@@ -58,6 +59,7 @@ function missileHandler(){
         let vectorX = Math.cos(rotation);
         let vectorY = Math.sin(rotation);
 
+        let id = getNextID();
         let newMissile = missile.create({
             state : {
                 size:{width:.075, height:.025},
@@ -67,16 +69,18 @@ function missileHandler(){
                 },
                 rotation:spaceState.rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,
-                center: spaceState.center
+                center: {x:spaceState.center.x,y:spaceState.center.y},
+                id:id
             },
             owner:"player",
             clientID:clientID
         });
             
-        let id = getNextID();
+        
         newMissile.setRemainingLife(missileLife);
         missiles[id] = newMissile;
         newMissiles.push(id);
+
     }
 
     that.createEnemyMissile = function(rotation, spaceState, missileSpeed){
@@ -93,7 +97,7 @@ function missileHandler(){
                 },
                 rotation:rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,
-                center: spaceState.center,
+                center: {x:spaceState.center.x,y:spaceState.center.y},
                 id:id
             },
             owner:"enemy",
@@ -101,14 +105,8 @@ function missileHandler(){
         });
         
         newMissile.setRemainingLife(missileLife);
-        // console.log('new missile generated: ', newMissile);
-        // console.log('current list of missiles: ', missiles);
         missiles[id] = newMissile;
-        // console.log('after adding new missile: ', missiles);
-
-        // console.log('newMissiles before: ', newMissiles);
         newMissiles.push(id);
-        // console.log('newMissiles after: ', newMissiles);
     }
 
     that.reset = function(){

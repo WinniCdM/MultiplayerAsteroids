@@ -28,10 +28,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         get: () => playerOthers
     });
 
-    Object.defineProperty(that, 'ufoList', {
-        get: () => MyGame.handlers.UFOHandler.ufos
-    });
-
     //------------------------------------------------------------------
     //
     // Handler for all messages
@@ -253,7 +249,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFONew(data){
-        console.log('UFO generated, data: ', data);
         MyGame.handlers.UFOHandler.handleNewUFO(data.message);//send state info
     }
 
@@ -263,8 +258,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFODestroyed(data){
-        console.log('UFO destroyed, data: ', data);
-        MyGame.handlers.UFOHandler.destroyUFO(data.id);//pass in only id of UFO
+        MyGame.handlers.UFOHandler.destroyUFO(data.message);//pass in only id of UFO
     }
     //------------------------------------------------------------------
     //
@@ -272,8 +266,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleMissileNew(data){
-        console.log('missile generated, data: ', data);
-        MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send state info
+        MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send everything
     }
 
     //------------------------------------------------------------------
@@ -282,8 +275,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleMissileDestroyed(data){
-        console.log('missile destroyed, data: ', data);
-        MyGame.handlers.MissileHandler.destroyMissile(data.id);//pass in only id of UFO
+        MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of UFO
     }
     //------------------------------------------------------------------
     //
@@ -307,6 +299,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         }
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
+        handlers.MissileHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

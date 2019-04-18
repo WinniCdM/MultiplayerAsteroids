@@ -51,7 +51,7 @@ function ufoHandler(missileHandler){
             },
             fireRate: 1000,
             smartShot: false,
-            missileSpeed: 1
+            missileSpeed: .00001
         }
         //console.log('ufo state: ', newUFOSpec.state);
 
@@ -65,8 +65,6 @@ function ufoHandler(missileHandler){
 
         ufos[id] = UFO.create(newUFOSpec,missileHandler);
         newUFOs.push(id);
-
-        //console.log('New UFO generated');
     }
 
     let test = true;
@@ -85,9 +83,12 @@ function ufoHandler(missileHandler){
     }
 
     that.update = function(elapsedTime){
+        
         handleUFOSpawning(elapsedTime);
         for(let id in ufos){
+            //console.log('handler before update ufo located: ', ufos[id].state.center);
             ufos[id].update(elapsedTime);
+            //console.log('handler after update ufo located: ', ufos[id].state.center);
         }
     }
 

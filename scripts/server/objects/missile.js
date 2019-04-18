@@ -16,6 +16,7 @@ function createMissile(spec){
     let state = spec.state;
     let remainingLife = 0;
 
+
     Object.defineProperty(that, 'owner', {
         get: () => spec.owner
     });

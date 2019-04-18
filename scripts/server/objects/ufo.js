@@ -16,56 +16,45 @@ let random = require ('../random');
 function createUFO(spec,missileHandler) {
     let that = {};
 
-    let state = spec.state;
+    that.state = spec.state;
     let maxSpeed = spec.maxSpeed;
     let timeSinceLastShot = spec.fireRate;
     let smartShot = spec.smartShot;
     let missileSpeed = spec.missileSpeed;
-
-
-    Object.defineProperty(that, 'state', {
-        get: () => state
-    });
-    Object.defineProperty(that, 'isSmart', {
-        get: () => smartShot
-    });
-
-    //Might not need this????
-    let reportUpdate = false;           // Indicates if this model was updated during the last update
-    Object.defineProperty(that, 'reportUpdate', {
-        get: () => reportUpdate,
-        set: value => reportUpdate = value
-    });
+    that.smartShot = spec.smartShot;
 
 
     that.update = function(elapsedTime){
 
+        //console.log('ufo located: ', that.state.center);
         timeSinceLastShot += elapsedTime;
         fire();
-        //update the state of this object
+        //update the that.state of this object
         updateCenter(elapsedTime);
         rotate(elapsedTime);
     }
 
     function updateCenter(elapsedTime){
-        state.center.x += state.momentum.x * elapsedTime;
-        state.center.y += state.momentum.y * elapsedTime;
-        if (state.center.x < -.1){
-            state.center.x = 10.1;
+        //console.log('that.state.center before update: ', that.state.center);
+        that.state.center.x += that.state.momentum.x * elapsedTime;
+        that.state.center.y += that.state.momentum.y * elapsedTime;
+        if (that.state.center.x < -.1){
+            that.state.center.x = 10.1;
         }
-        if (state.center.x > 10.1){
-            state.center.x = -.1;
+        if (that.state.center.x > 10.1){
+            that.state.center.x = -.1;
         }
         
-        if (state.center.y < -.1){
-            state.center.y = 10.1;
+        if (that.state.center.y < -.1){
+            that.state.center.y = 10.1;
         }
-        if (state.center.y > 10.1){
-            state.center.y = -.1;
+        if (that.state.center.y > 10.1){
+            that.state.center.y = -.1;
         }
+        //console.log('that.state after update: ', that.state.center);
     }
     function rotate(elapsedTime){
-        state.rotation += state.rotationRate;
+        that.state.rotation += that.state.rotationRate;
     }
 
     function fire(){
@@ -89,7 +78,8 @@ function createUFO(spec,missileHandler) {
                 missileRotation = random.nextDouble() * 2 * Math.PI;
             }
 
-            missileHandler.createEnemyMissile(missileRotation,state,missileSpeed)
+            //console.log('ufo creating missile at: ', state.center);
+            missileHandler.createEnemyMissile(missileRotation,that.state,missileSpeed)
         }
     }
 

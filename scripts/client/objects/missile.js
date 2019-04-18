@@ -17,6 +17,9 @@ MyGame.components.Missile = function(message,texture) {
         get: () => message.clientID
     });
 
+    Object.defineProperty(that, 'texture', {
+        get: () => texture
+    });
 
     that.update = function(elapsedTime){
         updateCenter(elapsedTime);

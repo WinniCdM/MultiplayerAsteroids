@@ -35,7 +35,6 @@ MyGame.components.UFO = function(state, texture) {
     });
 
     that.update = function(elapsedTime){
-
         //update Location
         updateCenter(elapsedTime);
         rotate(elapsedTime);
