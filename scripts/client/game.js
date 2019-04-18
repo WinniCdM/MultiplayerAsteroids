@@ -93,6 +93,13 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 case 'missile-destroyed':
                     //console.log('missile destroyed');
                     break;
+                case 'powerup-new':
+                    console.log(message.data);
+                    handlePowerupNew(message.data);
+                    break;
+                case 'powerup-delete':
+                    handlePowerupDelete(message.data);
+                    break;
             }
         } 
     }
@@ -242,7 +249,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
-        
+        handlers.AsteroidHandler.deleteAsteroid(data.key);
     }
 
     //------------------------------------------------------------------
@@ -261,6 +268,24 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function handleUFODestroyed(data){
         MyGame.handlers.UFOHandler.destroyUFO(data.id);//pass in only id of UFO
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about powerup creation
+    //
+    //------------------------------------------------------------------
+    function handlePowerupNew(data){
+        MyGame.handlers.PowerupHandler.createPowerup(data);
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about powerup destructions
+    //
+    //------------------------------------------------------------------
+    function handlePowerupDelete(data){
+        MyGame.handlers.PowerupHandler.deletePowerup(data.key);
     }
 
     //------------------------------------------------------------------

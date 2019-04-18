@@ -18,5 +18,9 @@ MyGame.handlers.AsteroidHandler = (function(){
         asteroids[data.key] = newAsteroid;
     }
 
+    that.deleteAsteroid = function(id){
+        delete asteroids[id];
+    }
+
     return that;
 }());
