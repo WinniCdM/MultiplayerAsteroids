@@ -9,9 +9,6 @@ let random = require ('../random');
 let helpers = require ('../helper/helperFunctions');
 let UFO = require ('../objects/ufo');
 
-
-
-
 function ufoHandler(missileHandler){
     let that = {};
 
@@ -56,7 +53,7 @@ function ufoHandler(missileHandler){
             smartShot: false,
             missileSpeed: 1
         }
-        console.log('ufo state: ', newUFOSpec.state);
+        //console.log('ufo state: ', newUFOSpec.state);
 
         if(smart){
             newUFOSpec.state.size = {width: .04, height: .04};
@@ -66,12 +63,10 @@ function ufoHandler(missileHandler){
             newUFOSpec.state.size = {width:.075,height:.075};
         }
 
-        
-        
         ufos[id] = UFO.create(newUFOSpec,missileHandler);
         newUFOs.push(id);
 
-        console.log('New UFO generated');
+        //console.log('New UFO generated');
     }
 
     let test = true;

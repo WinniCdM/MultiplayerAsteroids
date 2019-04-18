@@ -24,5 +24,15 @@ function numberPad(number, padding){
     number += '';
     return number.padStart(padding, '0');
 }
+
+//------------------------------------------------------------------
+//
+// Helper function to randomly choose between positive and negative
+//
+//------------------------------------------------------------------
+function generatePosNeg(){
+    return Math.random() < 0.5 ? -1 : 1
+}
 module.exports.generateNewRandomCenter = generateNewRandomCenter;
 module.exports.numberPad = numberPad;
+module.exports.generatePosNeg = generatePosNeg;

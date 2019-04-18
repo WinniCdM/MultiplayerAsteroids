@@ -18,6 +18,7 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
 
         renderer.TiledBackground.render(model.position);
 
+        // Local Self Player Setup
         let playerSelf = model.objectsWithinViewPort["playerSelf"]; // extract player
 
         let localPlayerSelf = { // translate to local viewport coordinates
@@ -32,9 +33,10 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             texture: playerSelf.texture
         }
 
-        let localPlayerOthers = [];
-
-        let playerOthers = model.objectsWithinViewPort["playerOthers"]; // extract other players
+        // Local Other Players Setup
+        let localPlayerOthers = []
+        
+        let playerOthers = model.objectsWithinViewPort["playerOthers"]; // extracct other players
 
         for (let index in playerOthers){
             let currPlayerOther = playerOthers[index];
@@ -54,14 +56,27 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localPlayerOthers.push(currLocalPlayerOther);
         }
 
-        // render everything within view port
-        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
-        for (let id in localPlayerOthers) {
-            let player = localPlayerOthers[id];
-            renderer.PlayerRemote.render(player.model, player.texture);
+        // Local Asteroids Setup
+        let localAsteroids = [];
+
+        let asteroids = model.objectsWithinViewPort["asteroids"]; // extract asteroids
+
+        for (let index in asteroids){
+            let currAsteroid = asteroids[index];
+            let currLocalAsteroid = {
+                state: {
+                    center: {
+                        x: currAsteroid.state.center.x - model.position.x,
+                        y: currAsteroid.state.center.y - model.position.y
+                    },
+                    size: currAsteroid.state.size,
+                    rotation: currAsteroid.state.rotation
+                }
+            }
+            localAsteroids.push(currLocalAsteroid);
         }
 
-        //UFO Rendering
+        // Local UFO setup
 
         let localUFOs = [];
 
@@ -85,15 +100,27 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localUFOs.push(currLocalUFO);
         }
 
+        // render everything within view port
+        // Render player 
+        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
 
-        for (let id in localUFOs){
-            let ufo = localUFOs[id];
-            renderer.UFO.render(ufo.state,ufo.texture,ufo.subImageIndex,ufo.subTextureWidth);
+        // Render other players
+        for (let id in localPlayerOthers) {
+            let player = localPlayerOthers[id];
+            renderer.PlayerRemote.render(player.model, player.texture);
         }
 
+        // Render asteroids
+        for (let id in localAsteroids) {
+            let asteroid = localAsteroids[id];
+            renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
+        }
 
-
-
+        //UFO Rendering
+        for (let id in localUFOs){
+            let ufo = localUFOs[id];
+            renderer.UFO.render(ufo.state,ufo.texture, ufo.subImageIndex, ufo.subTextureWidth);
+        }
 
         graphics.restoreContext();
     };

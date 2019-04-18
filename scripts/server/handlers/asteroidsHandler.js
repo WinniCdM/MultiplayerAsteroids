@@ -15,7 +15,7 @@ let Helper = require("../helper/helperFunctions");
 function asteroidHandler(){
     let that = {};
     let asteroids = {};
-    let newAsteroids = []; //list of ids
+    let newAsteroids = []; //dictionary of id to asteroid details
     let destroyedAsteroids = []; //list of ids
     let id = 0;
 
@@ -38,8 +38,8 @@ function asteroidHandler(){
     }
 
     that.update = function(elapsedTime){
-        for (let i = 0; i < asteroids.length; i++){
-            asteroids[i].update(elapsedTime);
+        for (let key in asteroids){
+            asteroids[key].update(elapsedTime);
         }
     }
 
@@ -54,10 +54,7 @@ function asteroidHandler(){
     }
 
     that.createNewAsteroidAtCenter = function(size, center){
-        asteroids.push(
-            getIdForNewAsteroid(),
-            Asteroid.create(center, size)
-            );
+        asteroids[getIdForNewAsteroid()] = Asteroid.create(center, size);
     }
 
     that.handleAsteroidBreak = function(oldAsteroid){
