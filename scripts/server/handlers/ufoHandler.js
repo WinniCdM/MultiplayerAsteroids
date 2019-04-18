@@ -16,8 +16,8 @@ function ufoHandler(missileHandler){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 60000000;
-    let largeUFOSpawnRate = 400;
+    let smallUFOSpawnRate = 60000;
+    let largeUFOSpawnRate = 40000;
 
     let nextID = 0;
     let newUFOs = [];
@@ -42,10 +42,10 @@ function ufoHandler(missileHandler){
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(0),//.0002),
+                momentum: random.nextCircleVector(.0002),
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
-                center: {x:1,y:1},//helpers.generateNewRandomCenter(),
+                center: helpers.generateNewRandomCenter(),
                 rotationRate: Math.PI / 1000,
                 id:id
             },
@@ -53,7 +53,6 @@ function ufoHandler(missileHandler){
             smartShot: false,
             missileSpeed: .001
         }
-        //console.log('ufo state: ', newUFOSpec.state);
 
         if(smart){
             newUFOSpec.state.size = {width: .04, height: .04};
@@ -67,12 +66,10 @@ function ufoHandler(missileHandler){
         newUFOs.push(id);
     }
 
-    let test = true;
     function handleUFOSpawning(elapsedTime){
         timeSinceLastSmallUFOSpawn += elapsedTime;
         timeSinceLastLargeUFOSpawn += elapsedTime;
-        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate && test){
-            test = false;
+        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate){
             createUFO(false);
             timeSinceLastLargeUFOSpawn = 0;
         }
@@ -86,9 +83,7 @@ function ufoHandler(missileHandler){
         
         handleUFOSpawning(elapsedTime);
         for(let id in ufos){
-            //console.log('handler before update ufo located: ', ufos[id].state.center);
             ufos[id].update(elapsedTime);
-            //console.log('handler after update ufo located: ', ufos[id].state.center);
         }
     }
 

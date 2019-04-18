@@ -11,21 +11,11 @@ MyGame.handlers.MissileHandler = (function() {
         get: () => missiles
     });
 
-     //simply keeps the state and renders it. 
-    //---------------------------------------------------------------
-    // State contains 
-    // size: { width:,height:},
-    // momentum: {x:,y:},//Should set x and y, not sure
-    // rotation: ,
-    // maxSpeed: ,
-    // center: {x:,y:},
-    // id:      //unique UFO identifier, use to add to dictionary
-    //---------------------------------------------------------------
 
     //message contains
     // state
     // owner
-    //clientID
+    // clientID
     that.handleNewMissile = function (message){
         //console.log('new missile added at: ', message.state);
 

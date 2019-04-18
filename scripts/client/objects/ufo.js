@@ -35,7 +35,6 @@ MyGame.components.UFO = function(state, texture) {
     });
 
     that.update = function(elapsedTime){
-        //update Location
         updateCenter(elapsedTime);
         rotate(elapsedTime);
         updateAnimation(elapsedTime);
@@ -64,18 +63,10 @@ MyGame.components.UFO = function(state, texture) {
     }
 
     function updateAnimation(elapsedTime){
-        //update animation Sprite stuff
         animationTime += elapsedTime;
-        //
-        // Check to see if we should update the animation frame
         if (animationTime >= spriteTime[subImageIndex]) {
-            //
-            // When switching sprites, keep the leftover time because
-            // it needs to be accounted for the next sprite animation frame.
             animationTime -= spriteTime[subImageIndex];
             subImageIndex += 1;
-            //
-            // Wrap around from the last back to the first sprite as needed
             subImageIndex = subImageIndex % spriteCount;
         }
     }
