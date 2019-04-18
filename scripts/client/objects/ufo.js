@@ -41,7 +41,6 @@ MyGame.components.UFO = function(state,texture) {
         updateCenter(elapsedTime);
         rotate(elapsedTime);
         updateAnimation(elapsedTime);
-        console.log('ufo location: ', state.center);
 
 
         

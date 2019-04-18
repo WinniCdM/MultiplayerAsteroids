@@ -19,13 +19,12 @@ function ufoHandler(missileHandler){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 6000;
-    let largeUFOSpawnRate = 4000;
+    let smallUFOSpawnRate = 60000;
+    let largeUFOSpawnRate = 40000;
 
     let nextID = 0;
     let newUFOs = [];
     let UFOsDestroyed = [];
-    let test = true;
 
     Object.defineProperty(that, 'ufos', {
         get: () => ufos
@@ -47,7 +46,7 @@ function ufoHandler(missileHandler){
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(.0002),//Should set x and y,aaaa not sure
+                momentum: random.nextCircleVector(.0002),
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
                 center: helpers.generateNewRandomCenter(),
@@ -79,11 +78,11 @@ function ufoHandler(missileHandler){
     function handleUFOSpawning(elapsedTime){
         timeSinceLastSmallUFOSpawn += elapsedTime;
         timeSinceLastLargeUFOSpawn += elapsedTime;
-        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate && test){
+        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate){
             createUFO(false);
             timeSinceLastLargeUFOSpawn = 0;
         }
-        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate && test){
+        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate){
             createUFO(true);
             timeSinceLastSmallUFOSpawn = 0;
         }
@@ -93,7 +92,6 @@ function ufoHandler(missileHandler){
         handleUFOSpawning(elapsedTime);
         for(let id in ufos){
             ufos[id].update(elapsedTime);
-            //console.log('ufo ', id, ' updating');
         }
     }
 
