@@ -113,7 +113,7 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
         // Render asteroids
         for (let id in localAsteroids) {
             let asteroid = localAsteroids[id];
-            renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
+            renderer.Asteroid.render(asteroid, asteroid.texture);
         }
 
         //UFO Rendering

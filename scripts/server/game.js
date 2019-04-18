@@ -10,10 +10,12 @@ let Player = require('./objects/player');
 let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
+let PowerupHandler = require("./handlers/powerupHandler");
 
 let asteroidsHandler = AsteroidHandler.create();
 let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler);
+let powerupHandler = PowerupHandler.create();
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -21,8 +23,11 @@ let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
 
-let asteroidGenerationRate = 3 / 10000 // 1 every 10000 milliseconds
+let asteroidGenerationRate = 3 / 10000 // however many every 10000 milliseconds
 let timeSinceLastAsteroid = 10000; // immediately spawn one
+
+let powerupGenerationRate = 1 / 20000; // however many every 20000 milliseconds
+let timeSinceLastPowerup = 0; 
 
 //------------------------------------------------------------------
 //
@@ -135,7 +140,7 @@ function updateClientsAboutAsteroids(elapsedTime){
     timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
     if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
         asteroidsHandler.createNewRandomAsteroid(1);
-        timeSinceLastAsteroid = 0;
+        timeSinceLastAsteroid -= asteroidGenerationRate; //account for overlap
     }
 
     // new asteroids
@@ -152,7 +157,8 @@ function updateClientsAboutAsteroids(elapsedTime){
 
     // deleted asteroids
     let deletedAsteroids = asteroidsHandler.deletedAsteroids;
-    for (let key in deletedAsteroids){
+    for (let i in deletedAsteroids){
+        let key = deletedAsteroids[i];
         let message = {
             key: key
         }
@@ -160,6 +166,41 @@ function updateClientsAboutAsteroids(elapsedTime){
     }
 
     asteroidsHandler.clearNewAndDeletedAsteroids();
+}
+
+//------------------------------------------------------------------
+//
+// Send state of the Powerups to any connected clients.
+//
+//------------------------------------------------------------------
+function updateClientsAboutPowerups(elapsedTime){
+    timeSinceLastPowerup += elapsedTime; // generate a new asteroid if necesary
+    if (timeSinceLastPowerup * powerupGenerationRate > 1){
+        powerupHandler.createNewPowerup(1);
+        timeSinceLastPowerup -= powerupGenerationRate; // account for overlap
+    }
+
+    // new powerups
+    let newPowerups = powerupHandler.newPowerups;
+    for (let i in newPowerups){
+        let key = newPowerups[i];
+        let currNewPowerup = powerupHandler.powerups[key];
+        let message = {
+            powerupState: currNewPowerup.state,
+            key: key
+        }
+        transmitMessageToAllClients(message, 'powerup-new');
+    }     
+
+    // deleted powerups
+    let deletedPowerups = powerupHandler.destroyedPowerups;
+    for (let i in deletedPowerups){
+        let key = deletedPowerups[i];
+        let message = {
+            key: key
+        }
+        transmitMessageToAllClients(message, 'powerup-delete');
+    }
 }
 
 //------------------------------------------------------------------
@@ -259,17 +300,22 @@ function informNewClientAboutExistingUFOs(clientSocket){
 
 //------------------------------------------------------------------
 //
-// Transmits a message of a certain type to all connected clients
+// Transmits messages of all current powerups to the provided 
+// clientSocket
 //
 //------------------------------------------------------------------
-function transmitMessageToAllClients(message, type){
-    for (let clientId in activeClients) {
-        let client = activeClients[clientId];
-        client.socket.emit('message', {
-                type: type,
-                message: message
-            }
-        )
+function informNewClientAboutExistingPowerups(clientSocket){
+    let uppers = powerupHandler.powerups;
+    for (let key in uppers){
+        let currUpper = uppers[key];
+        let message = {
+            powerupState: currUpper.state,
+            key: key
+        }
+        clientSocket.emit('message', {
+            type: "powerup-new",
+            message: message
+        })
     }
 }
 
@@ -285,6 +331,7 @@ function gameLoop(currentTime, elapsedTime) {
     updateClientsAboutAsteroids(elapsedTime);
     updateClientsAboutUFOs(elapsedTime);
     updateClientsAboutMissiles(elapsedTime);
+    updateClientsAboutPowerups(elapsedTime);
 
     if (!quit) {
         setTimeout(() => {
@@ -397,6 +444,7 @@ function initializeSocketIO(httpServer) {
         notifyConnect(socket, newPlayer);
         informNewClientAboutExistingAsteroids(socket);
         informNewClientAboutExistingUFOs(socket);
+        informNewClientAboutExistingPowerups(socket);
     });
 }
 

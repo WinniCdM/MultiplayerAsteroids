@@ -31,7 +31,8 @@ MyGame.loader = (function () {
                 'objects/player-remote', 
                 'objects/asteroid', 
                 'objects/ufo', 
-                'objects/missile'
+                'objects/missile',
+                'objects/powerup'
             ],
             message: 'Object models loaded',
             onComplete: null
@@ -50,7 +51,8 @@ MyGame.loader = (function () {
                 'rendering/viewPort', 
                 'rendering/tiledBackground',
                 'rendering/ufo',
-                'rendering/asteroid'
+                'rendering/asteroid',
+                'rendering/powerup'
             ],
             message: 'Renderers loaded',
             onComplete: null
@@ -58,7 +60,8 @@ MyGame.loader = (function () {
             scripts: [
                 'handlers/asteroidHandler', 
                 'handlers/ufoHandler', 
-                'handlers/missileHandler'
+                'handlers/missileHandler',
+                'handlers/powerupHandler'
             ],
             message: 'Handlers loaded',
             onComplete: null
