@@ -26,14 +26,12 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
     Object.defineProperty(that, 'playerOthers', {
         get: () => playerOthers
-    })
+    });
 
-
-    //UFO handler
-    let UFOHandler = handlers.UFOHandler();
     Object.defineProperty(that, 'ufoList', {
-        get: () => UFOHandler.ufos
-    })
+        get: () => MyGame.handlers.UFOHandler.ufos
+    });
+
     //------------------------------------------------------------------
     //
     // Handler for all messages
@@ -58,39 +56,42 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         messageQueue = [];
 
         for (let index in processMe){
-            let input = processMe[index];
-            switch (input.data.type){
+            let message = processMe[index];
+            switch (message.data.type){
                 case 'connect-ack':
-                    handleConnectAck(input.data);
+                    handleConnectAck(message.data);
                     break;
                 case 'connect-other':
-                    handleConnectOther(input.data);
+                    handleConnectOther(message.data);
                     break;
                 case 'disconnect-other':
-                    handleDisconnectOther(input.data);
+                    handleDisconnectOther(message.data);
                     break;
                 case 'update-self':
-                    handleUpdateSelf(input.data);
+                    handleUpdateSelf(message.data);
                     break;
                 case 'update-other':
-                    handleUpdateOther(input.data);
+                    handleUpdateOther(message.data);
                     break;
                 case 'asteroid-new':
-                    console.log("A new Asteroid has spawned: ", input.data);
+                    handleAsteroidNew(message.data);
+                    break;
+                case 'asteroid-delete':
+                    handleAsteroidDelete(message.data);
                     break;
                 case 'ufo-new':
-                    UFOHandler.handleNewUFO(input.data.message);//send state info
-                    console.log('A new ufo has been received');
+                    handleUFONew(message.data);
+                    //console.log('A new ufo has been received');
                     break;
                 case 'ufo-destroyed':
-                    UFOHandler.destroyUFO(input.data.message.id);//pass in only id of UFO
-                    console.log('ufo is destroyed');
+                    handleUFODestroyed(message.data);
+                    //console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
-                    console.log('missile generated');
+                    //console.log('missile generated');
                     break;
                 case 'missile-destroyed':
-                    console.log('missile destroyed');
+                    //console.log('missile destroyed');
                     break;
             }
         } 
@@ -228,6 +229,42 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
     //------------------------------------------------------------------
     //
+    // Handler for receiving new asteroids
+    //
+    //------------------------------------------------------------------
+    function handleAsteroidNew(data){
+        handlers.AsteroidHandler.createAsteroid(data.message);
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about asteroid destructions
+    //
+    //------------------------------------------------------------------
+    function handleAsteroidDelete(data){
+        
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a new ufo
+    //
+    //------------------------------------------------------------------
+    function handleUFONew(data){
+        MyGame.handlers.UFOHandler.handleNewUFO(data.message);//send state info
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about ufo destructions
+    //
+    //------------------------------------------------------------------
+    function handleUFODestroyed(data){
+        MyGame.handlers.UFOHandler.destroyUFO(data.id);//pass in only id of UFO
+    }
+
+    //------------------------------------------------------------------
+    //
     // Process the registered input handlers here.
     //
     //------------------------------------------------------------------
@@ -246,11 +283,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
         }
-
-        //Update animated Sprites
-        for(let id in UFOHandler.ufos){
-            UFOHandler.ufos[id].update(elapsedTime);
-        }
+        handlers.AsteroidHandler.update(elapsedTime);
+        handlers.UFOHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

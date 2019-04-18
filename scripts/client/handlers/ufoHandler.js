@@ -3,7 +3,7 @@
 // Handler for all ufos in the game.
 //
 //------------------------------------------------------------------
-MyGame.handlers.UFOHandler = function() {
+MyGame.handlers.UFOHandler = (function(){
     'use strict';
     let that = {};
 
@@ -12,6 +12,12 @@ MyGame.handlers.UFOHandler = function() {
     Object.defineProperty(that, 'ufos', {
         get: () => ufos
     });
+
+    that.update = function(elapsedTime){
+        for(let id in ufos){
+            ufos[id].update(elapsedTime);
+        }
+    }
 
     //simply keeps the state and renders it. 
     //---------------------------------------------------------------
@@ -25,9 +31,9 @@ MyGame.handlers.UFOHandler = function() {
     // id:      //unique UFO identifier, use to add to dictionary
     //---------------------------------------------------------------
     that.handleNewUFO = function (state){
-        console.log('ufo state: ', state.center);
+        //console.log('ufo state: ', state.center);
         //add the ufo to the dictionary using id
-        ufos[state.id] = MyGame.components.UFO(state,MyGame.assets['ufo-1']);
+        ufos[state.id] = MyGame.components.UFO(state, MyGame.assets['ufo-1']);
     }
 
     that.destroyUFO = function(id){
@@ -36,4 +42,4 @@ MyGame.handlers.UFOHandler = function() {
 
 
     return that;
-}
+}());
