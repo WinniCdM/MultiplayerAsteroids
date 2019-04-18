@@ -3,7 +3,7 @@
 // This function provides the "game" code.
 //
 //------------------------------------------------------------------
-MyGame.main = (function(graphics, renderer, input, components) {
+MyGame.main = (function(graphics, renderer, input, components, handlers) {
     'use strict';
 
     let lastTimeStamp = performance.now(),
@@ -52,25 +52,29 @@ MyGame.main = (function(graphics, renderer, input, components) {
         messageQueue = [];
 
         for (let index in processMe){
-            let input = processMe[index];
-            switch (input.data.type){
+            let message = processMe[index];
+            switch (message.data.type){
                 case 'connect-ack':
-                    handleConnectAck(input.data);
+                    handleConnectAck(message.data);
                     break;
                 case 'connect-other':
-                    handleConnectOther(input.data);
+                    handleConnectOther(message.data);
                     break;
                 case 'disconnect-other':
-                    handleDisconnectOther(input.data);
+                    handleDisconnectOther(message.data);
                     break;
                 case 'update-self':
-                    handleUpdateSelf(input.data);
+                    handleUpdateSelf(message.data);
                     break;
                 case 'update-other':
-                    handleUpdateOther(input.data);
+                    handleUpdateOther(message.data);
                     break;
                 case 'asteroid-new':
-                    console.log("A new Asteroid has spawned: ", input.data);
+                    handleAsteroidNew(message.data);
+                    break;
+                case 'asteroid-delete':
+                    handleAsteroidDelete(message.data);
+                    break;
             }
         } 
     }
@@ -207,6 +211,24 @@ MyGame.main = (function(graphics, renderer, input, components) {
 
     //------------------------------------------------------------------
     //
+    // Handler for receiving new asteroids
+    //
+    //------------------------------------------------------------------
+    function handleAsteroidNew(data){
+        handlers.AsteroidHandler.createAsteroid(data.message);
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about asteroid destructions
+    //
+    //------------------------------------------------------------------
+    function handleAsteroidDelete(data){
+        
+    }
+
+    //------------------------------------------------------------------
+    //
     // Process the registered input handlers here.
     //
     //------------------------------------------------------------------
@@ -225,6 +247,7 @@ MyGame.main = (function(graphics, renderer, input, components) {
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
         }
+        handlers.AsteroidHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------
@@ -311,4 +334,4 @@ MyGame.main = (function(graphics, renderer, input, components) {
 
     return that
  
-}(MyGame.graphics, MyGame.renderer, MyGame.input, MyGame.components));
+}(MyGame.graphics, MyGame.renderer, MyGame.input, MyGame.components, MyGame.handlers));

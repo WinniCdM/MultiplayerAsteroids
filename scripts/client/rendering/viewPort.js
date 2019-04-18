@@ -18,6 +18,7 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
 
         renderer.TiledBackground.render(model.position);
 
+        // Local Self Player Setup
         let playerSelf = model.objectsWithinViewPort["playerSelf"]; // extract player
 
         let localPlayerSelf = { // translate to local viewport coordinates
@@ -32,8 +33,9 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             texture: playerSelf.texture
         }
 
+        // Local Other Players Setup
         let localPlayerOthers = []
-
+        
         let playerOthers = model.objectsWithinViewPort["playerOthers"]; // extracct other players
 
         for (let index in playerOthers){
@@ -54,13 +56,41 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localPlayerOthers.push(currLocalPlayerOther);
         }
 
+        // Local Asteroids Setup
+        let localAsteroids = [];
+
+        let asteroids = model.objectsWithinViewPort["asteroids"]; // extract asteroids
+
+        for (let index in asteroids){
+            let currAsteroid = asteroids[index];
+            let currLocalAsteroid = {
+                state: {
+                    center: {
+                        x: currAsteroid.state.center.x - model.position.x,
+                        y: currAsteroid.state.center.y - model.position.y
+                    },
+                    size: currAsteroid.state.size,
+                    rotation: currAsteroid.rotation
+                }
+            }
+            localAsteroids.push(currLocalAsteroid);
+        }
+
         // render everything within view port
+        // Render player 
         renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
+
+        // Render other players
         for (let id in localPlayerOthers) {
             let player = localPlayerOthers[id];
             renderer.PlayerRemote.render(player.model, player.texture);
         }
 
+        // Render asteroids
+        for (let id in localAsteroids) {
+            let asteroid = localAsteroids[id];
+            renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
+        }
         graphics.restoreContext();
     };
 

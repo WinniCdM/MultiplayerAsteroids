@@ -24,22 +24,22 @@ function createAsteroid(position, size) {
         let size = { width: 0, height: 0 }
         switch (sizeString){
             case "large":
+                size.width = .2;
+                size.height = .2;
+                break;
+            case "medium":
                 size.width = .1;
                 size.height = .1;
                 break;
-            case "medium":
+            case "small":
                 size.width = .05;
                 size.height = .05;
-                break;
-            case "small":
-                size.width = .025;
-                size.height = .025;
         }
         return size;
     }
 
     let newSize = that.getSize(size);
-    let newMomentum = random.nextCircleVector();
+    let newMomentum = random.nextCircleVector(.0001);
 
     that.state = {
         center: {
@@ -61,8 +61,8 @@ function createAsteroid(position, size) {
 
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime
-        that.state.center.x += that.state.momentum.deltaX * elapsedTime;
-        that.state.center.y += that.state.momentum.deltaY * elapsedTime;
+        that.state.center.x += that.state.momentum.x * elapsedTime;
+        that.state.center.y += that.state.momentum.x * elapsedTime;
         if (that.state.center.x < -.1){
             that.state.center.x = 10.1;
         }

@@ -113,7 +113,8 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
     let updateViewPortObjects = function(elapsedTime){
         objectsWithinViewPort = { 
             "playerSelf": null,
-            "playerOthers": []
+            "playerOthers": [],
+            "asteroids": []
          } //clear viewport objects
         objectsWithinViewPort["playerSelf"] = MyGame.main.playerSelf; //add player
 
@@ -121,6 +122,13 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             let currOtherPlayer = MyGame.main.playerOthers[index];
             if (checkIfWithinViewPort(currOtherPlayer.model.state.position)){
                 objectsWithinViewPort["playerOthers"].push(currOtherPlayer);
+            }
+        }
+
+        for (let index in MyGame.handlers.AsteroidHandler.asteroids){
+            let currAsteroid = MyGame.handlers.AsteroidHandler.asteroids[index];
+            if (checkIfWithinViewPort(currAsteroid.state.center)){
+                objectsWithinViewPort["asteroids"].push(currAsteroid);
             }
         }
     }

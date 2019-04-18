@@ -17,7 +17,7 @@ let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
 
-let asteroidGenerationRate = 1 / 10000 // 1 every 10000 milliseconds
+let asteroidGenerationRate = 3 / 10000 // 1 every 10000 milliseconds
 let timeSinceLastAsteroid = 10000; // immediately spawn one
 
 //------------------------------------------------------------------
@@ -122,18 +122,47 @@ function updateClientsAboutAsteroids(elapsedTime){
 
     // new asteroids
     let newAsteroids = asteroids.newAsteroids;
-    for (let id in newAsteroids){
-        let currNewAsteroid = asteroids.asteroids[id];
-        transmitMessageToAllClients(currNewAsteroid.state, 'asteroid-new');
+    for (let i in newAsteroids){
+        let key = newAsteroids[i];
+        let currNewAsteroid = asteroids.asteroids[key];
+        let message = {
+            asteroidState: currNewAsteroid.state,
+            key: key
+        }
+        transmitMessageToAllClients(message, 'asteroid-new');
     }
 
     // deleted asteroids
     let deletedAsteroids = asteroids.deletedAsteroids;
-    for (let id in deletedAsteroids){
-        transmitMessageToAllClients(id, 'asteroid-delete');
+    for (let key in deletedAsteroids){
+        let message = {
+            key: key
+        }
+        transmitMessageToAllClients(message, 'asteroid-delete');
     }
 
     asteroids.clearNewAndDeletedAsteroids();
+}
+
+//------------------------------------------------------------------
+//
+// Transmits messages of all current asteroids to the provided 
+// clientSocket
+//
+//------------------------------------------------------------------
+function informNewClientAboutExistingAsteroids(clientSocket){
+    let rocks = asteroids.asteroids;
+    for( let key in rocks ){
+        let currRock = rocks[key];
+        let message = {
+            asteroidState: currRock.state,
+            key: key
+        }
+        clientSocket.emit('message', {
+            type: "asteroid-new",
+            message: message
+        });
+    }
 }
 
 
@@ -273,7 +302,7 @@ function initializeSocketIO(httpServer) {
         });
 
         notifyConnect(socket, newPlayer);
-        //TODO: update new client of all existing objects on the field.
+        informNewClientAboutExistingAsteroids(socket);
     });
 }
 

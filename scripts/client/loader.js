@@ -4,6 +4,7 @@ MyGame = {
     renderer: {},
     utilities: {},
     assets: {},
+    handlers: {}
 };
 
 //------------------------------------------------------------------
@@ -25,8 +26,8 @@ MyGame.loader = (function () {
             message: 'Input loaded',
             onComplete: null
         }, {
-            scripts: ['objects/player', 'objects/player-remote'],
-            message: 'Player models loaded',
+            scripts: ['objects/player', 'objects/player-remote', 'objects/asteroid'],
+            message: 'Component models loaded',
             onComplete: null
         }, {
             scripts: ['objects/viewPort'],
@@ -37,8 +38,13 @@ MyGame.loader = (function () {
             message: 'Graphics loaded',
             onComplete: null
         }, {
-            scripts: ['rendering/player', 'rendering/player-remote', 'rendering/viewPort', 'rendering/tiledBackground'],
+            scripts: ['rendering/player', 'rendering/player-remote', 'rendering/viewPort', 
+                'rendering/tiledBackground', 'rendering/asteroid'],
             message: 'Renderers loaded',
+            onComplete: null
+        }, {
+            scripts: ['handler/asteroidHandler'],
+            message: 'Handlers loaded',
             onComplete: null
         }, {
             scripts: ['game'],
