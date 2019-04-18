@@ -28,6 +28,12 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         get: () => playerOthers
     })
 
+
+    //UFO handler
+    let UFOHandler = handlers.UFOHandler();
+    Object.defineProperty(that, 'ufoList', {
+        get: () => UFOHandler.ufos
+    })
     //------------------------------------------------------------------
     //
     // Handler for all messages
@@ -74,6 +80,20 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'asteroid-delete':
                     handleAsteroidDelete(message.data);
+                    break;
+                case 'ufo-new':
+                    UFOHandler.handleNewUFO(input.data.message);//send state info
+                    console.log('A new ufo has been received');
+                    break;
+                case 'ufo-destroyed':
+                    UFOHandler.destroyUFO(input.data.message.id);//pass in only id of UFO
+                    console.log('ufo is destroyed');
+                    break;
+                case 'missile-new':
+                    console.log('missile generated');
+                    break;
+                case 'missile-destroyed':
+                    console.log('missile destroyed');
                     break;
             }
         } 
@@ -248,6 +268,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             playerOthers[id].model.update(elapsedTime);
         }
         handlers.AsteroidHandler.update(elapsedTime);
+
+        //Update animated Sprites
+        for(let id in UFOHandler.ufos){
+            UFOHandler.ufos[id].update(elapsedTime);
+        }
     }
 
     //------------------------------------------------------------------

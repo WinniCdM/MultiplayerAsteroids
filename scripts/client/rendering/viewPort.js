@@ -91,6 +91,40 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             let asteroid = localAsteroids[id];
             renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
         }
+        //UFO Rendering
+
+        let localUFOs = [];
+
+        let UFOs = model.objectsWithinViewPort['ufos'];
+
+        for (let index in UFOs){
+            let currUFO = UFOs[index];
+            let currLocalUFO = { // translate each to local viewport coordinates
+                state: {
+                    center: {
+                        x:currUFO.state.center.x - model.position.x,
+                        y:currUFO.state.center.y - model.position.y,
+                    },
+                    rotation: currUFO.state.rotation,
+                    size: currUFO.state.size
+                },
+                texture: currUFO.texture,
+                subImageIndex: currUFO.subImageIndex,
+                subTextureWidth: currUFO.subTextureWidth,
+            }
+            localUFOs.push(currLocalUFO);
+        }
+
+
+        for (let id in localUFOs){
+            let ufo = localUFOs[id];
+            renderer.UFO.render(ufo.state,ufo.texture,ufo.subImageIndex,ufo.subTextureWidth);
+        }
+
+
+
+
+
         graphics.restoreContext();
     };
 

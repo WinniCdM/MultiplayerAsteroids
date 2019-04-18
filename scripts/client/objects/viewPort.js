@@ -114,14 +114,24 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         objectsWithinViewPort = { 
             "playerSelf": null,
             "playerOthers": [],
+            "ufos": [],
             "asteroids": []
          } //clear viewport objects
         objectsWithinViewPort["playerSelf"] = MyGame.main.playerSelf; //add player
 
+        //Check if other players are in viewport
         for (let index in MyGame.main.playerOthers){
             let currOtherPlayer = MyGame.main.playerOthers[index];
             if (checkIfWithinViewPort(currOtherPlayer.model.state.position)){
                 objectsWithinViewPort["playerOthers"].push(currOtherPlayer);
+            }
+        }
+
+        //Check if UFOs are in viewport
+        for (let id in MyGame.main.ufoList){
+            let currUFO = MyGame.main.ufoList[id];
+            if (checkIfWithinViewPort(currUFO.state.center)){
+                objectsWithinViewPort["ufos"].push(currUFO);
             }
         }
 
