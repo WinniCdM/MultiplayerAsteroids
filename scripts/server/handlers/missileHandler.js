@@ -54,16 +54,16 @@ function missileHandler(){
         }
     }
 
-    that.createPlayerMissile = function(spaceState,missileSpeed){
-        let vectorX = Math.cos(spaceState.rotation);
-        let vectorY = Math.sin(spaceState.rotation);
+    that.createPlayerMissile = function(rotation, spaceState,missileSpeed){
+        let vectorX = Math.cos(rotation);
+        let vectorY = Math.sin(rotation);
 
         let newMissile = missile.create({
             state : {
                 size:{width:.075, height:.025},
                 momentum: {
-                    x: vectorX * missileSpeed,
-                    y: vectorY * missileSpeed
+                    x: spaceState.momentum.x + (vectorX * missileSpeed),
+                    y: spaceState.momentum.y + (vectorY * missileSpeed)
                 },
                 rotation:spaceState.rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,

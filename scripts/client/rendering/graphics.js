@@ -108,12 +108,50 @@ MyGame.graphics = (function() {
         context.restore();
     }
 
+    // --------------------------------------------------------------
+    //
+    // Draws a sprite to the canvas with the following specification:
+    //    image: Image
+    //    index: index of sub-texture to draw
+    //    subTextureWidth: pixel width of the sub-texture to draw
+    //    center: {x: , y: }
+    //    size: { width: , height: } // Size (in pixels) to render the sub-texture
+    //
+    // --------------------------------------------------------------
+    function drawSprite(image, index, subTextureWidth, center, size) {
+
+        let localCenter = {
+            x: center.x/2 * canvas.width,
+            y: center.y * canvas.height
+        }
+
+        let localSize = {
+            width: size.width * canvas.width / 2,
+            height: size.height * canvas.height
+        }
+
+
+        context.save();
+        // Pick the selected sprite from the sprite sheet to render
+        context.drawImage(
+            image,
+            subTextureWidth * index, 0,      // Which sub-texture to pick out
+            subTextureWidth, image.height,   // The size of the sub-texture
+            localCenter.x - localSize.width / 2,           // Where to draw the sub-texture
+            localCenter.y - localSize.height / 2,
+            localSize.width, localSize.height);
+
+        context.restore();
+    }
+
+
     return {
         clear: clear,
         saveContext: saveContext,
         restoreContext: restoreContext,
         rotateCanvas: rotateCanvas,
         drawImage: drawImage,
-        drawSubTexture:drawSubTexture
+        drawSubTexture:drawSubTexture,
+        drawSprite:drawSprite
     };
 }());

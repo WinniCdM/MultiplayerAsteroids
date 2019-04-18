@@ -19,12 +19,13 @@ function ufoHandler(missileHandler){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 60000;
-    let largeUFOSpawnRate = 40000;
+    let smallUFOSpawnRate = 6000;
+    let largeUFOSpawnRate = 4000;
 
     let nextID = 0;
     let newUFOs = [];
     let UFOsDestroyed = [];
+    let test = true;
 
     Object.defineProperty(that, 'ufos', {
         get: () => ufos
@@ -41,19 +42,23 @@ function ufoHandler(missileHandler){
     }
 
     function createUFO(smart){
+        test = false;
+        let id = getNextID();
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(.3),//Should set x and y, not sure
+                momentum: random.nextCircleVector(.0002),//Should set x and y,aaaa not sure
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
                 center: helpers.generateNewRandomCenter(),
-                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100)
+                rotationRate: random.nextRange(Math.PI / 1000,Math.PI / 100),
+                id:id
             },
             fireRate: 1000,
             smartShot: false,
             missileSpeed: 1
         }
+        console.log('ufo state: ', newUFOSpec.state);
 
         if(smart){
             newUFOSpec.state.size = {width: .04, height: .04};
@@ -63,22 +68,22 @@ function ufoHandler(missileHandler){
             newUFOSpec.state.size = {width:.075,height:.075};
         }
 
-        let id = getNextID();
+        
         
         ufos[id] = UFO.create(newUFOSpec,missileHandler);
         newUFOs.push(id);
 
-        //console.log("New UFO generated state: ", ufos[id].state, );
+        console.log('New UFO generated');
     }
 
     function handleUFOSpawning(elapsedTime){
         timeSinceLastSmallUFOSpawn += elapsedTime;
         timeSinceLastLargeUFOSpawn += elapsedTime;
-        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate){
+        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate && test){
             createUFO(false);
             timeSinceLastLargeUFOSpawn = 0;
         }
-        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate){
+        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate && test){
             createUFO(true);
             timeSinceLastSmallUFOSpawn = 0;
         }

@@ -4,6 +4,7 @@ MyGame = {
     renderer: {},
     utilities: {},
     assets: {},
+    handlers: {}
 };
 
 //------------------------------------------------------------------
@@ -45,7 +46,11 @@ MyGame.loader = (function () {
             message: 'Graphics loaded',
             onComplete: null
         }, {
-            scripts: ['rendering/player', 'rendering/player-remote', 'rendering/viewPort', 'rendering/tiledBackground'],
+            scripts: ['rendering/player', 
+            'rendering/player-remote', 
+            'rendering/viewPort', 
+            'rendering/tiledBackground',
+            'rendering/ufo'],
             message: 'Renderers loaded',
             onComplete: null
         }, {
@@ -62,6 +67,9 @@ MyGame.loader = (function () {
         }, {
             key: 'asteroid',
             source: 'assets/images/other/asteroid.png'
+        }, {
+            key: 'ufo-1',
+            source: 'assets/images/other/ufo1.png'
         },];
 
         

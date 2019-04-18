@@ -82,7 +82,7 @@ function update(elapsedTime) {
 //
 //------------------------------------------------------------------
 function updateClientsAboutUFOs(elapsedTime){
-    console.log('new ufos length: ', ufosHandler.newUFOs.length);
+    
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
