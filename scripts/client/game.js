@@ -284,11 +284,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             playerOthers[id].model.update(elapsedTime);
         }
         handlers.AsteroidHandler.update(elapsedTime);
-
-        //Update animated Sprites
-        for(let id in that.ufoList){
-            MyGame.handlers.UFOHandler.ufos[id].update(elapsedTime);
-        }
+        handlers.UFOHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

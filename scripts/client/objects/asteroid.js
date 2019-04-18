@@ -22,7 +22,7 @@ MyGame.components.Asteroid = function(spec){
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime
         that.state.center.x += that.state.momentum.x * elapsedTime;
-        that.state.center.y += that.state.momentum.x * elapsedTime;
+        that.state.center.y += that.state.momentum.y * elapsedTime;
         if (that.state.center.x < -.1){
             that.state.center.x = 10.1;
         }

@@ -128,6 +128,42 @@ function updateClientsAboutMissiles(elapsedTime){
 
 //------------------------------------------------------------------
 //
+// Send state of the Asteroids to any connected clients.
+//
+//------------------------------------------------------------------
+function updateClientsAboutAsteroids(elapsedTime){
+    timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
+    if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
+        asteroidsHandler.createNewRandomAsteroid(1);
+        timeSinceLastAsteroid = 0;
+    }
+
+    // new asteroids
+    let newAsteroids = asteroidsHandler.newAsteroids;
+    for (let i in newAsteroids){
+        let key = newAsteroids[i];
+        let currNewAsteroid = asteroidsHandler.asteroids[key];
+        let message = {
+            asteroidState: currNewAsteroid.state,
+            key: key
+        }
+        transmitMessageToAllClients(message, 'asteroid-new');
+    }
+
+    // deleted asteroids
+    let deletedAsteroids = asteroidsHandler.deletedAsteroids;
+    for (let key in deletedAsteroids){
+        let message = {
+            key: key
+        }
+        transmitMessageToAllClients(message, 'asteroid-delete');
+    }
+
+    asteroidsHandler.clearNewAndDeletedAsteroids();
+}
+
+//------------------------------------------------------------------
+//
 // Generic function used to send messages to all clients
 //
 //------------------------------------------------------------------
@@ -184,42 +220,6 @@ function updateClients(elapsedTime) {
 
 //------------------------------------------------------------------
 //
-// Send state of the Asteroids to any connected clients.
-//
-//------------------------------------------------------------------
-function updateClientsAboutAsteroids(elapsedTime){
-    timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
-    if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
-        asteroidsHandler.createNewRandomAsteroid(1);
-        timeSinceLastAsteroid = 0;
-    }
-
-    // new asteroids
-    let newAsteroids = asteroidsHandler.newAsteroids;
-    for (let i in newAsteroids){
-        let key = newAsteroids[i];
-        let currNewAsteroid = asteroidsHandler.asteroids[key];
-        let message = {
-            asteroidState: currNewAsteroid.state,
-            key: key
-        }
-        transmitMessageToAllClients(message, 'asteroid-new');
-    }
-
-    // deleted asteroids
-    let deletedAsteroids = asteroidsHandler.deletedAsteroids;
-    for (let key in deletedAsteroids){
-        let message = {
-            key: key
-        }
-        transmitMessageToAllClients(message, 'asteroid-delete');
-    }
-
-    asteroidsHandler.clearNewAndDeletedAsteroids();
-}
-
-//------------------------------------------------------------------
-//
 // Transmits messages of all current asteroids to the provided 
 // clientSocket
 //
@@ -236,6 +236,24 @@ function informNewClientAboutExistingAsteroids(clientSocket){
             type: "asteroid-new",
             message: message
         });
+    }
+}
+
+//------------------------------------------------------------------
+//
+// Transmits messages of all current ufos to the provided 
+// clientSocket
+//
+//------------------------------------------------------------------
+function informNewClientAboutExistingUFOs(clientSocket){
+    let fos = ufosHandler.ufos;
+    for (let key in fos){
+        let currFos = fos[key];
+        let message = currFos.state;
+        clientSocket.emit('message', {
+            type: "ufo-new",
+            message: message
+        })
     }
 }
 
@@ -378,6 +396,7 @@ function initializeSocketIO(httpServer) {
 
         notifyConnect(socket, newPlayer);
         informNewClientAboutExistingAsteroids(socket);
+        informNewClientAboutExistingUFOs(socket);
     });
 }
 

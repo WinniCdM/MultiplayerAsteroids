@@ -70,28 +70,13 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
                         y: currAsteroid.state.center.y - model.position.y
                     },
                     size: currAsteroid.state.size,
-                    rotation: currAsteroid.rotation
+                    rotation: currAsteroid.state.rotation
                 }
             }
             localAsteroids.push(currLocalAsteroid);
         }
 
-        // render everything within view port
-        // Render player 
-        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
-
-        // Render other players
-        for (let id in localPlayerOthers) {
-            let player = localPlayerOthers[id];
-            renderer.PlayerRemote.render(player.model, player.texture);
-        }
-
-        // Render asteroids
-        for (let id in localAsteroids) {
-            let asteroid = localAsteroids[id];
-            renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
-        }
-        //UFO Rendering
+        // Local UFO setup
 
         let localUFOs = [];
 
@@ -115,15 +100,27 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localUFOs.push(currLocalUFO);
         }
 
+        // render everything within view port
+        // Render player 
+        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
 
-        for (let id in localUFOs){
-            let ufo = localUFOs[id];
-            renderer.UFO.render(ufo.state,ufo.texture,ufo.subImageIndex,ufo.subTextureWidth);
+        // Render other players
+        for (let id in localPlayerOthers) {
+            let player = localPlayerOthers[id];
+            renderer.PlayerRemote.render(player.model, player.texture);
         }
 
+        // Render asteroids
+        for (let id in localAsteroids) {
+            let asteroid = localAsteroids[id];
+            renderer.Asteroid.render(asteroid, MyGame.assets['asteroid']);
+        }
 
-
-
+        //UFO Rendering
+        for (let id in localUFOs){
+            let ufo = localUFOs[id];
+            renderer.UFO.render(ufo.state,ufo.texture, ufo.subImageIndex, ufo.subTextureWidth);
+        }
 
         graphics.restoreContext();
     };

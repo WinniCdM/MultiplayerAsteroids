@@ -6,6 +6,7 @@
 'use strict';
 
 let random = require("../random");
+let helper = require("../helper/helperFunctions");
 
 //------------------------------------------------------------------
 //
@@ -56,13 +57,13 @@ function createAsteroid(position, size) {
             y: newMomentum.y
         },
         rotation: random.nextDouble() * 2 * Math.PI,    // Angle in radians
-        rotateRate: random.nextDouble() * Math.PI / 1000    // radians per millisecond
+        rotateRate: helper.generatePosNeg() * random.nextDouble() * Math.PI / 1000    // radians per millisecond
     }
 
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime
         that.state.center.x += that.state.momentum.x * elapsedTime;
-        that.state.center.y += that.state.momentum.x * elapsedTime;
+        that.state.center.y += that.state.momentum.y * elapsedTime;
         if (that.state.center.x < -.1){
             that.state.center.x = 10.1;
         }

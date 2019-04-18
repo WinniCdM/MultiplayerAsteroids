@@ -13,6 +13,12 @@ MyGame.handlers.UFOHandler = (function(){
         get: () => ufos
     });
 
+    that.update = function(elapsedTime){
+        for(let id in ufos){
+            ufos[id].update(elapsedTime);
+        }
+    }
+
     //simply keeps the state and renders it. 
     //---------------------------------------------------------------
     // State contains the following

@@ -3,7 +3,7 @@
 // Model for each ufo in the game.
 //
 //------------------------------------------------------------------
-MyGame.components.UFO = function(state,texture) {
+MyGame.components.UFO = function(state, texture) {
     'use strict';
     let that = {};
     Object.defineProperty(that, 'state', {
