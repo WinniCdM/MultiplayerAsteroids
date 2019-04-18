@@ -148,7 +148,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         for (let id in MyGame.handlers.MissileHandler.missiles){
             let currMissile = MyGame.handlers.MissileHandler.missiles[id];
             if(checkIfWithinViewPort(currMissile.state.center)){
-                objectsWithinViewPort['missile'].push(currMissile);
+                objectsWithinViewPort['missiles'].push(currMissile);
             }
         }
 

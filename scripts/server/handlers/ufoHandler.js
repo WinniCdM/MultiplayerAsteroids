@@ -42,16 +42,16 @@ function ufoHandler(missileHandler){
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(.0002),
+                momentum: random.nextCircleVector(0),//.0002),
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
-                center: helpers.generateNewRandomCenter(),
+                center: {x:1,y:1},//helpers.generateNewRandomCenter(),
                 rotationRate: Math.PI / 1000,
                 id:id
             },
             fireRate: 1000,
             smartShot: false,
-            missileSpeed: .00001
+            missileSpeed: .001
         }
         //console.log('ufo state: ', newUFOSpec.state);
 
