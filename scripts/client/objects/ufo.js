@@ -22,8 +22,7 @@ MyGame.components.UFO = function(state,texture) {
     Object.defineProperty(that, 'spriteTime', {
         get: () => spriteTime
     });
-
-
+    
     let animationTime = 0;
     let subImageIndex = 0;
     let subTextureWidth = texture.width / spriteCount;
@@ -41,9 +40,6 @@ MyGame.components.UFO = function(state,texture) {
         updateCenter(elapsedTime);
         rotate(elapsedTime);
         updateAnimation(elapsedTime);
-
-
-        
     }
 
     function updateCenter(elapsedTime){
@@ -65,7 +61,7 @@ MyGame.components.UFO = function(state,texture) {
     }
 
     function rotate(elapsedTime){
-        state.rotation += state.rotationRate;
+        state.rotation += state.rotationRate * elapsedTime;
     }
 
     function updateAnimation(elapsedTime){

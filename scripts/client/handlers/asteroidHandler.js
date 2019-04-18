@@ -1,4 +1,5 @@
 MyGame.handlers.AsteroidHandler = (function(){
+    'use strict';
     let that = {}
     let asteroids = {};
 

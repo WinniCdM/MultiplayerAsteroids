@@ -26,16 +26,14 @@ MyGame.loader = (function () {
             message: 'Input loaded',
             onComplete: null
         }, {
-            scripts: ['objects/player', 'objects/player-remote', 'objects/asteroid'],
-            message: 'Component models loaded',
-            onComplete: null
-        }, {
-            scripts: ['objects/ufo', 'objects/missile'],
-            message: 'ufo and missile models loaded',
-            onComplete: null
-        }, {
-            scripts: ['handlers/ufoHandler', 'handlers/missileHandler'],
-            message: 'UFO and Missile handlers loaded',
+            scripts: [
+                'objects/player', 
+                'objects/player-remote', 
+                'objects/asteroid', 
+                'objects/ufo', 
+                'objects/missile'
+            ],
+            message: 'Object models loaded',
             onComplete: null
         }, {
             scripts: ['objects/viewPort'],
@@ -46,16 +44,22 @@ MyGame.loader = (function () {
             message: 'Graphics loaded',
             onComplete: null
         }, {
-            scripts: ['rendering/player', 
-            'rendering/player-remote', 
-            'rendering/viewPort', 
-            'rendering/tiledBackground',
-            'rendering/ufo'],
-                'rendering/tiledBackground', 'rendering/asteroid'],
+            scripts: [
+                'rendering/player', 
+                'rendering/player-remote', 
+                'rendering/viewPort', 
+                'rendering/tiledBackground',
+                'rendering/ufo',
+                'rendering/asteroid'
+            ],
             message: 'Renderers loaded',
             onComplete: null
         }, {
-            scripts: ['handler/asteroidHandler'],
+            scripts: [
+                'handlers/asteroidHandler', 
+                'handlers/ufoHandler', 
+                'handlers/missileHandler'
+            ],
             message: 'Handlers loaded',
             onComplete: null
         }, {

@@ -19,8 +19,6 @@ MyGame.components.Asteroid = function(spec){
         rotateRate: spec.rotateRate
     }
 
-    console.log(that.state);
-
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime
         that.state.center.x += that.state.momentum.x * elapsedTime;
