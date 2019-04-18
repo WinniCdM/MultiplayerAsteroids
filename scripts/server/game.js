@@ -261,6 +261,28 @@ function informNewClientAboutExistingUFOs(clientSocket){
 
 //------------------------------------------------------------------
 //
+// Transmits messages of all current Missiles to the provided 
+// clientSocket
+//
+//------------------------------------------------------------------
+function informNewClientAboutExistingMissiles(clientSocket){
+    let missiles = missilesHandler.missiles;
+    for (let key in missiles){
+        let currMissiles = missiles[key];
+        let message = {
+            state:currMissiles.state,
+            owner:currMissiles.owner,
+            clientID:currMissiles.clientID
+        }
+        clientSocket.emit('message', {
+            type: "missile-new",
+            message: message
+        })
+    }
+}
+
+//------------------------------------------------------------------
+//
 // Transmits a message of a certain type to all connected clients
 //
 //------------------------------------------------------------------
@@ -399,6 +421,7 @@ function initializeSocketIO(httpServer) {
         notifyConnect(socket, newPlayer);
         informNewClientAboutExistingAsteroids(socket);
         informNewClientAboutExistingUFOs(socket);
+        informNewClientAboutExistingMissiles(socket);
     });
 }
 
