@@ -4,6 +4,7 @@ MyGame = {
     renderer: {},
     utilities: {},
     assets: {},
+    handlers: {}
 };
 
 //------------------------------------------------------------------
@@ -17,7 +18,7 @@ MyGame = {
 MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
-            scripts: ['../shared/helper/helperFunctions', '../shared/helper/queue'],
+            scripts: ['helper/helperFunctions', 'helper/queue'],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
@@ -29,6 +30,14 @@ MyGame.loader = (function () {
             message: 'Player models loaded',
             onComplete: null
         }, {
+            scripts: ['objects/ufo', 'objects/missile'],
+            message: 'ufo and missile models loaded',
+            onComplete: null
+        }, {
+            scripts: ['handlers/ufoHandler', 'handlers/missileHandler'],
+            message: 'UFO and Missile handlers loaded',
+            onComplete: null
+        }, {
             scripts: ['objects/viewPort'],
             message: 'ViewPort models loaded',
             onComplete: null
@@ -37,7 +46,11 @@ MyGame.loader = (function () {
             message: 'Graphics loaded',
             onComplete: null
         }, {
-            scripts: ['rendering/player', 'rendering/player-remote', 'rendering/viewPort', 'rendering/tiledBackground'],
+            scripts: ['rendering/player', 
+            'rendering/player-remote', 
+            'rendering/viewPort', 
+            'rendering/tiledBackground',
+            'rendering/ufo'],
             message: 'Renderers loaded',
             onComplete: null
         }, {
@@ -51,7 +64,13 @@ MyGame.loader = (function () {
         }, {
             key: 'player-other',
             source: 'assets/images/players/playerShip1_red.png'
-        }];
+        }, {
+            key: 'asteroid',
+            source: 'assets/images/other/asteroid.png'
+        }, {
+            key: 'ufo-1',
+            source: 'assets/images/other/ufo1.png'
+        },];
 
         
     //------------------------------------------------------------------

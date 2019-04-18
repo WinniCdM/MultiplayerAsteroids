@@ -32,9 +32,9 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             texture: playerSelf.texture
         }
 
-        let localPlayerOthers = []
+        let localPlayerOthers = [];
 
-        let playerOthers = model.objectsWithinViewPort["playerOthers"]; // extracct other players
+        let playerOthers = model.objectsWithinViewPort["playerOthers"]; // extract other players
 
         for (let index in playerOthers){
             let currPlayerOther = playerOthers[index];
@@ -60,6 +60,40 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             let player = localPlayerOthers[id];
             renderer.PlayerRemote.render(player.model, player.texture);
         }
+
+        //UFO Rendering
+
+        let localUFOs = [];
+
+        let UFOs = model.objectsWithinViewPort['ufos'];
+
+        for (let index in UFOs){
+            let currUFO = UFOs[index];
+            let currLocalUFO = { // translate each to local viewport coordinates
+                state: {
+                    center: {
+                        x:currUFO.state.center.x - model.position.x,
+                        y:currUFO.state.center.y - model.position.y,
+                    },
+                    rotation: currUFO.state.rotation,
+                    size: currUFO.state.size
+                },
+                texture: currUFO.texture,
+                subImageIndex: currUFO.subImageIndex,
+                subTextureWidth: currUFO.subTextureWidth,
+            }
+            localUFOs.push(currLocalUFO);
+        }
+
+
+        for (let id in localUFOs){
+            let ufo = localUFOs[id];
+            renderer.UFO.render(ufo.state,ufo.texture,ufo.subImageIndex,ufo.subTextureWidth);
+        }
+
+
+
+
 
         graphics.restoreContext();
     };

@@ -1,13 +1,41 @@
+// ------------------------------------------------------------------
+//
+// Nodejs module that represents the model for an asteroid handler 
+// object.
+//
+// ------------------------------------------------------------------
 let Asteroid = require("../objects/asteroid");
-let Helper = require("../../shared/helper/helperFunctions");
+let Helper = require("../helper/helperFunctions");
 
+// ------------------------------------------------------------------
+//
+// Public function to create a new asteroid handler
+//
+// ------------------------------------------------------------------
 function asteroidHandler(){
     let that = {};
-    let asteroids = [];
+    let asteroids = {};
+    let newAsteroids = []; //list of ids
+    let destroyedAsteroids = []; //list of ids
+    let id = 0;
 
     Object.defineProperty(that, 'asteroids', {
         get: () => asteroids
-    })
+    });
+
+    Object.defineProperty(that, 'newAsteroids', {
+        get: () => newAsteroids
+    });
+
+    Object.defineProperty(that, 'destroyedAsteroids', {
+        get: () => destroyedAsteroids
+    });
+
+    function getIdForNewAsteroid(){
+        let newId = id++
+        newAsteroids.push(newId);
+        return newId;
+    }
 
     that.update = function(elapsedTime){
         for (let i = 0; i < asteroids.length; i++){
@@ -17,23 +45,44 @@ function asteroidHandler(){
 
     that.createNewRandomAsteroid = function(number){
         for (let i = 0; i < number; i++){
-            asteroids.push(Asteroid.create(
-                HelperFunctions.generateNewRandomCenter(), 
-                "large"
-                )
-            );
+            asteroids[getIdForNewAsteroid()] = 
+                Asteroid.create(
+                    Helper.generateNewRandomCenter(), 
+                    "large"
+                    );
         }
+    }
+
+    that.createNewAsteroidAtCenter = function(size, center){
+        asteroids.push(
+            getIdForNewAsteroid(),
+            Asteroid.create(center, size)
+            );
     }
 
     that.handleAsteroidBreak = function(oldAsteroid){
         if (oldAsteroid.asteroidSize === "large"){
-            //create 3 medium asteroids
+            for (let i = 0; i < 3; i ++){
+                that.createNewAsteroidAtCenter("medium", oldAsteroid.center)
+            }
         } else if (oldAsteroid.asteroidSize === "medium"){
-            //create 4 small
+            for (let i = 0; i < 4; i ++){
+                that.createNewAsteroidAtCenter("small", oldAsteroid.center)
+            }
         }
+    }
+
+    that.deleteAsteroid = function(id){
+        delete asteroids[id];
+        deletedAsteroids.push(id);
+    }
+
+    that.clearNewAndDeletedAsteroids = function(){
+        deletedAsteroid = [];
+        newAsteroids = [];
     }
 
     return that;
 };
 
-module.exports.createAsteroidHandler = () => asteroidHandler();
+module.exports.create = () => asteroidHandler();
