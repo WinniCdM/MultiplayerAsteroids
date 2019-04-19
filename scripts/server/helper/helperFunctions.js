@@ -1,5 +1,5 @@
 let toggleTop = true;
-
+const performance = require('perf_hooks').performance;
 //------------------------------------------------------------------
 //
 // Helper function to generate a new random center along the edges
@@ -25,6 +25,10 @@ function numberPad(number, padding){
     return number.padStart(padding, '0');
 }
 
+function getTime(){
+    return performance.now();
+}
+
 //------------------------------------------------------------------
 //
 // Helper function to randomly choose between positive and negative
@@ -36,3 +40,4 @@ function generatePosNeg(){
 module.exports.generateNewRandomCenter = generateNewRandomCenter;
 module.exports.numberPad = numberPad;
 module.exports.generatePosNeg = generatePosNeg;
+module.exports.getTime = getTime;

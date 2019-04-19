@@ -125,6 +125,28 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localPowerups.push(currLocalPowerup);
         }
 
+        // Local Missile setup
+
+        let localMissiles = [];
+         
+        let missiles = model.objectsWithinViewPort['missiles'];
+
+        for (let index in missiles){
+            let currMissile = missiles[index];
+            let currLocalMissile = {
+                state: {
+                    center: {
+                        x:currMissile.state.center.x - model.position.x,
+                        y:currMissile.state.center.y - model.position.y
+                    },
+                    rotation:currMissile.state.rotation,
+                    size: currMissile.state.size
+                },
+                texture:currMissile.texture
+            }
+            localMissiles.push(currLocalMissile);
+        }
+
         // render everything within view port
         // Render player 
         renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
@@ -151,6 +173,12 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
         for (let id in localPowerups){
             let currPowerup = localPowerups[id];
             renderer.Powerup.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);
+        }
+
+        //Missile Rendering
+        for (let id in localMissiles){
+            let missile = localMissiles[id];
+            renderer.Missile.render(missile.state,missile.texture);
         }
 
         graphics.restoreContext();

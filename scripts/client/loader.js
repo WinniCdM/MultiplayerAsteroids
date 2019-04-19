@@ -58,7 +58,8 @@ MyGame.loader = (function () {
                 'rendering/tiledBackground',
                 'rendering/ufo',
                 'rendering/asteroid',
-                'rendering/powerup'
+                'rendering/powerup',
+                'rendering/missile'
             ],
             message: 'Renderers loaded',
             onComplete: null
@@ -88,6 +89,12 @@ MyGame.loader = (function () {
         }, {
             key: 'ufo-1',
             source: 'assets/images/other/ufo1.png'
+        }, {
+            key: 'enemy-missile',
+            source: 'assets/images/other/enemymissile.png'
+        }, {
+            key: 'player-missile',
+            source: 'assets/images/other/playermissile.png'
         }, {
             key: 'green-powerup',
             source: 'assets/images/powerups/green.png'
