@@ -58,6 +58,9 @@ function processInput() {
             case 'rotate-right':
                 client.player.rotateRight(input.message.elapsedTime);
                 break;
+            case 'fire':
+                client.player.fire(input.message.elapsedTime);
+                break;
         }
     }
 }
@@ -116,6 +119,7 @@ function updateClientsAboutMissiles(elapsedTime){
                 clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
+            console.log('new missile sent: ', message);
         }
         missilesHandler.clearNewMissiles();
     }
@@ -391,7 +395,7 @@ function initializeSocketIO(httpServer) {
         console.log('Connection established: ', socket.id);
         //
         // Create an entry in our list of connected clients
-        let newPlayer = Player.create()
+        let newPlayer = Player.create(missilesHandler,socket.id)
         newPlayer.clientId = socket.id;
         activeClients[socket.id] = {
             socket: socket,

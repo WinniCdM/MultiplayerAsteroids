@@ -375,6 +375,17 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             },
             'a', true);
 
+        myKeyboard.registerHandler(elapsedTime => {
+                let message = {
+                    id: messageId++,
+                    elapsedTime: elapsedTime,
+                    type: 'fire'
+                };
+                socket.emit('input', message);
+                messageHistory.enqueue(message);
+            },
+            ' ', true);
+
         //
         // Get the game loop started
         requestAnimationFrame(gameLoop);

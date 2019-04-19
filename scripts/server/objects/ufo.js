@@ -69,7 +69,8 @@ function createUFO(spec,missileHandler,activeClients) {
                 // if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
 
                 // missileOrientation = Random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
-                missileRotation = getSmartShotRotation();
+                //missileRotation = getSmartShotRotation();
+                missileRotation = random.nextDouble() * 2 * Math.PI;
             } else {
                 missileRotation = random.nextDouble() * 2 * Math.PI;
             }
@@ -81,6 +82,7 @@ function createUFO(spec,missileHandler,activeClients) {
 
     function getSmartShotRotation(){
         let targetID = findNearestPlayer();
+        console.log('activeClients: ', activeClients);
         let targetCenter = activeClients[targetID].player.position;
         let accuracyModifier = (1.5 / (activeClients[targetID].player.score + 1));
 

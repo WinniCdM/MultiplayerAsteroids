@@ -67,7 +67,7 @@ function missileHandler(){
                     x: spaceState.momentum.x + (vectorX * missileSpeed),
                     y: spaceState.momentum.y + (vectorY * missileSpeed)
                 },
-                rotation:spaceState.rotation,
+                rotation:rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,
                 center: {x:spaceState.center.x,y:spaceState.center.y},
                 id:id
