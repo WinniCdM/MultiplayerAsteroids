@@ -16,8 +16,8 @@ function ufoHandler(missileHandler,activeClients){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 60000;
-    let largeUFOSpawnRate = 40000;
+    let smallUFOSpawnRate = 6000;
+    let largeUFOSpawnRate = 4000;
 
     let nextID = 0;
     let newUFOs = [];
@@ -42,14 +42,14 @@ function ufoHandler(missileHandler,activeClients){
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
-                momentum: random.nextCircleVector(.0002),
+                momentum: {x:0.0001,y:0},//random.nextCircleVector(.0002),
                 rotation: random.nextDouble() * 2 * Math.PI,
                 maxSpeed: 200/1000,
-                center: helpers.generateNewRandomCenter(),
+                center: {x:1,y:1},//helpers.generateNewRandomCenter(),
                 rotationRate: Math.PI / 1000,
                 id:id
             },
-            fireRate: 1000,
+            fireRate: 3000,
             smartShot: false,
             missileSpeed: .001
         }
@@ -66,16 +66,18 @@ function ufoHandler(missileHandler,activeClients){
         newUFOs.push(id);
     }
 
+    let test = true;
     function handleUFOSpawning(elapsedTime){
         timeSinceLastSmallUFOSpawn += elapsedTime;
         timeSinceLastLargeUFOSpawn += elapsedTime;
-        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate){
+        if (timeSinceLastLargeUFOSpawn >= largeUFOSpawnRate && false){
             createUFO(false);
             timeSinceLastLargeUFOSpawn = 0;
         }
-        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate){
+        if (timeSinceLastSmallUFOSpawn >= smallUFOSpawnRate && test){
             createUFO(true);
             timeSinceLastSmallUFOSpawn = 0;
+            test = false;
         }
     }
 

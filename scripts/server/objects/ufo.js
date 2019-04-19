@@ -26,6 +26,7 @@ function createUFO(spec,missileHandler,activeClients) {
     Object.defineProperty(that, 'isSmart', {
         get: () => smartShot
     });
+    // console.log('ufo created at: ', that.state.center);
 
 
     that.update = function(elapsedTime){
@@ -34,9 +35,12 @@ function createUFO(spec,missileHandler,activeClients) {
         fire();
         updateCenter(elapsedTime);
         rotate(elapsedTime);
+        // console.log('current UFO center: ', that.state.center);
     }
 
     function updateCenter(elapsedTime){
+
+        
         that.state.center.x += that.state.momentum.x * elapsedTime;
         that.state.center.y += that.state.momentum.y * elapsedTime;
         if (that.state.center.x < -.1){

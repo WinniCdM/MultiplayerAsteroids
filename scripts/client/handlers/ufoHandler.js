@@ -21,6 +21,7 @@ MyGame.handlers.UFOHandler = (function(){
 
     that.handleNewUFO = function (state){
         //add the ufo to the dictionary using id
+        console.log('new ufo with state: ', state);
         ufos[state.id] = MyGame.components.UFO(state, MyGame.assets['ufo-1']);
     }
 
