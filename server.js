@@ -39,6 +39,6 @@ function handleRequest(request, response) {
 let server = http.createServer(handleRequest);
 
 server.listen(3000, function() {
-    game.initialize(server);
+    //game.initialize(server);
     console.log('Server is listening on port 3000');
 });

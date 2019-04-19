@@ -18,6 +18,12 @@ MyGame = {
 MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
+            scripts: [
+                'menu'
+            ],
+            message: 'Menu loaded',
+            onComplete: null
+        }, {
             scripts: ['helper/helperFunctions', 'helper/queue'],
             message: 'Utilities loaded',
             onComplete: null,
@@ -251,7 +257,7 @@ MyGame.loader = (function () {
     //------------------------------------------------------------------
     function mainComplete() {
         console.log('it is all loaded up');
-        MyGame.main.initialize();
+        //MyGame.main.initialize();
     }
 
     //
