@@ -55,7 +55,7 @@ function missileHandler(){
         }
     }
 
-    that.createPlayerMissile = function(rotation, spaceState,missileSpeed, clientID){
+    that.createPlayerMissile = function(rotation, spaceState, missileSpeed, clientID){
         let vectorX = Math.cos(rotation);
         let vectorY = Math.sin(rotation);
 

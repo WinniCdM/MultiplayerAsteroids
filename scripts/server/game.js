@@ -71,12 +71,12 @@ function processInput() {
 //
 //------------------------------------------------------------------
 function update(elapsedTime) {
+    missilesHandler.update(elapsedTime);
+    asteroidsHandler.update(elapsedTime);
+    ufosHandler.update(elapsedTime);
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
-    asteroidsHandler.update(elapsedTime);
-    ufosHandler.update(elapsedTime);
-    missilesHandler.update(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -310,11 +310,11 @@ function transmitMessageToAllClients(message, type){
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    update(elapsedTime);
     updateClients(elapsedTime);
     updateClientsAboutAsteroids(elapsedTime);
     updateClientsAboutUFOs(elapsedTime);
     updateClientsAboutMissiles(elapsedTime);
+    update(elapsedTime);
 
     if (!quit) {
         setTimeout(() => {
