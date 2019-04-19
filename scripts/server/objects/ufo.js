@@ -35,7 +35,6 @@ function createUFO(spec,missileHandler,activeClients) {
         fire();
         updateCenter(elapsedTime);
         rotate(elapsedTime);
-        // console.log('current UFO center: ', that.state.center);
     }
 
     function updateCenter(elapsedTime){

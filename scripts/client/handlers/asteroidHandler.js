@@ -14,7 +14,6 @@ MyGame.handlers.AsteroidHandler = (function(){
     }
 
     that.createAsteroid = function(data){
-        console.log('new asteroid received at: ', data.asteroidState.center);
         let newAsteroid = MyGame.components.Asteroid(data.asteroidState, MyGame.assets['asteroid']);
         asteroids[data.key] = newAsteroid;
     }

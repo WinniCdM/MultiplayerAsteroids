@@ -40,11 +40,9 @@ function asteroidHandler(){
         return newId;
     }
 
-    let test = true;
     that.update = function(elapsedTime){
         timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
-        if (timeSinceLastAsteroid * asteroidGenerationRate > 1 && test){
-            test = false;
+        if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
             that.createNewRandomAsteroid(1);
             timeSinceLastAsteroid = 0;
         }

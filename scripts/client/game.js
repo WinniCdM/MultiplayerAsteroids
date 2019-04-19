@@ -315,15 +315,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime) {
-        playerSelf.model.update(elapsedTime);
-        viewPort.update(elapsedTime);
-        for (let id in playerOthers) {
-            playerOthers[id].model.update(elapsedTime);
-        }
+        handlers.MissileHandler.update(elapsedTime);
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
         handlers.PowerupHandler.update(elapsedTime);
-        handlers.MissileHandler.update(elapsedTime);
+        playerSelf.model.update(elapsedTime);
+        for (let id in playerOthers) {
+            playerOthers[id].model.update(elapsedTime);
+        }
+        viewPort.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

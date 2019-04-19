@@ -40,8 +40,6 @@ MyGame.components.Asteroid = function(spec, texture){
         if (that.state.center.y > 10.1){
             that.state.center.y = -.1;
         }
-
-        console.log('current asteroid Position: ', that.state.center);
     }
 
     return that;

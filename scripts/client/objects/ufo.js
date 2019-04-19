@@ -38,7 +38,6 @@ MyGame.components.UFO = function(state, texture) {
         updateCenter(elapsedTime);
         rotate(elapsedTime);
         updateAnimation(elapsedTime);
-        // console.log('current UFO center: ', state.center);
     }
 
     function updateCenter(elapsedTime){

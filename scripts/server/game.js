@@ -72,12 +72,12 @@ function update(elapsedTime) {
     missilesHandler.update(elapsedTime);
     asteroidsHandler.update(elapsedTime);
     ufosHandler.update(elapsedTime);
+    powerupHandler.update(elapsedTime);
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
-    asteroidsHandler.update(elapsedTime);
-    ufosHandler.update(elapsedTime);
-    powerupHandler.update(elapsedTime);
+
+
 }
 
 //------------------------------------------------------------------
@@ -91,7 +91,6 @@ function updateClientsAboutUFOs(elapsedTime){
         for(let id in ufosHandler.newUFOs){
             let currNewUFO = ufosHandler.ufos[id];
             transmitMessageToAllClients(currNewUFO.state,'ufo-new');
-            // console.log('ufo message sent: ', currNewUFO.state);
         }
         ufosHandler.clearNewUFOS();
     }
@@ -151,7 +150,6 @@ function updateClientsAboutAsteroids(elapsedTime){
             key: key
         }
         transmitMessageToAllClients(message, 'asteroid-new');
-        console.log('asteroid sent: ', message.asteroidState.position);
     }
 
     // deleted asteroids
