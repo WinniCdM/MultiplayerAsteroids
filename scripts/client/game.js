@@ -94,7 +94,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     //console.log('missile destroyed');
                     break;
                 case 'powerup-new':
-                    console.log(message.data);
                     handlePowerupNew(message.data);
                     break;
                 case 'powerup-delete':

@@ -71,7 +71,8 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
                     },
                     size: currAsteroid.state.size,
                     rotation: currAsteroid.state.rotation
-                }
+                },
+                texture: currAsteroid.texture
             }
             localAsteroids.push(currLocalAsteroid);
         }
@@ -100,6 +101,30 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             localUFOs.push(currLocalUFO);
         }
 
+        //Local Powerup setup
+
+        let localPowerups = [];
+
+        let powerups = model.objectsWithinViewPort['powerups'];
+
+        for (let index in powerups){
+            let currPowerup = powerups[index];
+            let currLocalPowerup = {
+                state: {
+                    center: {
+                        x: currPowerup.state.center.x - model.position.x,
+                        y: currPowerup.state.center.y - model.position.y
+                    },
+                    rotation: currPowerup.state.rotation,
+                    size: currPowerup.state.size
+                },
+                texture: currPowerup.texture,
+                subImageIndex: currPowerup.subImageIndex,
+                subTextureWidth: currPowerup.subTextureWidth,
+            }
+            localPowerups.push(currLocalPowerup);
+        }
+
         // render everything within view port
         // Render player 
         renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
@@ -120,6 +145,12 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
         for (let id in localUFOs){
             let ufo = localUFOs[id];
             renderer.UFO.render(ufo.state,ufo.texture, ufo.subImageIndex, ufo.subTextureWidth);
+        }
+
+         //UFO Rendering
+        for (let id in localPowerups){
+            let currPowerup = localPowerups[id];
+            renderer.UFO.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);
         }
 
         graphics.restoreContext();

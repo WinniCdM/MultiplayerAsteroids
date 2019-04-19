@@ -19,7 +19,9 @@ MyGame.components.Asteroid = function(spec, texture){
         rotateRate: spec.rotateRate
     }
 
-    that.texture = texture;
+    Object.defineProperty(that, 'texture', {
+        get: () => texture
+    })
 
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime

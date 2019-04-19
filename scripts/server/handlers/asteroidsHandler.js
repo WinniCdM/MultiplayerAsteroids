@@ -18,6 +18,9 @@ function asteroidHandler(){
     let newAsteroids = []; //dictionary of id to asteroid details
     let destroyedAsteroids = []; //list of ids
     let id = 0;
+    
+    let asteroidGenerationRate = 3 / 10000; // however many every 10000 milliseconds
+    let timeSinceLastAsteroid = 10000; // immediately spawn one
 
     Object.defineProperty(that, 'asteroids', {
         get: () => asteroids
@@ -38,6 +41,12 @@ function asteroidHandler(){
     }
 
     that.update = function(elapsedTime){
+        timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
+        if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
+            that.createNewRandomAsteroid(1);
+            timeSinceLastAsteroid = 0;
+        }
+
         for (let key in asteroids){
             asteroids[key].update(elapsedTime);
         }

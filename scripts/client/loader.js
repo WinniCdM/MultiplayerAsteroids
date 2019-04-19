@@ -82,6 +82,18 @@ MyGame.loader = (function () {
         }, {
             key: 'ufo-1',
             source: 'assets/images/other/ufo1.png'
+        }, {
+            key: 'green-powerup',
+            source: 'assets/images/powerups/green.png'
+        }, {
+            key: 'blue-powerup',
+            source: 'assets/images/powerups/blue.png'
+        }, {
+            key: 'red-powerup',
+            source: 'assets/images/powerups/red.png'
+        }, {
+            key: 'yellow-powerup',
+            source: 'assets/images/powerups/yellow.png'
         },];
 
         

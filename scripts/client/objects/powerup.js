@@ -1,4 +1,4 @@
-MyGame.components.Powerup = function(spec, texture){
+MyGame.components.Powerup = function(state, texture, type){
     'use strict';
     let that = {}
 
@@ -10,12 +10,17 @@ MyGame.components.Powerup = function(spec, texture){
         get: () => texture
     })
 
+    Object.defineProperty(that, 'type', {
+        get: () => type
+    });
+
     let spriteCount = 6;
     let spriteTime = [200, 200, 200, 200, 200, 200];
 
     Object.defineProperty(that, 'spriteCount', {
         get: () => spriteCount
     });
+
     Object.defineProperty(that, 'spriteTime', {
         get: () => spriteTime
     });
@@ -27,7 +32,7 @@ MyGame.components.Powerup = function(spec, texture){
     Object.defineProperty(that, 'subImageIndex', {
         get: () => subImageIndex
     });
-    
+
     Object.defineProperty(that, 'subTextureWidth', {
         get: () => subTextureWidth
     });

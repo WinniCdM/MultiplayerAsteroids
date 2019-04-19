@@ -23,12 +23,6 @@ let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
 
-let asteroidGenerationRate = 3 / 10000 // however many every 10000 milliseconds
-let timeSinceLastAsteroid = 10000; // immediately spawn one
-
-let powerupGenerationRate = 1 / 20000; // however many every 20000 milliseconds
-let timeSinceLastPowerup = 0; 
-
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -76,6 +70,7 @@ function update(elapsedTime) {
     }
     asteroidsHandler.update(elapsedTime);
     ufosHandler.update(elapsedTime);
+    powerupHandler.update(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -137,12 +132,6 @@ function updateClientsAboutMissiles(elapsedTime){
 //
 //------------------------------------------------------------------
 function updateClientsAboutAsteroids(elapsedTime){
-    timeSinceLastAsteroid += elapsedTime; // generate a new asteroid if necesary
-    if (timeSinceLastAsteroid * asteroidGenerationRate > 1){
-        asteroidsHandler.createNewRandomAsteroid(1);
-        timeSinceLastAsteroid -= asteroidGenerationRate; //account for overlap
-    }
-
     // new asteroids
     let newAsteroids = asteroidsHandler.newAsteroids;
     for (let i in newAsteroids){
@@ -174,12 +163,6 @@ function updateClientsAboutAsteroids(elapsedTime){
 //
 //------------------------------------------------------------------
 function updateClientsAboutPowerups(elapsedTime){
-    timeSinceLastPowerup += elapsedTime; // generate a new asteroid if necesary
-    if (timeSinceLastPowerup * powerupGenerationRate > 1){
-        powerupHandler.createNewPowerup(1);
-        timeSinceLastPowerup -= powerupGenerationRate; // account for overlap
-    }
-
     // new powerups
     let newPowerups = powerupHandler.newPowerups;
     for (let i in newPowerups){
@@ -187,7 +170,8 @@ function updateClientsAboutPowerups(elapsedTime){
         let currNewPowerup = powerupHandler.powerups[key];
         let message = {
             powerupState: currNewPowerup.state,
-            key: key
+            key: key,
+            type: currNewPowerup.type
         }
         transmitMessageToAllClients(message, 'powerup-new');
     }     
@@ -201,6 +185,8 @@ function updateClientsAboutPowerups(elapsedTime){
         }
         transmitMessageToAllClients(message, 'powerup-delete');
     }
+
+    powerupHandler.clearNewAndDestroyedPowerups();
 }
 
 //------------------------------------------------------------------
@@ -310,7 +296,8 @@ function informNewClientAboutExistingPowerups(clientSocket){
         let currUpper = uppers[key];
         let message = {
             powerupState: currUpper.state,
-            key: key
+            key: key,
+            type: currUpper.type
         }
         clientSocket.emit('message', {
             type: "powerup-new",

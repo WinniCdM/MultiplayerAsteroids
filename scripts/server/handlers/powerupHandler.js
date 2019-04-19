@@ -18,6 +18,9 @@ function powerupHandler(){
     let destroyedPowerups = [];
     let id = 0;
 
+    let powerupGenerationRate = 1 / 20000; // however many every 20000 milliseconds
+    let timeSinceLastPowerup = 0; 
+
     Object.defineProperty(that, 'powerups', {
         get: () => powerups
     })
@@ -30,6 +33,14 @@ function powerupHandler(){
         get: () => destroyedPowerups
     })
 
+    that.update = function(elapsedTime){
+        timeSinceLastPowerup += elapsedTime; // generate a new asteroid if necesary
+        if (timeSinceLastPowerup * powerupGenerationRate > 1){
+            that.createNewPowerup(1);
+            timeSinceLastPowerup = 0;
+        }
+    }
+
     that.createNewPowerup = function(number){
         for (let i = 0; i < number; i++){
             powerups[getIdForNewPowerup()] =
@@ -40,6 +51,11 @@ function powerupHandler(){
     that.deletePowerup = function(id){
         delete powerups[id];
         destroyedPowerups.push(id);
+    }
+
+    that.clearNewAndDestroyedPowerups = function(){
+        destroyedPowerups = [];
+        newPowerups = [];
     }
 
     function getRandomPowerupType(){

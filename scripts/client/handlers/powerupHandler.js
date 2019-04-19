@@ -3,7 +3,7 @@ MyGame.handlers.PowerupHandler = (function(){
     let that = {};
     let powerups = {};
 
-    Object.defineProperty(thhat, 'powerups', {
+    Object.defineProperty(that, 'powerups', {
         get: () => powerups
     });
 
@@ -14,12 +14,32 @@ MyGame.handlers.PowerupHandler = (function(){
     }
 
     that.createPowerup = function(data){
-        let newPowerup = MyGame.components.Powerup(data.powerupState, MyGame.assets["asteroids"]);
-        powerups[data.key] = newPowerup;
+        let texture = MyGame.assets[getTexture(data.message.type)];
+        let newPowerup = MyGame.components.Powerup(data.message.powerupState, texture, data.message.type);
+        powerups[data.message.key] = newPowerup;
     }
 
     that.deletePowerup = function(id){
         delete powerups[id];
+    }
+
+    function getTexture(type){
+        let texture = '';
+        switch (type) {
+            case "spread-shot":
+                texture = "red-powerup";
+                break;
+            case "rapid-fire":
+                texture = "yellow-powerup";
+                break;
+            case "shields":
+                texture = "blue-powerup";
+                break;
+            case "guided-missiles":
+                texture = "green-powerup";
+                break;
+        }
+        return texture;
     }
 
     return that;
