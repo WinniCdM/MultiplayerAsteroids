@@ -77,7 +77,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'ufo-new':
                     handleUFONew(message.data);
-                    //console.log('A new ufo has been received');
+                    console.log('A new ufo has been received');
                     break;
                 case 'ufo-destroyed':
                     handleUFODestroyed(message.data);

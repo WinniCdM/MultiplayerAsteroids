@@ -39,7 +39,7 @@ function createPlayer(MissileHandler,clientID) {
     let lastTimeFired = helper.getTime();
     let crashed = false;
     let missileSpeed = .001;
-    let fireRate = 500;
+    let fireRate = 350;
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
@@ -150,7 +150,6 @@ function createPlayer(MissileHandler,clientID) {
 
         if(((helper.getTime() - lastTimeFired) > fireRate) && !crashed){
             lastTimeFired = helper.getTime();
-            console.log('fire');
             let state = {
                 momentum: {
                     x:momentum.x,

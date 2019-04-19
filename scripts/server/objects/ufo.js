@@ -101,7 +101,7 @@ function createUFO(spec,missileHandler,activeClients) {
 
     function findNearestPlayer(){
         let closestID = -1;
-        let closestDistance = 10;
+        let closestDistance = 100;
         for (let clientId in activeClients) {
             let currentPlayerCenter = activeClients[clientId].player.position;
             let currDistance = getDistance(currentPlayerCenter, that.state.center);
