@@ -15,7 +15,6 @@ let random = require ('../random');
 //------------------------------------------------------------------
 function createUFO(spec,missileHandler,activeClients) {
     let that = {};
-
     that.state = spec.state;
     let maxSpeed = spec.maxSpeed;
     let timeSinceLastShot = spec.fireRate;
@@ -58,19 +57,8 @@ function createUFO(spec,missileHandler,activeClients) {
         if(timeSinceLastShot >= spec.fireRate){
             timeSinceLastShot = 0;
             let missileRotation = 0;
-            //Need to figure out smart shooting
             if (smartShot){
-                // let playerCenter = TheGame.GameModel.player.state.center;
-                // let accuracyModifier = (1.5 / TheGame.GameModel.level);
-
-                // let absMissileOrientation = Math.atan((playerCenter.y - position.y)/(playerCenter.x - position.x));
-                // while (absMissileOrientation < -Math.PI) absMissileOrientation += Math.PI;
-                // while (absMissileOrientation >= Math.PI) absMissileOrientation -= Math.PI;
-                // if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
-
-                // missileOrientation = Random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
-                //missileRotation = getSmartShotRotation();
-                missileRotation = random.nextDouble() * 2 * Math.PI;
+                missileRotation = getSmartShotRotation();
             } else {
                 missileRotation = random.nextDouble() * 2 * Math.PI;
             }
@@ -81,17 +69,21 @@ function createUFO(spec,missileHandler,activeClients) {
 
 
     function getSmartShotRotation(){
-        let targetID = findNearestPlayer();
-        console.log('activeClients: ', activeClients);
-        let targetCenter = activeClients[targetID].player.position;
-        let accuracyModifier = (1.5 / (activeClients[targetID].player.score + 1));
-
-        let absMissileOrientation = Math.atan((targetCenter.y - this.state.center.y)/(targetCenter.x - this.state.center.x));
-        while (absMissileOrientation < -Math.PI) absMissileOrientation += Math.PI;
-        while (absMissileOrientation >= Math.PI) absMissileOrientation -= Math.PI;
-        if (playerCenter.x < position.x) absMissileOrientation += Math.PI;
-
-        return random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
+        if(Object.keys(activeClients).length){
+            let targetID = findNearestPlayer();
+            let targetCenter = activeClients[targetID].player.position;
+            let accuracyModifier = (1.5 / (activeClients[targetID].player.score + 1));
+    
+            let absMissileOrientation = Math.atan((targetCenter.y - that.state.center.y)/(targetCenter.x - that.state.center.x));
+            while (absMissileOrientation < -Math.PI) absMissileOrientation += Math.PI;
+            while (absMissileOrientation >= Math.PI) absMissileOrientation -= Math.PI;
+            if (targetCenter.x < that.state.center.x) absMissileOrientation += Math.PI;
+    
+            return random.nextRange(absMissileOrientation-accuracyModifier, absMissileOrientation+accuracyModifier);
+        }else{
+            return random.nextDouble() * 2 * Math.PI
+        }
+        
     }
 
 
@@ -100,10 +92,10 @@ function createUFO(spec,missileHandler,activeClients) {
         let closestDistance = 10;
         for (let clientId in activeClients) {
             let currentPlayerCenter = activeClients[clientId].player.position;
-            let currDistance = getDistance(currentPlayerCenter, this.state.center);
+            let currDistance = getDistance(currentPlayerCenter, that.state.center);
             if(closestDistance > currDistance){
                 closestDistance = currDistance;
-                closestID = clientID;
+                closestID = clientId;
             }
         }
         return closestID;
@@ -118,4 +110,4 @@ function createUFO(spec,missileHandler,activeClients) {
     return that;
 }
 
-module.exports.create = (spec,missileHandler) => createUFO(spec,missileHandler);
+module.exports.create = (spec,missileHandler,activeClients) => createUFO(spec,missileHandler,activeClients);
