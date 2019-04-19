@@ -148,7 +148,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         for (let index in MyGame.handlers.PowerupHandler.powerups){
             let currPowerup = MyGame.handlers.PowerupHandler.powerups[index];
             if (checkIfWithinViewPort(currPowerup.state.center)){
-                objectsWithinViewPort["asteroids"].push(currPowerup);
+                objectsWithinViewPort["powerups"].push(currPowerup);
             }
         }
     }

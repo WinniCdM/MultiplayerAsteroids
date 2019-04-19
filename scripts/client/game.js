@@ -309,6 +309,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         }
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
+        handlers.PowerupHandler.update(elapsedTime);
     }
 
     //------------------------------------------------------------------

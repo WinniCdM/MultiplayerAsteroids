@@ -150,7 +150,7 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
          //UFO Rendering
         for (let id in localPowerups){
             let currPowerup = localPowerups[id];
-            renderer.UFO.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);
+            renderer.Powerup.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);
         }
 
         graphics.restoreContext();
