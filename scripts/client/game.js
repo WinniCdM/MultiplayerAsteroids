@@ -251,6 +251,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFONew(data){
+        console.log('new UFO message received: ', data.message);
         MyGame.handlers.UFOHandler.handleNewUFO(data.message);//send state info
     }
 
@@ -343,8 +344,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        processNetwork();
         update(elapsedTime);
+        processNetwork();
         render();
 
         requestAnimationFrame(gameLoop);

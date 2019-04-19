@@ -70,13 +70,17 @@ function processInput() {
 //------------------------------------------------------------------
 function update(elapsedTime) {
     missilesHandler.update(elapsedTime);
+    updateClientsAboutMissiles(elapsedTime);
     asteroidsHandler.update(elapsedTime);
+    updateClientsAboutAsteroids(elapsedTime);
     ufosHandler.update(elapsedTime);
+    updateClientsAboutUFOs(elapsedTime);
     powerupHandler.update(elapsedTime);
+    updateClientsAboutPowerups(elapsedTime);
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
-
+    updateClients(elapsedTime);
 
 }
 
@@ -91,6 +95,7 @@ function updateClientsAboutUFOs(elapsedTime){
         for(let id in ufosHandler.newUFOs){
             let currNewUFO = ufosHandler.ufos[id];
             transmitMessageToAllClients(currNewUFO.state,'ufo-new');
+            console.log('new UFO message sent: ', currNewUFO.state);
         }
         ufosHandler.clearNewUFOS();
     }
@@ -120,7 +125,6 @@ function updateClientsAboutMissiles(elapsedTime){
                 clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
-            console.log('new Missile sent out: ', message.state.center);
         }
         missilesHandler.clearNewMissiles();
     }
@@ -285,10 +289,9 @@ function informNewClientAboutExistingUFOs(clientSocket){
     let fos = ufosHandler.ufos;
     for (let key in fos){
         let currFos = fos[key];
-        let message = currFos.state;
         clientSocket.emit('message', {
             type: "ufo-new",
-            message: message
+            message: currFos.state
         })
     }
 }
@@ -343,13 +346,7 @@ function informNewClientAboutExistingPowerups(clientSocket){
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    updateClients(elapsedTime);
-    updateClientsAboutAsteroids(elapsedTime);
-    updateClientsAboutUFOs(elapsedTime);
-    updateClientsAboutMissiles(elapsedTime);
-    updateClientsAboutPowerups(elapsedTime);
     update(elapsedTime);
-
     if (!quit) {
         setTimeout(() => {
             let now = present();
