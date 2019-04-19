@@ -80,14 +80,12 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'ufo-destroyed':
                     handleUFODestroyed(message.data);
-                    //console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
                     handleMissileNew(message.data);
                     break;
                 case 'missile-destroyed':
                     handleMissileDestroyed(message.data);
-                    //console.log('missile destroyed');
                     break;
                 case 'powerup-new':
                     handlePowerupNew(message.data);

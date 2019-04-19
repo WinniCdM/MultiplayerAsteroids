@@ -18,7 +18,11 @@ MyGame = {
 MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
-            scripts: ['helper/helperFunctions', 'helper/queue'],
+            scripts: [
+                'helper/helperFunctions', 
+                'helper/queue',
+                'helper/random',
+            ],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
@@ -32,7 +36,9 @@ MyGame.loader = (function () {
                 'objects/asteroid', 
                 'objects/ufo', 
                 'objects/missile',
-                'objects/powerup'
+                'objects/powerup',
+                'objects/particleSubsystem',
+                'objects/particle',
             ],
             message: 'Object models loaded',
             onComplete: null
@@ -53,7 +59,8 @@ MyGame.loader = (function () {
                 'rendering/ufo',
                 'rendering/asteroid',
                 'rendering/powerup',
-                'rendering/missile'
+                'rendering/missile',
+                'rendering/particleSubsystem',
             ],
             message: 'Renderers loaded',
             onComplete: null
@@ -62,7 +69,8 @@ MyGame.loader = (function () {
                 'handlers/asteroidHandler', 
                 'handlers/ufoHandler', 
                 'handlers/missileHandler',
-                'handlers/powerupHandler'
+                'handlers/powerupHandler',
+                'handlers/particleHandler',
             ],
             message: 'Handlers loaded',
             onComplete: null
