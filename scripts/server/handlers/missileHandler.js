@@ -13,7 +13,7 @@ function missileHandler(){
     let that = {};
 
     let missiles = {};
-    let missileLife = 100;
+    let missileLife = 2000;
 
     let nextID = 0;
     let newMissiles = [];
@@ -41,6 +41,7 @@ function missileHandler(){
 
 
         for(let id in missiles){
+            
             missiles[id].update(elapsedTime);
 
             if(missiles[id].remainingLife <= 0){
@@ -50,14 +51,15 @@ function missileHandler(){
         }
 
         for (let i = 0; i < missilesToDelete.length; i++){
-            deleteMissile(missilesToDelete[i]);
+            that.deleteMissile(missilesToDelete[i]);
         }
     }
 
-    that.createPlayerMissile = function(rotation, spaceState,missileSpeed){
+    that.createPlayerMissile = function(rotation, spaceState, missileSpeed, clientID){
         let vectorX = Math.cos(rotation);
         let vectorY = Math.sin(rotation);
 
+        let id = getNextID();
         let newMissile = missile.create({
             state : {
                 size:{width:.075, height:.025},
@@ -65,23 +67,27 @@ function missileHandler(){
                     x: spaceState.momentum.x + (vectorX * missileSpeed),
                     y: spaceState.momentum.y + (vectorY * missileSpeed)
                 },
-                rotation:spaceState.rotation,
+                rotation:rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,
-                center: spaceState.center
+                center: {x:spaceState.center.x,y:spaceState.center.y},
+                id:id
             },
-            owner:"player"
+            owner:"player",
+            clientID:clientID
         });
             
-        let id = getNextID();
+        
         newMissile.setRemainingLife(missileLife);
         missiles[id] = newMissile;
         newMissiles.push(id);
+
     }
 
     that.createEnemyMissile = function(rotation, spaceState, missileSpeed){
         let vectorX = Math.cos(rotation);
         let vectorY = Math.sin(rotation);
 
+        let id = getNextID();
         let newMissile = missile.create({
             state : {
                 size:{width:.075, height:.025},
@@ -91,16 +97,16 @@ function missileHandler(){
                 },
                 rotation:rotation,
                 maxSpeed:spaceState.maxSpeed + missileSpeed,
-                center: spaceState.center
+                center: {x:spaceState.center.x,y:spaceState.center.y},
+                id:id
             },
-            owner:"enemy"
+            owner:"enemy",
+            clientID: -1
         });
-        let id = getNextID();
+        
         newMissile.setRemainingLife(missileLife);
         missiles[id] = newMissile;
         newMissiles.push(id);
-
-        //console.log("New missile generated state: ", missiles[id].state, );
     }
 
     that.reset = function(){
@@ -112,10 +118,7 @@ function missileHandler(){
     }
 
     that.clearNewMissiles = function(){
-        // console.log('clear new missiles called, current length: ', newMissiles.length);
         newMissiles.length = 0;
-        
-        // console.log('length after clearing: ', newMissiles.length);
     }
     that.clearMissilesDestroyed = function(){
         missilesDestroyed.length = 0;

@@ -28,10 +28,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         get: () => playerOthers
     });
 
-    Object.defineProperty(that, 'ufoList', {
-        get: () => MyGame.handlers.UFOHandler.ufos
-    });
-
     //------------------------------------------------------------------
     //
     // Handler for all messages
@@ -81,16 +77,16 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'ufo-new':
                     handleUFONew(message.data);
-                    //console.log('A new ufo has been received');
                     break;
                 case 'ufo-destroyed':
                     handleUFODestroyed(message.data);
                     //console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
-                    //console.log('missile generated');
+                    handleMissileNew(message.data);
                     break;
                 case 'missile-destroyed':
+                    handleMissileDestroyed(message.data);
                     //console.log('missile destroyed');
                     break;
                 case 'powerup-new':
@@ -266,7 +262,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFODestroyed(data){
-        MyGame.handlers.UFOHandler.destroyUFO(data.id);//pass in only id of UFO
+        MyGame.handlers.UFOHandler.destroyUFO(data.message);//pass in only id of UFO
+    }
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a new Missile
+    //
+    //------------------------------------------------------------------
+    function handleMissileNew(data){
+        MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send everything
     }
 
     //------------------------------------------------------------------
@@ -289,6 +293,14 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
     //------------------------------------------------------------------
     //
+    // Handler for receiving a notification about Missile destructions
+    //
+    //------------------------------------------------------------------
+    function handleMissileDestroyed(data){
+        MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of UFO
+    }
+    //------------------------------------------------------------------
+    //
     // Process the registered input handlers here.
     //
     //------------------------------------------------------------------
@@ -302,14 +314,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function update(elapsedTime) {
-        playerSelf.model.update(elapsedTime);
-        viewPort.update(elapsedTime);
-        for (let id in playerOthers) {
-            playerOthers[id].model.update(elapsedTime);
-        }
+        handlers.MissileHandler.update(elapsedTime);
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
         handlers.PowerupHandler.update(elapsedTime);
+        playerSelf.model.update(elapsedTime);
+        for (let id in playerOthers) {
+            playerOthers[id].model.update(elapsedTime);
+        }
+        viewPort.update(elapsedTime);
     }
 
     //------------------------------------------------------------------
@@ -384,6 +397,17 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 playerSelf.model.rotateLeft(elapsedTime);
             },
             'a', true);
+
+        myKeyboard.registerHandler(elapsedTime => {
+                let message = {
+                    id: messageId++,
+                    elapsedTime: elapsedTime,
+                    type: 'fire'
+                };
+                socket.emit('input', message);
+                messageHistory.enqueue(message);
+            },
+            ' ', true);
 
         //
         // Get the game loop started

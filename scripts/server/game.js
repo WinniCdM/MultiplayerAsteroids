@@ -12,10 +12,8 @@ let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
 
-let asteroidsHandler = AsteroidHandler.create();
-let missilesHandler = MissileHandler.createMissileHandler();
-let ufosHandler = UFOHandler.createUFOHandler(missilesHandler);
 let powerupHandler = PowerupHandler.create();
+
 
 const UPDATE_RATE_MS = 200;
 let quit = false;
@@ -23,6 +21,9 @@ let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
 
+let asteroidsHandler = AsteroidHandler.create();
+let missilesHandler = MissileHandler.createMissileHandler();
+let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -55,6 +56,9 @@ function processInput() {
             case 'rotate-right':
                 client.player.rotateRight(input.message.elapsedTime);
                 break;
+            case 'fire':
+                client.player.fire(input.message.elapsedTime);
+                break;
         }
     }
 }
@@ -65,12 +69,15 @@ function processInput() {
 //
 //------------------------------------------------------------------
 function update(elapsedTime) {
-    for (let clientId in activeClients) {
-        activeClients[clientId].player.update(elapsedTime, false);
-    }
+    missilesHandler.update(elapsedTime);
     asteroidsHandler.update(elapsedTime);
     ufosHandler.update(elapsedTime);
     powerupHandler.update(elapsedTime);
+    for (let clientId in activeClients) {
+        activeClients[clientId].player.update(elapsedTime, false);
+    }
+
+
 }
 
 //------------------------------------------------------------------
@@ -106,12 +113,14 @@ function updateClientsAboutMissiles(elapsedTime){
     if(missilesHandler.newMissiles.length){
 
         for(let id in missilesHandler.newMissiles){
-            let currNewMissile = missilesHandler.newMissiles[id];
+            let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
             let message = {
                 state:currNewMissile.state,
-                owner:currNewMissile.owner
+                owner:currNewMissile.owner,
+                clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
+            console.log('new Missile sent out: ', message.state.center);
         }
         missilesHandler.clearNewMissiles();
     }
@@ -119,7 +128,7 @@ function updateClientsAboutMissiles(elapsedTime){
     //Missiles destroyed
     if(missilesHandler.missilesDestroyed.length){
         for(let id in missilesHandler.missilesDestroyed){
-            transmitMessageToAllClients(id,'missile-destroyed');
+            transmitMessageToAllClients(missilesHandler.missilesDestroyed[id],'missile-destroyed');
         }
 
         missilesHandler.clearMissilesDestroyed();
@@ -286,8 +295,29 @@ function informNewClientAboutExistingUFOs(clientSocket){
 
 //------------------------------------------------------------------
 //
-// Transmits messages of all current powerups to the provided 
+// Transmits messages of all current Missiles to the provided 
 // clientSocket
+//
+//------------------------------------------------------------------
+function informNewClientAboutExistingMissiles(clientSocket){
+    let missiles = missilesHandler.missiles;
+    for (let key in missiles){
+        let currMissiles = missiles[key];
+        let message = {
+            state:currMissiles.state,
+            owner:currMissiles.owner,
+            clientID:currMissiles.clientID
+        }
+        clientSocket.emit('message', {
+            type: "missile-new",
+            message: message
+        })
+    }
+}
+
+//------------------------------------------------------------------
+//
+// Transmits a message of a certain type to all connected clients
 //
 //------------------------------------------------------------------
 function informNewClientAboutExistingPowerups(clientSocket){
@@ -313,12 +343,12 @@ function informNewClientAboutExistingPowerups(clientSocket){
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    update(elapsedTime);
     updateClients(elapsedTime);
     updateClientsAboutAsteroids(elapsedTime);
     updateClientsAboutUFOs(elapsedTime);
     updateClientsAboutMissiles(elapsedTime);
     updateClientsAboutPowerups(elapsedTime);
+    update(elapsedTime);
 
     if (!quit) {
         setTimeout(() => {
@@ -399,7 +429,7 @@ function initializeSocketIO(httpServer) {
         console.log('Connection established: ', socket.id);
         //
         // Create an entry in our list of connected clients
-        let newPlayer = Player.create()
+        let newPlayer = Player.create(missilesHandler,socket.id)
         newPlayer.clientId = socket.id;
         activeClients[socket.id] = {
             socket: socket,
@@ -431,6 +461,7 @@ function initializeSocketIO(httpServer) {
         notifyConnect(socket, newPlayer);
         informNewClientAboutExistingAsteroids(socket);
         informNewClientAboutExistingUFOs(socket);
+        informNewClientAboutExistingMissiles(socket);
         informNewClientAboutExistingPowerups(socket);
     });
 }

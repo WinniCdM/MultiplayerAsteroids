@@ -6,6 +6,7 @@
 'use strict';
 
 let random = require ('../random');
+let helper = require ('../helper/helperFunctions');
 
 //------------------------------------------------------------------
 //
@@ -13,7 +14,7 @@ let random = require ('../random');
 // at some random location.
 //
 //------------------------------------------------------------------
-function createPlayer() {
+function createPlayer(MissileHandler,clientID) {
     let that = {};
 
     let position = {
@@ -34,6 +35,11 @@ function createPlayer() {
     let thrustRate = 0.0000004;         // unit acceleration per millisecond
     let reportUpdate = false;           // Indicates if this model was updated during the last update
     let lastUpdateDiff = 0;
+    let score = 0;
+    let lastTimeFired = helper.getTime();
+    let crashed = false;
+    let missileSpeed = .001;
+    let fireRate = 350;
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
@@ -62,6 +68,19 @@ function createPlayer() {
     Object.defineProperty(that, 'reportUpdate', {
         get: () => reportUpdate,
         set: value => reportUpdate = value
+    });
+
+    Object.defineProperty(that, 'crashed', {
+        get: () => crashed,
+        set: value => crashed = value
+    });
+
+    Object.defineProperty(that, 'score', {
+        get: () => score
+    });
+
+    Object.defineProperty(that, 'clientID', {
+        get: () => clientID
     });
 
     //------------------------------------------------------------------
@@ -122,7 +141,42 @@ function createPlayer() {
         if (position.y > 10) { position.y = 10; momentum.y = 0; } //upper down bound
     };
 
+    //------------------------------------------------------------------
+    //
+    // Function used to fire missiles.
+    //
+    //------------------------------------------------------------------
+    that.fire = function(elapsedTime) {
+
+        if(((helper.getTime() - lastTimeFired) > fireRate) && !crashed){
+            lastTimeFired = helper.getTime();
+            let state = {
+                momentum: {
+                    x:momentum.x,
+                    y:momentum.y
+                },
+                maxSpeed: .002,//???
+                center:{
+                    x: position.x,
+                    y: position.y
+                }
+            }
+
+            //Decide which type of fireing to call, for now just normalFire
+            normalFire(state);
+
+
+        }
+
+    };
+
+    function normalFire(state){
+        MissileHandler.createPlayerMissile(direction,state,missileSpeed,clientID);
+    }
+
+
+
     return that;
 }
 
-module.exports.create = () => createPlayer();
+module.exports.create = (MissileHandler,clientID) => createPlayer(MissileHandler,clientID);
