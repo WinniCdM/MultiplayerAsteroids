@@ -15,7 +15,7 @@ MyGame.components.Powerup = function(state, texture, type){
     });
 
     let spriteCount = 6;
-    let spriteTime = [100, 100, 100, 100, 100, 100];
+    let spriteTime = [75, 75, 75, 75, 75, 75];
 
     Object.defineProperty(that, 'spriteCount', {
         get: () => spriteCount
