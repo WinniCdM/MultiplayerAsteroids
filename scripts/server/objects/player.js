@@ -39,7 +39,7 @@ function createPlayer(MissileHandler,clientID) {
     let lastTimeFired = helper.getTime();
     let crashed = false;
     let missileSpeed = .001;
-    let fireRate = 1;
+    let fireRate = 500;
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum

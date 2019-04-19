@@ -52,7 +52,7 @@ MyGame.loader = (function () {
                 'rendering/tiledBackground',
                 'rendering/ufo',
                 'rendering/asteroid',
-                'rendering/powerup'
+                'rendering/powerup',
                 'rendering/missile'
             ],
             message: 'Renderers loaded',

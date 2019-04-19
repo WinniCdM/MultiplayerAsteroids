@@ -116,7 +116,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             "playerOthers": [],
             "ufos": [],
             "asteroids": [],
-            "powerups": []
+            "powerups": [],
             "missiles": []
          } //clear viewport objects
         objectsWithinViewPort["playerSelf"] = MyGame.main.playerSelf; //add player

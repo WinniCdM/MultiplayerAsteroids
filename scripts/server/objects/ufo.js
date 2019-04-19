@@ -22,10 +22,6 @@ function createUFO(spec,missileHandler,activeClients) {
     let missileSpeed = spec.missileSpeed;
     that.smartShot = spec.smartShot;
 
-
-    Object.defineProperty(that, 'state', {
-        get: () => state
-    });
     
     Object.defineProperty(that, 'isSmart', {
         get: () => smartShot
