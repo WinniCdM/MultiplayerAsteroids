@@ -14,8 +14,12 @@ MyGame.handlers.AsteroidHandler = (function(){
     }
 
     that.createAsteroid = function(data){
-        let newAsteroid = MyGame.components.Asteroid(data.asteroidState);
+        let newAsteroid = MyGame.components.Asteroid(data.asteroidState, MyGame.assets['asteroid']);
         asteroids[data.key] = newAsteroid;
+    }
+
+    that.deleteAsteroid = function(id){
+        delete asteroids[id];
     }
 
     return that;
