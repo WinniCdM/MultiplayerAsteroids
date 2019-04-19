@@ -141,13 +141,13 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             renderer.Asteroid.render(asteroid, asteroid.texture);
         }
 
-        //UFO Rendering
+        // UFO Rendering
         for (let id in localUFOs){
             let ufo = localUFOs[id];
             renderer.UFO.render(ufo.state,ufo.texture, ufo.subImageIndex, ufo.subTextureWidth);
         }
 
-         //UFO Rendering
+         // Powerup Rendering
         for (let id in localPowerups){
             let currPowerup = localPowerups[id];
             renderer.Powerup.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);

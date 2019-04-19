@@ -144,7 +144,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             }
         }
 
-        //check if asteroids are in viewport
+        //check if powerups are in viewport
         for (let index in MyGame.handlers.PowerupHandler.powerups){
             let currPowerup = MyGame.handlers.PowerupHandler.powerups[index];
             if (checkIfWithinViewPort(currPowerup.state.center)){
