@@ -84,7 +84,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'missile-new':
                     handleMissileNew(message.data);
-                    //console.log('missile generated');
                     break;
                 case 'missile-destroyed':
                     handleMissileDestroyed(message.data);

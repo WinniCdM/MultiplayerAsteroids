@@ -120,6 +120,7 @@ function updateClientsAboutMissiles(elapsedTime){
                 clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
+            console.log('new Missile sent out: ', message.state.center);
         }
         missilesHandler.clearNewMissiles();
     }
