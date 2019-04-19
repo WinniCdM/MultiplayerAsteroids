@@ -23,6 +23,22 @@ function createUFO(spec,missileHandler,activeClients) {
     that.smartShot = spec.smartShot;
 
 
+    Object.defineProperty(that, 'state', {
+        get: () => state
+    });
+    
+    Object.defineProperty(that, 'isSmart', {
+        get: () => smartShot
+    });
+
+    //Might not need this????
+    let reportUpdate = false;           // Indicates if this model was updated during the last update
+    Object.defineProperty(that, 'reportUpdate', {
+        get: () => reportUpdate,
+        set: value => reportUpdate = value
+    });
+
+
     that.update = function(elapsedTime){
 
         timeSinceLastShot += elapsedTime;

@@ -116,6 +116,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             "playerOthers": [],
             "ufos": [],
             "asteroids": [],
+            "powerups": []
             "missiles": []
          } //clear viewport objects
         objectsWithinViewPort["playerSelf"] = MyGame.main.playerSelf; //add player
@@ -136,11 +137,19 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             }
         }
 
-        //Asteroids
+        //Check if asteroids are in viewport
         for (let index in MyGame.handlers.AsteroidHandler.asteroids){
             let currAsteroid = MyGame.handlers.AsteroidHandler.asteroids[index];
             if (checkIfWithinViewPort(currAsteroid.state.center)){
                 objectsWithinViewPort["asteroids"].push(currAsteroid);
+            }
+        }
+
+        //check if powerups are in viewport
+        for (let index in MyGame.handlers.PowerupHandler.powerups){
+            let currPowerup = MyGame.handlers.PowerupHandler.powerups[index];
+            if (checkIfWithinViewPort(currPowerup.state.center)){
+                objectsWithinViewPort["powerups"].push(currPowerup);
             }
         }
 

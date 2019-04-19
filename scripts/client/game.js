@@ -91,6 +91,12 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     handleMissileDestroyed(message.data);
                     //console.log('missile destroyed');
                     break;
+                case 'powerup-new':
+                    handlePowerupNew(message.data);
+                    break;
+                case 'powerup-delete':
+                    handlePowerupDelete(message.data);
+                    break;
             }
         } 
     }
@@ -240,7 +246,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
-        
+        handlers.AsteroidHandler.deleteAsteroid(data.key);
     }
 
     //------------------------------------------------------------------
@@ -267,6 +273,24 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function handleMissileNew(data){
         MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send everything
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about powerup creation
+    //
+    //------------------------------------------------------------------
+    function handlePowerupNew(data){
+        MyGame.handlers.PowerupHandler.createPowerup(data);
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Handler for receiving a notification about powerup destructions
+    //
+    //------------------------------------------------------------------
+    function handlePowerupDelete(data){
+        MyGame.handlers.PowerupHandler.deletePowerup(data.key);
     }
 
     //------------------------------------------------------------------
@@ -299,6 +323,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         }
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
+        handlers.PowerupHandler.update(elapsedTime);
         handlers.MissileHandler.update(elapsedTime);
     }
 
