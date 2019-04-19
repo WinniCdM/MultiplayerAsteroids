@@ -1,4 +1,4 @@
-MyGame.components.Asteroid = function(spec){
+MyGame.components.Asteroid = function(spec, texture){
     let that = {};
 
     that.state = {
@@ -18,6 +18,10 @@ MyGame.components.Asteroid = function(spec){
         rotation: spec.rotation,
         rotateRate: spec.rotateRate
     }
+
+    Object.defineProperty(that, 'texture', {
+        get: () => texture
+    })
 
     that.update = function(elapsedTime){
         that.state.rotation += that.state.rotateRate * elapsedTime
