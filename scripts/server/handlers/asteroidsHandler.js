@@ -16,7 +16,7 @@ function asteroidHandler(){
     let that = {};
     let asteroids = {};
     let newAsteroids = []; //dictionary of id to asteroid details
-    let destroyedAsteroids = []; //list of ids
+    let deletedAsteroids = []; //list of ids
     let id = 0;
     
     let asteroidGenerationRate = 3 / 10000; // however many every 10000 milliseconds
@@ -30,8 +30,8 @@ function asteroidHandler(){
         get: () => newAsteroids
     });
 
-    Object.defineProperty(that, 'destroyedAsteroids', {
-        get: () => destroyedAsteroids
+    Object.defineProperty(that, 'deletedAsteroids', {
+        get: () => deletedAsteroids
     });
 
     function getIdForNewAsteroid(){
@@ -80,11 +80,11 @@ function asteroidHandler(){
 
     that.deleteAsteroid = function(id){
         delete asteroids[id];
-        deletedAsteroid.push(id);
+        deletedAsteroids.push(id);
     }
 
     that.clearNewAndDeletedAsteroids = function(){
-        deletedAsteroid = [];
+        deletedAsteroids = [];
         newAsteroids = [];
     }
 

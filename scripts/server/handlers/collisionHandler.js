@@ -30,7 +30,6 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
                     asteroidHandler.handleAsteroidBreak(currAsteroid);
                     asteroidHandler.deleteAsteroid(j);
                     missileHandler.deleteMissile(i);
-                    console.log("collide");
                 }
             }
         }

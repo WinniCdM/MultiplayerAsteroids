@@ -256,7 +256,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
-        console.log("deleting asteroid id: ", data.message.key);
         handlers.AsteroidHandler.deleteAsteroid(data.message.key);
     }
 
@@ -310,7 +309,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleMissileDestroyed(data){
-        MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of UFO
+        MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of missile
     }
     //------------------------------------------------------------------
     //

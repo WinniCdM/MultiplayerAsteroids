@@ -111,8 +111,10 @@ function updateClientsAboutUFOs(elapsedTime){
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
-            let currNewUFO = ufosHandler.ufos[id];
-            transmitMessageToAllClients(currNewUFO.state,'ufo-new');
+            if (ufosHandler.newUFOs[id] in ufosHandler.ufos){
+                let currNewUFO = ufosHandler.ufos[id];
+                transmitMessageToAllClients(currNewUFO.state,'ufo-new');
+            }
         }
         ufosHandler.clearNewUFOS();
     }
@@ -133,15 +135,16 @@ function updateClientsAboutUFOs(elapsedTime){
 function updateClientsAboutMissiles(elapsedTime){
     //New Missiles
     if(missilesHandler.newMissiles.length){
-
         for(let id in missilesHandler.newMissiles){
-            let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
-            let message = {
-                state: currNewMissile.state,
-                owner: currNewMissile.owner,
-                clientID: currNewMissile.clientID
+            if (missilesHandler.newMissiles[id] in missilesHandler.missiles){
+                let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
+                let message = {
+                    state: currNewMissile.state,
+                    owner: currNewMissile.owner,
+                    clientID: currNewMissile.clientID
+                }
+                transmitMessageToAllClients(message,'missile-new');
             }
-            transmitMessageToAllClients(message,'missile-new');
         }
         missilesHandler.clearNewMissiles();
     }
@@ -165,13 +168,15 @@ function updateClientsAboutAsteroids(elapsedTime){
     // new asteroids
     let newAsteroids = asteroidsHandler.newAsteroids;
     for (let i in newAsteroids){
-        let key = newAsteroids[i];
-        let currNewAsteroid = asteroidsHandler.asteroids[key];
-        let message = {
-            asteroidState: currNewAsteroid.state,
-            key: key
+        if (asteroidsHandler.newAsteroids[i] in asteroidsHandler.asteroids){
+            let key = newAsteroids[i];
+            let currNewAsteroid = asteroidsHandler.asteroids[key];
+            let message = {
+                asteroidState: currNewAsteroid.state,
+                key: key
+            }
+            transmitMessageToAllClients(message, 'asteroid-new');
         }
-        transmitMessageToAllClients(message, 'asteroid-new');
     }
 
     // deleted asteroids
@@ -196,14 +201,16 @@ function updateClientsAboutPowerups(elapsedTime){
     // new powerups
     let newPowerups = powerupHandler.newPowerups;
     for (let i in newPowerups){
-        let key = newPowerups[i];
-        let currNewPowerup = powerupHandler.powerups[key];
-        let message = {
-            powerupState: currNewPowerup.state,
-            key: key,
-            type: currNewPowerup.type
+        if (powerupHandler.newPowerups[i] in powerupHandler.powerups){
+            let key = newPowerups[i];
+            let currNewPowerup = powerupHandler.powerups[key];
+            let message = {
+                powerupState: currNewPowerup.state,
+                key: key,
+                type: currNewPowerup.type
+            }
+            transmitMessageToAllClients(message, 'powerup-new');
         }
-        transmitMessageToAllClients(message, 'powerup-new');
     }     
 
     // deleted powerups
