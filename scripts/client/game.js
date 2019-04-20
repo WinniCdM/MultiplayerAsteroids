@@ -189,6 +189,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         playerSelf.model.position.x = data.position.x;
         playerSelf.model.position.y = data.position.y;
         playerSelf.model.direction = data.direction;
+        playerSelf.model.score = data.score;
 
         //
         // Remove messages from the queue up through the last one identified
@@ -198,7 +199,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             if (messageHistory.front.id === data.lastMessageId) {
                 done = true;
             }
-            //console.log('dumping: ', messageHistory.front.id);
             messageHistory.dequeue();
         }
 
@@ -234,6 +234,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             let model = playerOthers[data.clientId].model;
             model.goal.updateWindow = data.updateWindow;
 
+            model.score = data.score;
             model.username = data.username;
             model.state.momentum.x = data.momentum.x;
             model.state.momentum.y = data.momentum.y
@@ -399,7 +400,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             }
         })
 
-        console.log(data.key);
         MyGame.handlers.PowerupHandler.deletePowerup(data.message.key);
     }
 

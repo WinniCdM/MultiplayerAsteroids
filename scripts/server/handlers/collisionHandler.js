@@ -40,12 +40,10 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
                 let currUFO = ufos[k];
                 if (haveCollided(currMissile.state, currUFO.state)){
                     if (currMissile.owner === "player"){
-                        console.log(k);
                         players[currMissile.clientID].player.score += calculateUFOScore(currUFO.isSmart);
 
                         ufoHandler.deleteUFO(k);
                         missileHandler.deleteMissile(i);
-                        console.log(players[currMissile.clientID].player.score);
                     } //else do nothing
                 }
             }

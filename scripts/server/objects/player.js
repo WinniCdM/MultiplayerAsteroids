@@ -45,7 +45,7 @@ function createPlayer(MissileHandler,clientID) {
     let rapidFire = false;
     let splitShot = false;
     let spreadShot = false;
-    let shield = 0;
+    let noShot = false;
 
     let powerupTime = 0;
 
@@ -181,6 +181,8 @@ function createPlayer(MissileHandler,clientID) {
                 splitFire(state);
             } else if (spreadShot){
                 spreadFire(state);
+            } else if (noShot){
+                //do nothing, because we're cruel
             } else{
                 normalFire(state);
             }
@@ -208,9 +210,9 @@ function createPlayer(MissileHandler,clientID) {
     that.pickupPowerup = function(powerupType){
         resetPowerups();
         switch (powerupType){
-            case "shields":
-                shield = 4; // 4 hits absorbed
-                powerupTime = 120000;
+            case "no-shot":
+                noShot = true;
+                powerupTime = 30000;
                 break;
             case "rapid-fire":
                 rapidFire = true;
@@ -231,7 +233,7 @@ function createPlayer(MissileHandler,clientID) {
         rapidFire = false;
         spreadShot = false;
         splitShot = false;
-        shield = 0;
+        noShot = false;
         powerupTime = 0;
     }
 

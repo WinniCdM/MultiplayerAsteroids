@@ -70,8 +70,6 @@ MyGame.graphics = (function() {
             x: center.x/2 * canvas.width,
             y: center.y * canvas.height
         };
-        // console.log("Player global Position: ", center)
-        // console.log("canvas position: ", localCenter);
         let localSize = {
             width: size.width * canvas.width / 2,
             height: size.height * canvas.height

@@ -91,7 +91,6 @@ function ufoHandler(missileHandler,activeClients){
     that.deleteUFO = function(id){
         delete ufos[id];
         UFOsDestroyed.push(id);
-        console.log(UFOsDestroyed);
     }
 
     that.reset = function(){
