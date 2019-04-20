@@ -112,3 +112,26 @@ button:active {
 #controls{
     font-size: 30px;
 }
+#user-name-wrapper{
+    width: 20%;
+    display: block;
+    padding-top: 20px;
+    float: left;
+    text-align: right;
+}
+#user-name{
+    border: solid white 1px;
+    background-color: rgba(255, 255, 255, .5);
+    width: 59%;
+    height: 40px;
+    font-family: 'Press Start 2P', cursive, Calibri;
+    margin: 0 auto;
+    margin-top: 5px;
+    padding: 5px;
+    color: white;
+    transition: all .5s ease-in-out;
+}
+#user-name:focus{
+    width:64%;
+    transition: all .1s ease-in-out;
+}

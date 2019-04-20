@@ -30,6 +30,7 @@ MyGame.handlers.ParticleHandler = (function(){
     that.resetLocal = function(elapsedTime){
         that.localParticleSubsystems = [];
     }
+
     that.resetGlobal = function(elapsedTime){
         that.globalParticleSubsystems = [];
     }
@@ -76,7 +77,7 @@ MyGame.handlers.ParticleHandler = (function(){
             numPerUpdate: 2,
             duration: 50,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
+            size: { mean: .025, stdev: .01},
             speed: { mean: .00165, stdev: .00035 },
             lifetime: { mean: 500, stdev: 100 },
             direction: MyGame.main.playerSelf.model.getThrustDirection(),
@@ -87,11 +88,11 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['asteroid'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 200,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .01, stdev: .01},
+            speed: { mean: .00625, stdev: .0035 },
+            lifetime: { mean: 6000, stdev: 250 },
             type: "explosion"
         }));
     }
@@ -99,21 +100,21 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['asteroid'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 200,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['fire'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
     }
@@ -121,21 +122,21 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['smoke'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['fire'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
     }
@@ -143,21 +144,21 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['smoke'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['fire'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
     }
@@ -165,21 +166,21 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['blue'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['white'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
     }
@@ -187,21 +188,21 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['blue'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['white'],
             numPerUpdate: 2,
-            duration: 100,
+            duration: 300,
             center: { x: center.x, y: center.y },
-            size: { mean: .05, stdev: .01},
-            speed: { mean: .003, stdev: .002 },
-            lifetime: { mean: 500, stdev: 100 },
+            size: { mean: .002, stdev: .01},
+            speed: { mean: .00065, stdev: .0035 },
+            lifetime: { mean: 2000, stdev: 250 },
             type: "explosion"
         }));
     }

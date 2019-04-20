@@ -26,9 +26,9 @@ MyGame.components.ParticleSubsystem = function(spec){
             }
         }
 
-        //delet all dead particles
+        //delete all dead particles
         for(let i = particlesToDelete.length; i>= 0; i--){
-            particles.splice(particlesToDelete[i],1);
+            particles.splice(particlesToDelete[i], 1);
         }
     }
     
@@ -55,7 +55,7 @@ MyGame.components.ParticleSubsystem = function(spec){
         return MyGame.components.Particle({
             center: { x: spec.center.x, y: spec.center.y },
             size: { width: size, height: size },
-            direction: MyGame.utilities.Random.nextCircleVector(), 
+            direction: MyGame.utilities.Random.nextCircleVector(.1), 
             speed: MyGame.utilities.Random.nextGaussian(spec.speed.mean, spec.speed.stdev),
             rotation: 0,
             lifetime: MyGame.utilities.Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),
@@ -63,11 +63,6 @@ MyGame.components.ParticleSubsystem = function(spec){
             type: spec.type
         });
     }
-
-
-
-
-
 
     return that;
 }

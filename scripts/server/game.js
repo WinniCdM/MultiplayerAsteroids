@@ -11,6 +11,7 @@ let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
+let CollisionHandler = require("./handlers/collisionHandler");
 
 const UPDATE_RATE_MS = 50;
 let quit = false;
@@ -23,6 +24,8 @@ let asteroidsHandler = AsteroidHandler.create();
 let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
 let powerupHandler = PowerupHandler.create();
+let collisionHandler = CollisionHandler.create(asteroidsHandler, missilesHandler, powerupHandler, ufosHandler, activeClients);
+
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -79,7 +82,7 @@ function handleJoinGame(input){
         gameStarted = true;
     }
     activeClients[input.clientId].player.username = input.message.username;
-    for(let id in activeClients){
+    for (let id in activeClients){
         activeClients[id].player.reportUpdate = true;
     }
 }
@@ -102,6 +105,7 @@ function update(elapsedTime) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
     updateClients(elapsedTime);
+    collisionHandler.handleCollisions(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -113,8 +117,10 @@ function updateClientsAboutUFOs(elapsedTime){
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
-            let currNewUFO = ufosHandler.ufos[ufosHandler.newUFOs[id]];
-            transmitMessageToAllClients(currNewUFO.state,'ufo-new');
+            if (ufosHandler.newUFOs[id] in ufosHandler.ufos){
+                let currNewUFO = ufosHandler.ufos[ufosHandler.newUFOs[id]];
+                transmitMessageToAllClients(currNewUFO.state,'ufo-new');
+            }
         }
         ufosHandler.clearNewUFOS();
     }
@@ -122,7 +128,7 @@ function updateClientsAboutUFOs(elapsedTime){
     //UFO destroyed
     if(ufosHandler.UFOsDestroyed.length){
         for(let id in ufosHandler.UFOsDestroyed){
-            transmitMessageToAllClients(id,'ufo-destroyed'); 
+            transmitMessageToAllClients(ufosHandler.UFOsDestroyed[id],'ufo-destroyed'); 
         }
         ufosHandler.clearUFOsDestroyed();
     }
@@ -135,15 +141,16 @@ function updateClientsAboutUFOs(elapsedTime){
 function updateClientsAboutMissiles(elapsedTime){
     //New Missiles
     if(missilesHandler.newMissiles.length){
-
         for(let id in missilesHandler.newMissiles){
-            let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
-            let message = {
-                state:currNewMissile.state,
-                owner:currNewMissile.owner,
-                clientID:currNewMissile.clientID
+            if (missilesHandler.newMissiles[id] in missilesHandler.missiles){
+                let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
+                let message = {
+                    state: currNewMissile.state,
+                    owner: currNewMissile.owner,
+                    clientID: currNewMissile.clientID
+                }
+                transmitMessageToAllClients(message,'missile-new');
             }
-            transmitMessageToAllClients(message,'missile-new');
         }
         missilesHandler.clearNewMissiles();
     }
@@ -166,13 +173,15 @@ function updateClientsAboutAsteroids(elapsedTime){
     // new asteroids
     let newAsteroids = asteroidsHandler.newAsteroids;
     for (let i in newAsteroids){
-        let key = newAsteroids[i];
-        let currNewAsteroid = asteroidsHandler.asteroids[key];
-        let message = {
-            asteroidState: currNewAsteroid.state,
-            key: key
+        if (asteroidsHandler.newAsteroids[i] in asteroidsHandler.asteroids){
+            let key = newAsteroids[i];
+            let currNewAsteroid = asteroidsHandler.asteroids[key];
+            let message = {
+                asteroidState: currNewAsteroid.state,
+                key: key
+            }
+            transmitMessageToAllClients(message, 'asteroid-new');
         }
-        transmitMessageToAllClients(message, 'asteroid-new');
     }
 
     // deleted asteroids
@@ -197,14 +206,16 @@ function updateClientsAboutPowerups(elapsedTime){
     // new powerups
     let newPowerups = powerupHandler.newPowerups;
     for (let i in newPowerups){
-        let key = newPowerups[i];
-        let currNewPowerup = powerupHandler.powerups[key];
-        let message = {
-            powerupState: currNewPowerup.state,
-            key: key,
-            type: currNewPowerup.type
+        if (powerupHandler.newPowerups[i] in powerupHandler.powerups){
+            let key = newPowerups[i];
+            let currNewPowerup = powerupHandler.powerups[key];
+            let message = {
+                powerupState: currNewPowerup.state,
+                key: key,
+                type: currNewPowerup.type
+            }
+            transmitMessageToAllClients(message, 'powerup-new');
         }
-        transmitMessageToAllClients(message, 'powerup-new');
     }     
 
     // deleted powerups
