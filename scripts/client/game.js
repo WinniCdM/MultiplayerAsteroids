@@ -21,6 +21,16 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         socket = io(),
         that = {};
 
+    let hyperspaceBar = components.HyperspaceBar({
+        value: 0,
+        maxVal: 15000,
+        size: { width: .35, height: .045 },
+        barColor: 'rgba(255, 255, 255, .5)',
+        barOutlineColor: 'rgba(255, 255, 255, .7)',
+        position: { x: .75, y: .01 },//ViewPort Units
+        text: 'Hyperspace'
+    });
+
     Object.defineProperty(that, 'playerSelf', {
         get: () => playerSelf
     });
@@ -227,8 +237,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
 
         if(data.hyperspaceJump){
-            console.log('add hyperspace system');
+            playerSelf.model.hyperSpaceStatus = 0;
             handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+            handlers.AudioHandler.handleNewGlobalAudio({
                 center:{
                     x: data.position.x,
                     y: data.position.y
@@ -465,6 +482,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         viewPort.update(elapsedTime);
         playerSelf.model.update(elapsedTime);
         handlers.ScoreHandler.update(elapsedTime);
+        hyperspaceBar.update(playerSelf.model.hyperSpaceStatus);
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
@@ -479,7 +497,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function render() {
         graphics.clear();
         renderer.ViewPort.render(viewPort); 
-        handlers.ScoreHandler.render();       
+        handlers.ScoreHandler.render();   
+        renderer.HyperspaceBar.render(hyperspaceBar);    
     }
 
     //------------------------------------------------------------------
