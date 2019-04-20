@@ -24,7 +24,6 @@ function createUFO(spec,missileHandler,activeClients) {
     Object.defineProperty(that, 'isSmart', {
         get: () => smartShot
     });
-    // console.log('ufo created at: ', that.state.center);
 
 
     that.update = function(elapsedTime){
