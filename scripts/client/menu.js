@@ -19,6 +19,7 @@ MyGame.Menu = (function(){
         switch(btnid){
             case "playgame-button":
                 that.Push(that.MenuItemsEnums.INGAME);
+                MyGame.main.emitJoinGame();
                 MyGame.main.initialize();
                 break;
             case "highscore-button":

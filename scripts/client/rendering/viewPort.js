@@ -148,14 +148,6 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
         }
 
         // render everything within view port
-        // Render player 
-        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
-
-        // Render other players
-        for (let id in localPlayerOthers) {
-            let player = localPlayerOthers[id];
-            renderer.PlayerRemote.render(player.model, player.texture);
-        }
 
         // Render asteroids
         for (let id in localAsteroids) {
@@ -180,6 +172,16 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             let missile = localMissiles[id];
             renderer.Missile.render(missile.state,missile.texture);
         }
+
+        // Render other players
+        for (let id in localPlayerOthers) {
+            let player = localPlayerOthers[id];
+            renderer.PlayerRemote.render(player.model, player.texture);
+        }
+
+        // Render player - render behind particles, so that its on top of every thing else, but behind the particles
+        renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);
+
 
         graphics.restoreContext();
     };
