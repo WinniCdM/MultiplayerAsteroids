@@ -107,9 +107,10 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         inGame = true;
         let message = {
             type: 'join-game',
-            username: 'player'//TODO!!!!!!!!!!!!!!!!!!
+            username: document.getElementById("user-name").value
         }
         socket.emit('input', message);
+        playerSelf.username = message.username;
     }
 
     //------------------------------------------------------------------
@@ -230,6 +231,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             let model = playerOthers[data.clientId].model;
             model.goal.updateWindow = data.updateWindow;
 
+            model.username = data.username;
             model.state.momentum.x = data.momentum.x;
             model.state.momentum.y = data.momentum.y
             model.goal.position.x = data.position.x;

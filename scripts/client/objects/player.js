@@ -21,6 +21,7 @@ MyGame.components.Player = function() {
     let direction = 0;
     let rotateRate = 0;
     let thrustRate = 0;
+    that.username = '';
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
