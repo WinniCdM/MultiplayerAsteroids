@@ -145,6 +145,29 @@ MyGame.graphics = (function() {
     }
 
 
+    
+    function drawText(spec) {
+        let localCenter = {
+            x: spec.center.x/2 * canvas.width,
+            y: spec.center.y * canvas.height
+        };
+
+        context.save();
+
+        context.font = spec.font;
+        context.fillStyle = spec.fillStyle;
+        context.strokeStyle = spec.strokeStyle;
+        context.textBaseline = 'top';
+
+
+
+        context.fillText(spec.text, localCenter.x, localCenter.y);
+        context.strokeText(spec.text, localCenter.x, localCenter.y);
+
+        context.restore();
+    }
+
+
     return {
         clear: clear,
         saveContext: saveContext,
@@ -152,6 +175,7 @@ MyGame.graphics = (function() {
         rotateCanvas: rotateCanvas,
         drawImage: drawImage,
         drawSubTexture:drawSubTexture,
-        drawSprite:drawSprite
+        drawSprite:drawSprite,
+        drawText:drawText,
     };
 }());

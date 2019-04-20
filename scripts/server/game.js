@@ -59,7 +59,7 @@ function processInput() {
                 client.player.fire(input.message.elapsedTime);
                 break;
             case 'join-game':
-                handleJoinGame();
+                handleJoinGame(input);
                 break;
         }
     }
@@ -71,11 +71,12 @@ function processInput() {
 // Starts the game if no one has joined, other wise, just joins
 //
 //------------------------------------------------------------------
-function handleJoinGame(){
+function handleJoinGame(input){
     if (!gameStarted){
         gameStarted = true;
-        console.log("Game started");
     }
+    activeClients[input.clientId].player.username = input.message.username;
+    activeClients[input.clientId].player.reportUpdate = true;
 }
 
 //------------------------------------------------------------------
@@ -246,6 +247,8 @@ function updateClients(elapsedTime) {
             momentum: client.player.momentum,
             direction: client.player.direction,
             position: client.player.position,
+            username: client.player.username,
+            score: client.player.score,
             updateWindow: elapsedTime
         };
         if (client.player.reportUpdate) {
