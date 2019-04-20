@@ -161,6 +161,29 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
             }
         }
 
+
+        //Particles
+        //These are a bit different, instead of just adding we need to actually call
+        //the function to create the system based on the GlobalParticleSubSystem list that is
+        //in the viewport
+        for(let index in MyGame.handlers.ParticleHandler.globalParticleSubsystems){
+            let currSystem = MyGame.handlers.ParticleHandler.globalParticleSubsystems[index];
+            //currSystem contains: center, type
+            if(checkIfWithinViewPort(currSystem.center)){
+                //call the handler to create the correct localParticleSubsytem
+                let localCenter = {
+                    x:currSystem.center.x - position.x,
+                    y:currSystem.center.y - position.y
+                }
+                MyGame.handlers.ParticleHandler.handlNewLocalParticleSubsystem({
+                    center: localCenter,
+                    type: currSystem.type
+                })
+            }
+        }
+        //After we have gone over all of the new globalParticleSubsystems clear that array
+        MyGame.handlers.ParticleHandler.resetGlobal();
+
     }
 
     //------------------------------------------------------------------

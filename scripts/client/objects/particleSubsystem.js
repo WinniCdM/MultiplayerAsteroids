@@ -3,7 +3,7 @@ MyGame.components.ParticleSubsystem = function(spec){
     that.duration = spec.duration;
     let particles = [];
 
-    let renderer = MyGame.renderer.ParticleSubSystem()
+    let renderer = MyGame.renderer.ParticleSubSystem(MyGame.graphics,particles,spec.texture)
 
     that.update = function(elapsedTime){
         that.duration -= elapsedTime;
@@ -37,7 +37,7 @@ MyGame.components.ParticleSubsystem = function(spec){
     }
 
 
-
+//Center and size need to be in ViewPort Units {x:0->2, y:0->1}
     function create(){//need random working
         let size = MyGame.utilities.Random.nextGaussian(spec.size.mean, spec.size.stdev);
         if (spec.type === "cone"){

@@ -3,7 +3,7 @@
 // Rendering function for a ParticleSubsystem object.
 //
 // ------------------------------------------------------------------
-MyGame.renderer.ParticleSubSystem = (function(graphics, particles, image) {
+MyGame.renderer.ParticleSubSystem = function(graphics, particles, image) {
     'use strict';
     let that = {};
 
@@ -23,4 +23,4 @@ MyGame.renderer.ParticleSubSystem = (function(graphics, particles, image) {
 
     return that;
 
-}(MyGame.graphics));
+};
