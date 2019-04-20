@@ -12,18 +12,17 @@ let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
 
-let powerupHandler = PowerupHandler.create();
-
-
-const UPDATE_RATE_MS = 200;
+const UPDATE_RATE_MS = 50;
 let quit = false;
 let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
+let gameStarted = false;
 
 let asteroidsHandler = AsteroidHandler.create();
 let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
+let powerupHandler = PowerupHandler.create();
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -59,7 +58,23 @@ function processInput() {
             case 'fire':
                 client.player.fire(input.message.elapsedTime);
                 break;
+            case 'join-game':
+                handleJoinGame();
+                break;
         }
+    }
+}
+
+//------------------------------------------------------------------
+//
+// Handles the join game request
+// Starts the game if no one has joined, other wise, just joins
+//
+//------------------------------------------------------------------
+function handleJoinGame(){
+    if (!gameStarted){
+        gameStarted = true;
+        console.log("Game started");
     }
 }
 
@@ -70,14 +85,17 @@ function processInput() {
 //------------------------------------------------------------------
 function update(elapsedTime) {
     missilesHandler.update(elapsedTime);
+    updateClientsAboutMissiles(elapsedTime);
     asteroidsHandler.update(elapsedTime);
+    updateClientsAboutAsteroids(elapsedTime);
     ufosHandler.update(elapsedTime);
+    updateClientsAboutUFOs(elapsedTime);
     powerupHandler.update(elapsedTime);
+    updateClientsAboutPowerups(elapsedTime);
     for (let clientId in activeClients) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
-
-
+    updateClients(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -120,7 +138,6 @@ function updateClientsAboutMissiles(elapsedTime){
                 clientID:currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
-            console.log('new Missile sent out: ', message.state.center);
         }
         missilesHandler.clearNewMissiles();
     }
@@ -343,12 +360,9 @@ function informNewClientAboutExistingPowerups(clientSocket){
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    updateClients(elapsedTime);
-    updateClientsAboutAsteroids(elapsedTime);
-    updateClientsAboutUFOs(elapsedTime);
-    updateClientsAboutMissiles(elapsedTime);
-    updateClientsAboutPowerups(elapsedTime);
-    update(elapsedTime);
+    if (gameStarted){
+        update(elapsedTime);
+    }
 
     if (!quit) {
         setTimeout(() => {
@@ -472,7 +486,6 @@ function initializeSocketIO(httpServer) {
 //
 //------------------------------------------------------------------
 function initialize(httpServer) {
-
     initializeSocketIO(httpServer);
     gameLoop(present(), 0);
 }

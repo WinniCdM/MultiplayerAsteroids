@@ -17,6 +17,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         messageHistory = MyGame.utilities.Queue(),
         messageId = 1,
         messageQueue = [],
+        inGame = false,
         socket = io(),
         that = {};
 
@@ -80,14 +81,12 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'ufo-destroyed':
                     handleUFODestroyed(message.data);
-                    //console.log('ufo is destroyed');
                     break;
                 case 'missile-new':
                     handleMissileNew(message.data);
                     break;
                 case 'missile-destroyed':
                     handleMissileDestroyed(message.data);
-                    //console.log('missile destroyed');
                     break;
                 case 'powerup-new':
                     handlePowerupNew(message.data);
@@ -97,6 +96,19 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
             }
         } 
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Emits the join game message to start the game
+    //
+    //------------------------------------------------------------------
+    that.handleJoinGame = function(){
+        inGame = true;
+        let message = {
+            type: 'join-game'
+        }
+        socket.emit('input', message);
     }
 
     //------------------------------------------------------------------
@@ -345,9 +357,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        processNetwork();
-        update(elapsedTime);
-        render();
+        if (inGame){
+            processNetwork();
+            update(elapsedTime);
+            render();
+        }
 
         requestAnimationFrame(gameLoop);
     };
@@ -408,6 +422,9 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 messageHistory.enqueue(message);
             },
             ' ', true);
+
+        myKeyboard.registerHandler(
+            () => MyGame.Menu.HandleEscPress(), 'Escape', true);
 
         //
         // Get the game loop started

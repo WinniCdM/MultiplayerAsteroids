@@ -5,7 +5,6 @@
 //------------------------------------------------------------------
 MyGame.components.Missile = function(message,texture) {
     let that = {};
-    console.log('new Missile: ', message.state.center);
 
     let state = message.state;
     Object.defineProperty(that, 'state', {
