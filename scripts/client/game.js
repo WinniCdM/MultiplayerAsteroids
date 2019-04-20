@@ -66,9 +66,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'update-self':
                     handleUpdateSelf(message.data);
+                    //hyperspace?
                     break;
                 case 'update-other':
                     handleUpdateOther(message.data);
+                    //hyperspace?
                     break;
                 case 'asteroid-new':
                     handleAsteroidNew(message.data);
@@ -524,6 +526,17 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 messageHistory.enqueue(message);
             },
             ' ', true);
+        myKeyboard.registerHandler(elapsedTime => {
+                let message = {
+                    id: messageId++,
+                    elapsedTime: elapsedTime,
+                    type: 'hyperspace'
+                };
+                socket.emit('input', message);
+                messageHistory.enqueue(message);
+                console.log('asking for jump');
+            },
+            'z', true);
 
         myKeyboard.registerHandler(
             () => MyGame.Menu.HandleEscPress(), 'Escape', true);
