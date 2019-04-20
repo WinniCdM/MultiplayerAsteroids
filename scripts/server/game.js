@@ -76,7 +76,9 @@ function handleJoinGame(input){
         gameStarted = true;
     }
     activeClients[input.clientId].player.username = input.message.username;
-    activeClients[input.clientId].player.reportUpdate = true;
+    for(let id in activeClients){
+        activeClients[id].player.reportUpdate = true;
+    }
 }
 
 //------------------------------------------------------------------
