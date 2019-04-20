@@ -62,17 +62,16 @@ MyGame.handlers.ParticleHandler = (function(){
         }
     }
 
-    //TODO, finish this function
     function createThrust(center){
-        particleSubsystems.push(TheGame.objects.ParticleSubSystem({
-            imageSrc: "assets/images/fire.png",
+        localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['fire'],
             numPerUpdate: 2,
             duration: 100,
             center: { x: center.x, y: center.y },
-            size: { mean: 10, stdev: 2 },
-            speed: { mean: .165, stdev: .035 },
+            size: { mean: .1, stdev: .022 },
+            speed: { mean: .000165, stdev: .000035 },
             lifetime: { mean: 500, stdev: 100 },
-            direction: TheGame.GameModel.player.getThrustDirection(),
+            direction: MyGame.main.playerSelf.getThrustDirection(),
             type: "cone"
         }));
     }
