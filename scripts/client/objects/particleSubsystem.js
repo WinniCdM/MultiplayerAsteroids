@@ -26,9 +26,9 @@ MyGame.components.ParticleSubsystem = function(spec){
             }
         }
 
-        //delet all dead particles
+        //delete all dead particles
         for(let i = particlesToDelete.length; i>= 0; i--){
-            particles.splice(particlesToDelete[i],1);
+            particles.splice(particlesToDelete[i], 1);
         }
     }
     
@@ -63,11 +63,6 @@ MyGame.components.ParticleSubsystem = function(spec){
             type: spec.type
         });
     }
-
-
-
-
-
-
+    
     return that;
 }

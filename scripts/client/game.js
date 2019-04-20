@@ -257,11 +257,10 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
         //Call correct particle system
-        let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message];
+        let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message.key];
 
-        
         //Call correct Particle System
-        if(asteroid.width == .05){
+        if(asteroid.state.size.width == .05){
             MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
                 type:'asteroid-destroyed',
                 center:{
@@ -272,10 +271,10 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         }
         else{
             MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
-                center:{
                 type:'asteroid-breakup',
-                    y: asteroid.state.center.y
+                center:{
                     x: asteroid.state.center.x,
+                    y: asteroid.state.center.y
                 }
             })
         }
@@ -288,7 +287,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 y: asteroid.state.center.y
             }
         })
-        //delete Asteroid
+
+        //Delete Asteroid
         handlers.AsteroidHandler.deleteAsteroid(data.message.key);
     }
 
@@ -345,7 +345,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     y: data.message.state.center.y
                 }
             })
-        }else{
+        } else{
             MyGame.handlers.AudioHandler.handleNewGlobalAudio({
                 type:'enemy-laser',
                 center:{
@@ -374,6 +374,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handlePowerupDelete(data){
         //Call correct particle system
         let powerUpCenter = MyGame.handlers.PowerupHandler.powerups[data.message].state.center;
+
         MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
             type:'powerup-pickup',
             center:{
@@ -438,8 +439,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
-        renderer.ViewPort.render(viewPort); 
-        // handlers.ParticleHandler.render();       
+        renderer.ViewPort.render(viewPort);       
     }
 
     //------------------------------------------------------------------

@@ -30,6 +30,7 @@ MyGame.handlers.ParticleHandler = (function(){
     that.resetLocal = function(elapsedTime){
         that.localParticleSubsystems = [];
     }
+    
     that.resetGlobal = function(elapsedTime){
         that.globalParticleSubsystems = [];
     }
@@ -51,27 +52,21 @@ MyGame.handlers.ParticleHandler = (function(){
                 break;
             case 'asteroid-breakup':
                 createAsteroidBreakup(spec.center);
-                MyGame.handlers.AudioHandler.playAsteroidExplosion();
                 break;
             case 'asteroid-destroyed':
                 createAsteroidDestroyed(spec.center);
-                //call sound manager here
                 break;
             case 'player-explosion':
                 createPlayerDestroyed(spec.center);
-                //call sound manager here
                 break;
             case 'ufo-explosion':
                 createUFODestroyed(spec.center);
-                //call sound manager here
                 break;
             case 'hyperspace':
                 createHyperspaceWarp(spec.center);
-                //call sound manager here
                 break;
             case 'powerup-pickup':
                 createPowerupPickup(spec.center);
-                //call sound manager here
                 break;
         }
     }

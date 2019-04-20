@@ -112,7 +112,7 @@ function updateClientsAboutUFOs(elapsedTime){
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
             if (ufosHandler.newUFOs[id] in ufosHandler.ufos){
-                let currNewUFO = ufosHandler.ufos[id];
+                let currNewUFO = ufosHandler.ufos[ufosHandler.newUFOs[id]];
                 transmitMessageToAllClients(currNewUFO.state,'ufo-new');
             }
         }

@@ -167,7 +167,7 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             renderer.Powerup.render(currPowerup.state, currPowerup.texture, currPowerup.subImageIndex, currPowerup.subTextureWidth);
         }
 
-        //Missile Rendering
+        // Missile Rendering
         for (let id in localMissiles){
             let missile = localMissiles[id];
             renderer.Missile.render(missile.state,missile.texture);
