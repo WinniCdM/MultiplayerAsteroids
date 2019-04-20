@@ -29,6 +29,8 @@ MyGame.components.PlayerRemote = function() {
         },
         updateWindow: 0      // Server reported time elapsed since last update
     };
+    that.username = '';
+    that.score = 0;
 
     Object.defineProperty(that, 'state', {
         get: () => state
@@ -41,6 +43,7 @@ MyGame.components.PlayerRemote = function() {
     Object.defineProperty(that, 'size', {
         get: () => size
     });
+
 
     //------------------------------------------------------------------
     //

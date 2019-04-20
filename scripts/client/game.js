@@ -105,10 +105,15 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     that.handleJoinGame = function(){
         inGame = true;
+        let username = document.getElementById("user-name").value;
+        if(username === '')
+            username = 'nothing';
         let message = {
-            type: 'join-game'
+            type: 'join-game',
+            username: username
         }
         socket.emit('input', message);
+        playerSelf.model.username = message.username;
     }
 
     //------------------------------------------------------------------
@@ -229,6 +234,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             let model = playerOthers[data.clientId].model;
             model.goal.updateWindow = data.updateWindow;
 
+            model.username = data.username;
             model.state.momentum.x = data.momentum.x;
             model.state.momentum.y = data.momentum.y
             model.goal.position.x = data.position.x;
@@ -426,6 +432,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         handlers.ParticleHandler.update(elapsedTime);
         viewPort.update(elapsedTime);
         playerSelf.model.update(elapsedTime);
+        handlers.ScoreHandler.update(elapsedTime);
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
@@ -439,7 +446,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
-        renderer.ViewPort.render(viewPort);       
+        renderer.ViewPort.render(viewPort); 
+        handlers.ScoreHandler.render();       
     }
 
     //------------------------------------------------------------------

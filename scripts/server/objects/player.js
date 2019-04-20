@@ -40,6 +40,7 @@ function createPlayer(MissileHandler,clientID) {
     let crashed = false;
     let missileSpeed = .001;
     let fireRate = 350;
+    that.username = '';
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum

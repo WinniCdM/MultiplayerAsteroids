@@ -49,7 +49,8 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
                         },
                         direction: currPlayerOther.model.state.direction
                     },
-                    size: currPlayerOther.model.size
+                    size: currPlayerOther.model.size,
+                    username: currPlayerOther.model.username,
                 },
                 texture: currPlayerOther.texture
             }
