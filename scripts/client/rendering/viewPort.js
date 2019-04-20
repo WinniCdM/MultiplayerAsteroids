@@ -179,6 +179,9 @@ MyGame.renderer.ViewPort = (function(graphics, renderer) {
             renderer.PlayerRemote.render(player.model, player.texture);
         }
 
+
+        //play sounds
+        MyGame.handlers.AudioHandler.play();
         MyGame.handlers.ParticleHandler.render();
         // Render player - render behind particles, so that its on top of every thing else, but behind the particles
         renderer.Player.render(localPlayerSelf.model, localPlayerSelf.texture);

@@ -184,6 +184,17 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         //After we have gone over all of the new globalParticleSubsystems clear that array
         MyGame.handlers.ParticleHandler.resetGlobal();
 
+
+        //Audio
+        for(let index in MyGame.handlers.AudioHandler.globalAudio){
+            let currAudio = MyGame.handlers.AudioHandler.globalAudio[index];
+
+            if(checkIfWithinViewPort(currAudio.center)){
+                MyGame.handlers.AudioHandler.handleNewLocalAudio(currAudio.type);
+            }
+        }
+        MyGame.handlers.AudioHandler.resetGlobal();
+
     }
 
     //------------------------------------------------------------------
