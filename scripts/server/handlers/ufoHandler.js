@@ -16,7 +16,7 @@ function ufoHandler(missileHandler,activeClients){
 
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
-    let smallUFOSpawnRate = 6000;
+    let smallUFOSpawnRate = 60000;
     let largeUFOSpawnRate = 4000;
 
     let nextID = 0;
@@ -39,6 +39,7 @@ function ufoHandler(missileHandler,activeClients){
 
     function createUFO(smart){
         let id = getNextID();
+        
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},

@@ -93,9 +93,8 @@ function updateClientsAboutUFOs(elapsedTime){
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
-            let currNewUFO = ufosHandler.ufos[id];
+            let currNewUFO = ufosHandler.ufos[ufosHandler.newUFOs[id]];
             transmitMessageToAllClients(currNewUFO.state,'ufo-new');
-            console.log('new UFO message sent: ', currNewUFO.state);
         }
         ufosHandler.clearNewUFOS();
     }
@@ -293,6 +292,7 @@ function informNewClientAboutExistingUFOs(clientSocket){
             type: "ufo-new",
             message: currFos.state
         })
+        console.log('old UFO message sent: ', currFos.state);
     }
 }
 
