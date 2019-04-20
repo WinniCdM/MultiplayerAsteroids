@@ -259,7 +259,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handleAsteroidDelete(data){
         //Call correct particle system
         let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message];
-        console.log('location of asteroid destroyed: ', asteroid.state.center);
         
 
         //Call correct Particle System
@@ -311,7 +310,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handleUFODestroyed(data){
         //Call correct particle system
         let ufoCenter = MyGame.handlers.UFOHandler.ufos[data.message].state.center;
-        console.log('location of ufo destroyed: ', ufoCenter);
         MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
             type:'ufo-explosion',
             center:{
@@ -377,7 +375,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handlePowerupDelete(data){
         //Call correct particle system
         let powerUpCenter = MyGame.handlers.PowerupHandler.powerups[data.message].state.center;
-        console.log('location of ufo destroyed: ', powerUpCenter);
         MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
             type:'powerup-pickup',
             center:{
