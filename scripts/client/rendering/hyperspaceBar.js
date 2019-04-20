@@ -11,15 +11,13 @@ MyGame.renderer.HyperspaceBar = (function(graphics) {
 
         graphics.drawText({
             text: spec.text,
-            fillStyle: 'rgba(255, 255, 255, .7)',
-            strokeStyle: 'rgba(255, 255, 255, .7)',
-            font: "12pt \'Press Start 2P\'",
+            fillStyle: spec.barOutlineColor,
+            strokeStyle: spec.barOutlineColor,
+            font: spec.font,
             center:{
                 x:spec.position.x +.005,
                 y:spec.position.y +.005
             }
-
-
         })
     }
 

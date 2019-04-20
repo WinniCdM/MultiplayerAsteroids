@@ -11,6 +11,7 @@ MyGame.components.HyperspaceBar = function(spec){
         get barOutlineColor(){ return spec.barOutlineColor; },
         get position(){ return spec.position; },
         get text() { return spec.text;},
+        get font() { return spec.font;},
         update: update
     }
 

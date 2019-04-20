@@ -28,7 +28,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         barColor: 'rgba(255, 255, 255, .5)',
         barOutlineColor: 'rgba(255, 255, 255, .7)',
         position: { x: .75, y: .01 },//ViewPort Units
-        text: 'Hyperspace'
+        text: 'Hyperspace',
+        font: "12pt \'Press Start 2P\'",
     });
 
     Object.defineProperty(that, 'playerSelf', {
@@ -584,7 +585,6 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 };
                 socket.emit('input', message);
                 messageHistory.enqueue(message);
-                console.log('asking for jump');
             },
             'z', true);
 
