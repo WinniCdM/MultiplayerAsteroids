@@ -78,6 +78,7 @@ MyGame.loader = (function () {
                 'handlers/powerupHandler',
                 'handlers/particleHandler',
                 'handlers/audioHandler',
+                'handlers/scoreHandler',
             ],
             message: 'Handlers loaded',
             onComplete: null

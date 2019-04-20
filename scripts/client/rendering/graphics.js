@@ -148,8 +148,8 @@ MyGame.graphics = (function() {
     
     function drawText(spec) {
         let localCenter = {
-            x: spec.center.x/2 * canvas.width - 50,
-            y: spec.center.y * canvas.height - 50
+            x: spec.center.x/2 * canvas.width,
+            y: spec.center.y * canvas.height
         };
 
         context.save();

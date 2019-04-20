@@ -76,6 +76,7 @@ function handleJoinGame(input){
         gameStarted = true;
     }
     activeClients[input.clientId].player.username = input.message.username;
+    activeClients[input.clientId].player.reportUpdate = true;
 }
 
 //------------------------------------------------------------------
@@ -247,6 +248,7 @@ function updateClients(elapsedTime) {
             direction: client.player.direction,
             position: client.player.position,
             username: client.player.username,
+            score: client.player.score,
             updateWindow: elapsedTime
         };
         if (client.player.reportUpdate) {

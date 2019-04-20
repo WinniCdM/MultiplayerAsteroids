@@ -26,8 +26,8 @@ MyGame.renderer.PlayerRemote = (function(graphics) {
             strokeStyle: 'rgba(255, 255, 255, .3)',
             text: model.username,
             center:{
-                x:model.state.position.x,
-                y:model.state.position.y
+                x:model.state.position.x - .07,
+                y:model.state.position.y -.07
             }
             
         } 
