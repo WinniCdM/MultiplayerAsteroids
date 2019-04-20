@@ -128,32 +128,25 @@ MyGame.loader = (function () {
         }, {
             key: 'yellow-powerup',
             source: 'assets/images/powerups/yellow.png'
-        }, 
-        {
+        }, {
             key: 'enemy-laser',
             source: 'assets/sounds/enemylaser.wav'
-        }, 
-        {
+        }, {
             key: 'main-music',
             source: 'assets/sounds/mainmusic.mp3'
-        }, 
-        {
+        }, {
             key: 'laser',
             source: 'assets/sounds/laser.mp3'
-        }, 
-        {
+        }, {
             key: 'explosion',
             source: 'assets/sounds/Explosion1.mp3'
-        }, 
-        {
+        }, {
             key: 'asteroid-explosion',
             source: 'assets/sounds/Explosion6.mp3'
-        }, 
-        {
+        }, {
             key: 'respawn',
             source: 'assets/sounds/respawn.mp3'
-        }, 
-        {
+        }, {
             key: 'hyperspace',
             source: 'assets/sounds/PowerUp30.mp3'
         },

@@ -51,7 +51,7 @@ MyGame.handlers.ParticleHandler = (function(){
                 break;
             case 'asteroid-breakup':
                 createAsteroidBreakup(spec.center);
-                //call sound manager here
+                MyGame.handlers.AudioHandler.playAsteroidExplosion();
                 break;
             case 'asteroid-destroyed':
                 createAsteroidDestroyed(spec.center);
