@@ -275,6 +275,7 @@ function updateClients(elapsedTime) {
 
     for (let clientId in activeClients) {
         activeClients[clientId].player.reportUpdate = false;
+        activeClients[clientId].player.reportHyperspaceJump = false;
     }
     lastUpdateTime = present();
 }

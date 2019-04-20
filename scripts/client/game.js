@@ -224,6 +224,18 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             memory.enqueue(message);
         }
         messageHistory = memory;
+
+
+        if(data.hyperspaceJump){
+            console.log('add hyperspace system');
+            handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+        }
     }
 
     //------------------------------------------------------------------
@@ -246,6 +258,22 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             if (model.goal.position.y < 0) { model.goal.position.y = 0; model.state.momentum.y = 0; } //lower up bound
             if (model.goal.position.y > 10) { model.goal.position.y = 10; model.state.momentum.y = 0; } //upper down bound
             model.goal.direction = data.direction;
+        }
+        if(data.hyperspaceJump){
+            handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+            handlers.AudioHandler.handleNewGlobalAudio({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
         }
     }
 
