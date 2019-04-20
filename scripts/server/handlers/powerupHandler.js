@@ -68,7 +68,7 @@ function powerupHandler(){
         } else if (randomNum > .4 && randomNum <= .8){
             type = "spread-shot"
         } else if (randomNum < 1){
-            type = "guided-missiles"
+            type = "split-shot"
         }
         return type;
     }

@@ -35,7 +35,7 @@ MyGame.handlers.PowerupHandler = (function(){
             case "shields":
                 texture = "blue-powerup";
                 break;
-            case "guided-missiles":
+            case "split-shot":
                 texture = "green-powerup";
                 break;
         }

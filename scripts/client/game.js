@@ -265,34 +265,36 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         //Call correct particle system
         let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message.key];
 
-        //Call correct Particle System
-        if(asteroid.state.size.width == .05){
-            MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
-                type:'asteroid-destroyed',
-                center:{
-                    x: asteroid.state.center.x,
-                    y: asteroid.state.center.y
-                }
-            })
-        }
-        else{
-            MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
-                type:'asteroid-breakup',
-                center:{
-                    x: asteroid.state.center.x,
-                    y: asteroid.state.center.y
-                }
-            })
-        }
-
-        //Call correct Audio
-        MyGame.handlers.AudioHandler.handleNewGlobalAudio({
-            type:'asteroid-explosion',
-            center:{
-                x: asteroid.state.center.x,
-                y: asteroid.state.center.y
+        if (asteroid != null){
+            //Call correct Particle System
+            if(asteroid.state.size.width == .05){
+                MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                    type:'asteroid-destroyed',
+                    center:{
+                        x: asteroid.state.center.x,
+                        y: asteroid.state.center.y
+                    }
+                })
             }
-        })
+            else{
+                MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                    type:'asteroid-breakup',
+                    center:{
+                        x: asteroid.state.center.x,
+                        y: asteroid.state.center.y
+                    }
+                })
+            }
+    
+            //Call correct Audio
+            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                type:'asteroid-explosion',
+                center:{
+                    x: asteroid.state.center.x,
+                    y: asteroid.state.center.y
+                }
+            })
+        }
 
         //Delete Asteroid
         handlers.AsteroidHandler.deleteAsteroid(data.message.key);
@@ -379,8 +381,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function handlePowerupDelete(data){
         //Call correct particle system
-        let powerUpCenter = MyGame.handlers.PowerupHandler.powerups[data.message].state.center;
-
+        let powerUpCenter = MyGame.handlers.PowerupHandler.powerups[data.message.key].state.center;
         MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
             type:'powerup-pickup',
             center:{
@@ -398,7 +399,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             }
         })
 
-        MyGame.handlers.PowerupHandler.deletePowerup(data.key);
+        console.log(data.key);
+        MyGame.handlers.PowerupHandler.deletePowerup(data.message.key);
     }
 
     //------------------------------------------------------------------

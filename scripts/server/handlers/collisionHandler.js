@@ -12,11 +12,13 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
     let that = {}
 
     that.handleCollisions = function(elapsedTime){
-        missilesAgainstAsteroids();
+        missilesAgainstEverythingElse();
+        playersAgainstEverythingElse();
     }
 
-    function missilesAgainstAsteroids(){
+    function missilesAgainstEverythingElse(){
         let missiles = missileHandler.missiles;
+        let ufos = ufoHandler.ufos;
         let asteroids = asteroidHandler.asteroids;
 
         for (let i in missiles){
@@ -24,12 +26,46 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
             for (let j in asteroids){
                 let currAsteroid = asteroids[j];
                 if (haveCollided(currMissile.state, currAsteroid.state)){
-                    //check if its ally or enemy
-                    //if ally, give points to appropriate player
-                    //if enemy, just delete cause the EXPLOSIONS
+                    if (currMissile.owner === "player"){
+                        players[currMissile.clientID].player.score += calculateAsteroidScore(currAsteroid.asteroidSize);
+                    }
+
                     asteroidHandler.handleAsteroidBreak(currAsteroid);
                     asteroidHandler.deleteAsteroid(j);
                     missileHandler.deleteMissile(i);
+                }
+            }
+
+            for (let k in ufos){
+                let currUFO = ufos[k];
+                if (haveCollided(currMissile.state, currUFO.state)){
+                    if (currMissile.owner === "player"){
+                        console.log(k);
+                        players[currMissile.clientID].player.score += calculateUFOScore(currUFO.isSmart);
+
+                        ufoHandler.deleteUFO(k);
+                        missileHandler.deleteMissile(i);
+                        console.log(players[currMissile.clientID].player.score);
+                    } //else do nothing
+                }
+            }
+        }
+    }
+
+    function playersAgainstEverythingElse(){
+        let powerups = powerupHandler.powerups;
+        for (let id in players){
+            let currPlayer = players[id].player;
+            let currPlayerState = {
+                size: currPlayer.size,
+                center: currPlayer.position
+            }
+            // against powerups
+            for (let i in powerups){
+                let currPowerup = powerups[i];
+                if (haveCollided(currPlayerState, currPowerup.state)){
+                    currPlayer.pickupPowerup(currPowerup.type);
+                    powerupHandler.deletePowerup(i);
                 }
             }
         }
@@ -39,6 +75,23 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
         let radiTotal = (state1.size.width / 2) + (state2.size.width / 2);
         let distance = helpers.getDistance(state1.center, state2.center);
         return (radiTotal > distance);
+    }
+
+    function calculateAsteroidScore(size){
+        if (size === "large"){
+            return 20;
+        }
+        if (size === "medium"){
+            return 50;
+        }
+        return 100;
+    }
+
+    function calculateUFOScore(isSmart){
+        if (isSmart){
+            return 1000;
+        }
+        return 200;
     }
 
     return that;
