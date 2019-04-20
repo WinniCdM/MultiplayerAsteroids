@@ -17,6 +17,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         messageHistory = MyGame.utilities.Queue(),
         messageId = 1,
         messageQueue = [],
+        inGame = false,
         socket = io(),
         that = {};
 
@@ -102,7 +103,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     // Emits the join game message to start the game
     //
     //------------------------------------------------------------------
-    that.emitJoinGame = function(){
+    that.handleJoinGame = function(){
+        inGame = true;
         let message = {
             type: 'join-game'
         }
@@ -355,9 +357,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         lastTimeStamp = time;
 
         processInput(elapsedTime);
-        processNetwork();
-        update(elapsedTime);
-        render();
+        if (inGame){
+            processNetwork();
+            update(elapsedTime);
+            render();
+        }
 
         requestAnimationFrame(gameLoop);
     };
@@ -418,6 +422,9 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 messageHistory.enqueue(message);
             },
             ' ', true);
+
+        myKeyboard.registerHandler(
+            () => MyGame.Menu.HandleEscPress(), 'Escape', true);
 
         //
         // Get the game loop started

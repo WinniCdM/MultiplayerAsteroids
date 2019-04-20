@@ -19,7 +19,7 @@ MyGame.Menu = (function(){
         switch(btnid){
             case "playgame-button":
                 that.Push(that.MenuItemsEnums.INGAME);
-                MyGame.main.emitJoinGame();
+                MyGame.main.handleJoinGame();
                 MyGame.main.initialize();
                 break;
             case "highscore-button":
@@ -60,15 +60,15 @@ MyGame.Menu = (function(){
     } 
 
     that.HandleEscPress = function(){
-        if (menuStack[menuStack.length - 1] === MenuItemsEnums.INGAME){
-            Push(MenuItemsEnums.PAUSE);
+        if (menuStack[menuStack.length - 1] === that.MenuItemsEnums.INGAME){
+            that.Push(that.MenuItemsEnums.PAUSE);
         }
-        else if (menuStack[menuStack.length - 1] === MenuItemsEnums.PAUSE){
+        else if (menuStack[menuStack.length - 1] === that.MenuItemsEnums.PAUSE){
             //Do nothing, user is required to press resume or exit
             //TODO: Make this not part of it
         }
         else {
-            Pop();
+            that.Pop();
         }
     }
 
