@@ -12,18 +12,17 @@ let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
 
-let powerupHandler = PowerupHandler.create();
-
-
-const UPDATE_RATE_MS = 200;
+const UPDATE_RATE_MS = 50;
 let quit = false;
 let activeClients = {};
 let inputQueue = [];
 let lastUpdateTime = present();
+let gameStarted = false;
 
 let asteroidsHandler = AsteroidHandler.create();
 let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
+let powerupHandler = PowerupHandler.create();
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -59,7 +58,23 @@ function processInput() {
             case 'fire':
                 client.player.fire(input.message.elapsedTime);
                 break;
+            case 'join-game':
+                handleJoinGame();
+                break;
         }
+    }
+}
+
+//------------------------------------------------------------------
+//
+// Handles the join game request
+// Starts the game if no one has joined, other wise, just joins
+//
+//------------------------------------------------------------------
+function handleJoinGame(){
+    if (!gameStarted){
+        gameStarted = true;
+        console.log("Game started");
     }
 }
 
@@ -81,7 +96,6 @@ function update(elapsedTime) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
     updateClients(elapsedTime);
-
 }
 
 //------------------------------------------------------------------
@@ -346,7 +360,10 @@ function informNewClientAboutExistingPowerups(clientSocket){
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    update(elapsedTime);
+    if (gameStarted){
+        update(elapsedTime);
+    }
+
     if (!quit) {
         setTimeout(() => {
             let now = present();
@@ -469,7 +486,6 @@ function initializeSocketIO(httpServer) {
 //
 //------------------------------------------------------------------
 function initialize(httpServer) {
-
     initializeSocketIO(httpServer);
     gameLoop(present(), 0);
 }

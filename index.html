@@ -4,12 +4,78 @@
     <meta charset = "UTF-8">
     <title>Asteroids With Friends</title>
     <script src = "/node_modules/socket.io-client/dist/socket.io.slim.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div id="container">
-        <canvas id = "canvas-main" class = "screen" width = "1000" height = "500"></canvas>
+        <div id="canvas-screen" class="screen">
+            <canvas id = "canvas-main"  width = "1000" height = "500"></canvas>
+        </div>
+            <!--Main Menu-->
+        <div id="main-menu-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="titles">Asteroids with Friends!</h1>  <!--TODO: CREATE LOGOS-->
+                <button id="playgame-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">Join Game</button>
+                <button id="highscore-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">High Scores</button>
+                <button id="controls-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">Controls</button>
+                <button id="credit-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">Credits</button>
+            </div>
+        </div>
+        <!--High Scores-->
+        <div id="highscore-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="titles">High Scores</h1>
+                <div class="text-content" id="highscores">wheeeew</div>
+            </div>
+        </div>
+        <!--Controls-->
+        <div id="controls-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="titles">Controls</h1>
+                <div class="text-content sub-title">Thrust</div>
+                <div class="text-content">[Up Arrow]</div>
+                <div class="text-content sub-title">Rotate Left</div>
+                <div class="text-content">[Left Arrow]</div>
+                <div class="text-content sub-title">Rotate Right</div>
+                <div class="text-content">[Right Arrow]</div>
+                <div class="text-content sub-title">Fire</div>
+                <div class="text-content">[Spacebar]</div>
+                <div class="text-content sub-title">Hyperspace</div>
+                <div class="text-content">[Z]</div>
+                <div class="text-content sub-title">Pause/Previous Screen</div>
+                <div class="text-content">[Esc]</div>
+            </div>
+        </div>
+        <!--Credits-->
+        <div id="credit-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="titles">Credits</h1>
+                <div class="text-content sub-title">Software Developers</div>
+                <div class="text-content">Jason Andersen</div> 
+                <div class="text-content">Benjamin Winslett</div> 
+                <div class="text-content sub-title">Game Art</div> 
+                <div class="text-content">Benjamin Winslett</div> 
+                <div class="text-content">PNGriver.com</div> 
+                <div class="text-content">universeatarms.com</div> 
+                <div class="text-content">Google Images</div>
+                <div class="text-content sub-title">Music</div> 
+                <div class="text-content">Eric Matyas | www.soundimage.org</div>
+                <div class="text-content sub-title">SFX</div> 
+                <div class="text-content">Eric Matyas | www.soundimage.org</div>
+                <div class="text-content">opengameart.org</div>
+            </div>
+        </div>
+        <!--Pause-->
+        <div id="pause-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="titles">In Game Menu</h1>
+                <button id="resume-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">Resume</button>
+                <button id="exit-button" onclick="MyGame.Menu.buttonOnClickHandler(this.id)">Exit</button>
+            </div>
+        </div>
     </div>
+    
 
     <script data-main = "scripts/client/loader" src = "scripts/client/require.js"></script>
 </body>

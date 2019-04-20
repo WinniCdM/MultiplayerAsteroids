@@ -19,6 +19,12 @@ MyGame.loader = (function () {
     'use strict';
     let scriptOrder = [{
             scripts: [
+                'menu'
+            ],
+            message: 'Menu loaded',
+            onComplete: null
+        }, {
+            scripts: [
                 'helper/helperFunctions', 
                 'helper/queue',
                 'helper/random',
