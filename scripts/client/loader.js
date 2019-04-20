@@ -77,6 +77,7 @@ MyGame.loader = (function () {
                 'handlers/missileHandler',
                 'handlers/powerupHandler',
                 'handlers/particleHandler',
+                'handlers/audioHandler',
             ],
             message: 'Handlers loaded',
             onComplete: null
@@ -127,7 +128,36 @@ MyGame.loader = (function () {
         }, {
             key: 'yellow-powerup',
             source: 'assets/images/powerups/yellow.png'
-        },];
+        }, 
+        // {
+        //     key: 'enemy-laser',
+        //     source: 'assets/sounds/enemylaser.wav'
+        // }, 
+        {
+            key: 'main-music',
+            source: 'assets/sounds/mainmusic.mp3'
+        }, 
+        // {
+        //     key: 'laser',
+        //     source: 'assets/sounds/laser.wav'
+        // }, 
+        {
+            key: 'explosion',
+            source: 'assets/sounds/Explosion1.mp3'
+        }, 
+        {
+            key: 'asteroid-explosion',
+            source: 'assets/sounds/Explosion6.mp3'
+        }, 
+        {
+            key: 'respawn',
+            source: 'assets/sounds/respawn.mp3'
+        }, 
+        {
+            key: 'hyperspace',
+            source: 'assets/sounds/PowerUp30.mp3'
+        },
+    ];
 
         
     //------------------------------------------------------------------
@@ -256,7 +286,7 @@ MyGame.loader = (function () {
                 if (xhr.status === 200) {
                     if (fileExtension === 'png' || fileExtension === 'jpg') {
                         asset = new Image();
-                    } else if (fileExtension === 'mp3') {
+                    } else if (fileExtension === 'mp3' || fileExtension === 'wav') {
                         asset = new Audio();
                     } else {
                         if (onError) { onError('Unknown file extension: ' + fileExtension); }
