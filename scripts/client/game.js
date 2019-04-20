@@ -106,7 +106,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     that.handleJoinGame = function(){
         inGame = true;
         let message = {
-            type: 'join-game'
+            type: 'join-game',
+            username: 'player'//TODO!!!!!!!!!!!!!!!!!!
         }
         socket.emit('input', message);
     }
