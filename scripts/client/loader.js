@@ -24,7 +24,11 @@ MyGame.loader = (function () {
             message: 'Menu loaded',
             onComplete: null
         }, {
-            scripts: ['helper/helperFunctions', 'helper/queue'],
+            scripts: [
+                'helper/helperFunctions', 
+                'helper/queue',
+                'helper/random',
+            ],
             message: 'Utilities loaded',
             onComplete: null,
         }, {
@@ -38,7 +42,9 @@ MyGame.loader = (function () {
                 'objects/asteroid', 
                 'objects/ufo', 
                 'objects/missile',
-                'objects/powerup'
+                'objects/powerup',
+                'objects/particleSubsystem',
+                'objects/particle',
             ],
             message: 'Object models loaded',
             onComplete: null
@@ -59,7 +65,8 @@ MyGame.loader = (function () {
                 'rendering/ufo',
                 'rendering/asteroid',
                 'rendering/powerup',
-                'rendering/missile'
+                'rendering/missile',
+                'rendering/particleSubsystem',
             ],
             message: 'Renderers loaded',
             onComplete: null
@@ -68,7 +75,9 @@ MyGame.loader = (function () {
                 'handlers/asteroidHandler', 
                 'handlers/ufoHandler', 
                 'handlers/missileHandler',
-                'handlers/powerupHandler'
+                'handlers/powerupHandler',
+                'handlers/particleHandler',
+                'handlers/audioHandler',
             ],
             message: 'Handlers loaded',
             onComplete: null
@@ -96,6 +105,18 @@ MyGame.loader = (function () {
             key: 'player-missile',
             source: 'assets/images/other/playermissile.png'
         }, {
+            key: 'fire',
+            source: 'assets/images/other/fire.png'
+        }, {
+            key: 'blue',
+            source: 'assets/images/other/blue.png'
+        }, {
+            key: 'smoke',
+            source: 'assets/images/other/smoke.png'
+        }, {
+            key: 'white',
+            source: 'assets/images/other/white.png'
+        }, {
             key: 'green-powerup',
             source: 'assets/images/powerups/green.png'
         }, {
@@ -107,7 +128,29 @@ MyGame.loader = (function () {
         }, {
             key: 'yellow-powerup',
             source: 'assets/images/powerups/yellow.png'
-        },];
+        }, {
+            key: 'enemy-laser',
+            source: 'assets/sounds/enemylaser.wav'
+        }, {
+            key: 'main-music',
+            source: 'assets/sounds/mainmusic.mp3'
+        }, {
+            key: 'laser',
+            source: 'assets/sounds/laser.mp3'
+        }, {
+            key: 'explosion',
+            source: 'assets/sounds/Explosion1.mp3'
+        }, {
+            key: 'asteroid-explosion',
+            source: 'assets/sounds/Explosion6.mp3'
+        }, {
+            key: 'respawn',
+            source: 'assets/sounds/respawn.mp3'
+        }, {
+            key: 'hyperspace',
+            source: 'assets/sounds/PowerUp30.mp3'
+        },
+    ];
 
         
     //------------------------------------------------------------------
@@ -236,7 +279,7 @@ MyGame.loader = (function () {
                 if (xhr.status === 200) {
                     if (fileExtension === 'png' || fileExtension === 'jpg') {
                         asset = new Image();
-                    } else if (fileExtension === 'mp3') {
+                    } else if (fileExtension === 'mp3' || fileExtension === 'wav') {
                         asset = new Audio();
                     } else {
                         if (onError) { onError('Unknown file extension: ' + fileExtension); }

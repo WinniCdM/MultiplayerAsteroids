@@ -107,7 +107,7 @@ function updateClientsAboutUFOs(elapsedTime){
     //New UFO
     if(ufosHandler.newUFOs.length){
         for(let id in ufosHandler.newUFOs){
-            let currNewUFO = ufosHandler.ufos[id];
+            let currNewUFO = ufosHandler.ufos[ufosHandler.newUFOs[id]];
             transmitMessageToAllClients(currNewUFO.state,'ufo-new');
         }
         ufosHandler.clearNewUFOS();
@@ -147,7 +147,6 @@ function updateClientsAboutMissiles(elapsedTime){
         for(let id in missilesHandler.missilesDestroyed){
             transmitMessageToAllClients(missilesHandler.missilesDestroyed[id],'missile-destroyed');
         }
-
         missilesHandler.clearMissilesDestroyed();
     }
 }
@@ -302,10 +301,9 @@ function informNewClientAboutExistingUFOs(clientSocket){
     let fos = ufosHandler.ufos;
     for (let key in fos){
         let currFos = fos[key];
-        let message = currFos.state;
         clientSocket.emit('message', {
             type: "ufo-new",
-            message: message
+            message: currFos.state
         })
     }
 }

@@ -16,7 +16,6 @@ let helper = require("../helper/helperFunctions");
 //------------------------------------------------------------------
 function createAsteroid(position, size) {
     let that = {};
-    // console.log('asteroid created at: ', position);
 
     Object.defineProperty(that, 'asteroidSize', {
         get: () => size

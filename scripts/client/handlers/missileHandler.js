@@ -17,7 +17,6 @@ MyGame.handlers.MissileHandler = (function() {
     // owner
     // clientID
     that.handleNewMissile = function (message){
-        //console.log('new missile added at: ', message.state);
 
         switch(message.owner){
             case 'player':

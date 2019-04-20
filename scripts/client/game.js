@@ -256,6 +256,39 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
+        //Call correct particle system
+        let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message];
+        
+
+        //Call correct Particle System
+        if(asteroid.width == .05){
+            MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                type:'asteroid-destroyed',
+                center:{
+                    x: asteroid.state.center.x,
+                    y: asteroid.state.center.y
+                }
+            })
+        }
+        else{
+            MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                type:'asteroid-breakup',
+                center:{
+                    x: asteroid.state.center.x,
+                    y: asteroid.state.center.y
+                }
+            })
+        }
+
+        //Call correct Audio
+        MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+            type:'asteroid-explosion',
+            center:{
+                x: asteroid.state.center.x,
+                y: asteroid.state.center.y
+            }
+        })
+        //delete Asteroid
         handlers.AsteroidHandler.deleteAsteroid(data.key);
     }
 
@@ -274,6 +307,25 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleUFODestroyed(data){
+        //Call correct particle system
+        let ufoCenter = MyGame.handlers.UFOHandler.ufos[data.message].state.center;
+        MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+            type:'ufo-explosion',
+            center:{
+                x: ufoCenter.x,
+                y: ufoCenter.y
+            }
+        })
+
+        //Call correct Audio
+        MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+            type:'explosion',
+            center:{
+                x: ufoCenter.x,
+                y: ufoCenter.y
+            }
+        })
+
         MyGame.handlers.UFOHandler.destroyUFO(data.message);//pass in only id of UFO
     }
     //------------------------------------------------------------------
@@ -283,6 +335,26 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function handleMissileNew(data){
         MyGame.handlers.MissileHandler.handleNewMissile(data.message);//send everything
+        
+        //Call correct Audio
+        if(data.message.owner == 'player'){
+            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                type:'laser',
+                center:{
+                    x: data.message.state.center.x,
+                    y: data.message.state.center.y
+                }
+            })
+        }else{
+            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                type:'enemy-laser',
+                center:{
+                    x: data.message.state.center.x,
+                    y: data.message.state.center.y
+                }
+            })
+        }
+        
     }
 
     //------------------------------------------------------------------
@@ -300,6 +372,25 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handlePowerupDelete(data){
+        //Call correct particle system
+        let powerUpCenter = MyGame.handlers.PowerupHandler.powerups[data.message].state.center;
+        MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+            type:'powerup-pickup',
+            center:{
+                x:powerUpCenter.x,
+                y:powerUpCenter.y
+            }
+        })
+
+        //Call correct Audio
+        MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+            type:'hyperspace',
+            center:{
+                x: powerUpCenter.x,
+                y: powerUpCenter.y
+            }
+        })
+
         MyGame.handlers.PowerupHandler.deletePowerup(data.key);
     }
 
@@ -330,11 +421,14 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         handlers.AsteroidHandler.update(elapsedTime);
         handlers.UFOHandler.update(elapsedTime);
         handlers.PowerupHandler.update(elapsedTime);
+
+        handlers.ParticleHandler.update(elapsedTime);
+        viewPort.update(elapsedTime);
         playerSelf.model.update(elapsedTime);
+
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
         }
-        viewPort.update(elapsedTime);
     }
 
     //------------------------------------------------------------------
@@ -344,7 +438,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //------------------------------------------------------------------
     function render() {
         graphics.clear();
-        renderer.ViewPort.render(viewPort);        
+        renderer.ViewPort.render(viewPort); 
+        // handlers.ParticleHandler.render();       
     }
 
     //------------------------------------------------------------------

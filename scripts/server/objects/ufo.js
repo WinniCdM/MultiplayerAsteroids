@@ -21,12 +21,9 @@ function createUFO(spec,missileHandler,activeClients) {
     let smartShot = spec.smartShot;
     let missileSpeed = spec.missileSpeed;
     that.smartShot = spec.smartShot;
-
-    
     Object.defineProperty(that, 'isSmart', {
         get: () => smartShot
     });
-    // console.log('ufo created at: ', that.state.center);
 
 
     that.update = function(elapsedTime){
@@ -38,7 +35,6 @@ function createUFO(spec,missileHandler,activeClients) {
     }
 
     function updateCenter(elapsedTime){
-
         
         that.state.center.x += that.state.momentum.x * elapsedTime;
         that.state.center.y += that.state.momentum.y * elapsedTime;

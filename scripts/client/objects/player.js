@@ -60,6 +60,17 @@ MyGame.components.Player = function() {
 
         momentum.x += (vectorX * thrustRate * elapsedTime);
         momentum.y += (vectorY * thrustRate * elapsedTime);
+
+        MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+            center: {
+                x: position.x - (vectorX*.015),
+                y: position.y - (vectorY*.015)
+            },
+            type:'thrust'
+
+        });
+
+
     };
 
     //------------------------------------------------------------------
@@ -79,6 +90,18 @@ MyGame.components.Player = function() {
     that.rotateLeft = function(elapsedTime) {
         direction -= (rotateRate * elapsedTime);
     };
+
+    //------------------------------------------------------------------
+    //
+    // Public function that gives the direction of the thrust
+    //
+    //------------------------------------------------------------------
+    that.getThrustDirection = function(){
+        let vectorX = Math.cos(direction);
+        let vectorY = Math.sin(direction);
+        return { x: -vectorX, y: -vectorY}
+    }
+
 
     that.update = function(elapsedTime) {
         position.x += (momentum.x * elapsedTime);

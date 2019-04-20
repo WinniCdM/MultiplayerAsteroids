@@ -39,6 +39,7 @@ function ufoHandler(missileHandler,activeClients){
 
     function createUFO(smart){
         let id = getNextID();
+        
         let newUFOSpec = {
             state: {
                 size: { width:0,height:0},
