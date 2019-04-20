@@ -62,13 +62,13 @@ function powerupHandler(){
         let type = "";
         let randomNum = Math.random();
         if (randomNum <= .2){
-            type = "shields";
+            type = "no-shot";
         } else if (randomNum > .2 && randomNum <= .4){
             type = "rapid-fire"
         } else if (randomNum > .4 && randomNum <= .8){
             type = "spread-shot"
         } else if (randomNum < 1){
-            type = "guided-missiles"
+            type = "split-shot"
         }
         return type;
     }

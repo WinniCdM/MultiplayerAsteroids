@@ -328,7 +328,4 @@ MyGame.loader = (function () {
             loadScripts(scriptOrder, mainComplete);
         }
     );
-
-    //console.log("assets: ", MyGame.assets);
-
 }());

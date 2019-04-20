@@ -42,6 +42,13 @@ function createPlayer(MissileHandler,clientID) {
     let fireRate = 350;
     that.username = '';
 
+    let rapidFire = false;
+    let splitShot = false;
+    let spreadShot = false;
+    let noShot = false;
+
+    let powerupTime = 0;
+
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
     });
@@ -77,7 +84,8 @@ function createPlayer(MissileHandler,clientID) {
     });
 
     Object.defineProperty(that, 'score', {
-        get: () => score
+        get: () => score,
+        set: (value) => score = value 
     });
 
     Object.defineProperty(that, 'clientID', {
@@ -129,6 +137,12 @@ function createPlayer(MissileHandler,clientID) {
     //
     //------------------------------------------------------------------
     that.update = function(elapsedTime, intraUpdate) {
+        if (powerupTime > 0){
+            powerupTime -= elapsedTime;
+        } else {
+            resetPowerups();
+        }
+
         if (intraUpdate === false) {
             elapsedTime -= lastUpdateDiff;
             lastUpdateDiff = 0;
@@ -151,6 +165,7 @@ function createPlayer(MissileHandler,clientID) {
 
         if(((helper.getTime() - lastTimeFired) > fireRate) && !crashed){
             lastTimeFired = helper.getTime();
+            if (rapidFire) { lastTimeFired -= fireRate / 2}
             let state = {
                 momentum: {
                     x:momentum.x,
@@ -162,11 +177,15 @@ function createPlayer(MissileHandler,clientID) {
                     y: position.y
                 }
             }
-
-            //Decide which type of fireing to call, for now just normalFire
-            normalFire(state);
-
-
+            if (splitShot){
+                splitFire(state);
+            } else if (spreadShot){
+                spreadFire(state);
+            } else if (noShot){
+                //do nothing, because we're cruel
+            } else{
+                normalFire(state);
+            }
         }
 
     };
@@ -175,7 +194,48 @@ function createPlayer(MissileHandler,clientID) {
         MissileHandler.createPlayerMissile(direction,state,missileSpeed,clientID);
     }
 
+    function splitFire(state){
+        MissileHandler.createPlayerMissile(direction,state,missileSpeed,clientID);
+        MissileHandler.createPlayerMissile(direction - Math.PI, state, missileSpeed, clientID);
+    }
 
+    function spreadFire(state){
+        MissileHandler.createPlayerMissile(direction,state,missileSpeed,clientID);
+        MissileHandler.createPlayerMissile(direction - .15,state,missileSpeed,clientID);
+        MissileHandler.createPlayerMissile(direction - .3,state,missileSpeed,clientID);
+        MissileHandler.createPlayerMissile(direction + .15, state,missileSpeed,clientID);
+        MissileHandler.createPlayerMissile(direction + .3, state,missileSpeed,clientID);
+    }
+
+    that.pickupPowerup = function(powerupType){
+        resetPowerups();
+        switch (powerupType){
+            case "no-shot":
+                noShot = true;
+                powerupTime = 30000;
+                break;
+            case "rapid-fire":
+                rapidFire = true;
+                powerupTime = 60000;
+                break;
+            case "spread-shot":
+                spreadShot = true;
+                powerupTime = 30000;
+                break;
+            case "split-shot":
+                splitShot = true;
+                powerupTime = 60000;
+                break;
+        }
+    }
+
+    function resetPowerups(){
+        rapidFire = false;
+        spreadShot = false;
+        splitShot = false;
+        noShot = false;
+        powerupTime = 0;
+    }
 
     return that;
 }

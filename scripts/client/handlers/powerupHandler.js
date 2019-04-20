@@ -26,16 +26,16 @@ MyGame.handlers.PowerupHandler = (function(){
     function getTexture(type){
         let texture = '';
         switch (type) {
-            case "spread-shot":
+            case "no-shot":
                 texture = "red-powerup";
                 break;
             case "rapid-fire":
                 texture = "yellow-powerup";
                 break;
-            case "shields":
+            case "spread-shot":
                 texture = "blue-powerup";
                 break;
-            case "guided-missiles":
+            case "split-shot":
                 texture = "green-powerup";
                 break;
         }
