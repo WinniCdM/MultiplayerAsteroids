@@ -147,7 +147,6 @@ function updateClientsAboutMissiles(elapsedTime){
         for(let id in missilesHandler.missilesDestroyed){
             transmitMessageToAllClients(missilesHandler.missilesDestroyed[id],'missile-destroyed');
         }
-
         missilesHandler.clearMissilesDestroyed();
     }
 }
