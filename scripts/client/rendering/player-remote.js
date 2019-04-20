@@ -15,16 +15,15 @@ MyGame.renderer.PlayerRemote = (function(graphics) {
     //
     // ------------------------------------------------------------------
     that.render = function(model, texture) {
-        console.log('other players username: ', model.username);
         graphics.saveContext();
         graphics.rotateCanvas(model.state.position, model.state.direction);
         graphics.drawImage(texture, model.state.position, model.size);
         graphics.restoreContext();
 
         let textSpec ={
-            font: '32pt Arial',
-            fillStyle: 'rgba(255, 0, 0, 1)',
-            strokeStyle: 'rgba(0, 0, 0, 1)',
+            font: "12pt \'Press Start 2P\'",
+            fillStyle: 'rgba(255, 255, 255, .3)',
+            strokeStyle: 'rgba(255, 255, 255, .3)',
             text: model.username,
             center:{
                 x:model.state.position.x,
