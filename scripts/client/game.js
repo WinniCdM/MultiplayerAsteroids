@@ -256,7 +256,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
-        handlers.AsteroidHandler.deleteAsteroid(data.key);
+        console.log("deleting asteroid id: ", data.message.key);
+        handlers.AsteroidHandler.deleteAsteroid(data.message.key);
     }
 
     //------------------------------------------------------------------

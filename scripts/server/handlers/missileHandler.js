@@ -73,7 +73,7 @@ function missileHandler(){
                 id:id
             },
             owner:"player",
-            clientID:clientID
+            clientID: clientID
         });
             
         
@@ -86,19 +86,19 @@ function missileHandler(){
     that.createEnemyMissile = function(rotation, spaceState, missileSpeed){
         let vectorX = Math.cos(rotation);
         let vectorY = Math.sin(rotation);
-
+        
         let id = getNextID();
         let newMissile = missile.create({
             state : {
-                size:{width:.075, height:.025},
+                size: { width:.075, height:.025 },
                 momentum: {
                     x: vectorX * missileSpeed,
                     y: vectorY * missileSpeed
                 },
-                rotation:rotation,
-                maxSpeed:spaceState.maxSpeed + missileSpeed,
-                center: {x:spaceState.center.x,y:spaceState.center.y},
-                id:id
+                rotation: rotation,
+                maxSpeed: spaceState.maxSpeed + missileSpeed,
+                center: { x: spaceState.center.x, y: spaceState.center.y},
+                id: id
             },
             owner:"enemy",
             clientID: -1
@@ -110,18 +110,19 @@ function missileHandler(){
     }
 
     that.reset = function(){
-        missiles = [];
+        missiles = {};
     }
+
     that.deleteMissile = function(id){
         delete missiles[id];
         missilesDestroyed.push(id);
     }
 
     that.clearNewMissiles = function(){
-        newMissiles.length = 0;
+        newMissiles = [];
     }
     that.clearMissilesDestroyed = function(){
-        missilesDestroyed.length = 0;
+        missilesDestroyed = [];
     }
 
     

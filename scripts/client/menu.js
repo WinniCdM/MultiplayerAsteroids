@@ -37,10 +37,6 @@ MyGame.Menu = (function(){
                 that.Pop();
                 that.Pop();
                 break;
-            case "exit-game-over":
-                that.Pop();
-                that.Pop();
-                break;
             default:
                 break;        
         }         

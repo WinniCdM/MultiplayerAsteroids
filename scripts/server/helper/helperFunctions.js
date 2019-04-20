@@ -25,8 +25,25 @@ function numberPad(number, padding){
     return number.padStart(padding, '0');
 }
 
+//------------------------------------------------------------------
+//
+// Helper function to get the time
+//
+//------------------------------------------------------------------
 function getTime(){
     return performance.now();
+}
+
+//------------------------------------------------------------------
+//
+// Helper function to calculate the distance between two centers
+//
+//------------------------------------------------------------------
+function getDistance(center1, center2){
+    return Math.sqrt(
+        Math.pow(center2.x - center1.x, 2) +
+        Math.pow(center2.y - center1.y, 2)
+    );
 }
 
 //------------------------------------------------------------------
@@ -41,3 +58,4 @@ module.exports.generateNewRandomCenter = generateNewRandomCenter;
 module.exports.numberPad = numberPad;
 module.exports.generatePosNeg = generatePosNeg;
 module.exports.getTime = getTime;
+module.exports.getDistance = getDistance;

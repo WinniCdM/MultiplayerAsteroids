@@ -69,18 +69,18 @@ function asteroidHandler(){
     that.handleAsteroidBreak = function(oldAsteroid){
         if (oldAsteroid.asteroidSize === "large"){
             for (let i = 0; i < 3; i ++){
-                that.createNewAsteroidAtCenter("medium", oldAsteroid.center)
+                that.createNewAsteroidAtCenter("medium", oldAsteroid.state.center)
             }
         } else if (oldAsteroid.asteroidSize === "medium"){
             for (let i = 0; i < 4; i ++){
-                that.createNewAsteroidAtCenter("small", oldAsteroid.center)
+                that.createNewAsteroidAtCenter("small", oldAsteroid.state.center)
             }
         }
     }
 
     that.deleteAsteroid = function(id){
         delete asteroids[id];
-        deletedAsteroids.push(id);
+        deletedAsteroid.push(id);
     }
 
     that.clearNewAndDeletedAsteroids = function(){

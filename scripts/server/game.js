@@ -11,6 +11,7 @@ let AsteroidHandler = require('./handlers/asteroidsHandler');
 let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
+let CollisionHandler = require("./handlers/collisionHandler");
 
 const UPDATE_RATE_MS = 50;
 let quit = false;
@@ -23,6 +24,8 @@ let asteroidsHandler = AsteroidHandler.create();
 let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
 let powerupHandler = PowerupHandler.create();
+let collisionHandler = CollisionHandler.create(asteroidsHandler, missilesHandler, powerupHandler, ufosHandler, activeClients);
+
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -96,6 +99,7 @@ function update(elapsedTime) {
         activeClients[clientId].player.update(elapsedTime, false);
     }
     updateClients(elapsedTime);
+    collisionHandler.handleCollisions(elapsedTime);
 }
 
 //------------------------------------------------------------------
@@ -133,9 +137,9 @@ function updateClientsAboutMissiles(elapsedTime){
         for(let id in missilesHandler.newMissiles){
             let currNewMissile = missilesHandler.missiles[missilesHandler.newMissiles[id]];
             let message = {
-                state:currNewMissile.state,
-                owner:currNewMissile.owner,
-                clientID:currNewMissile.clientID
+                state: currNewMissile.state,
+                owner: currNewMissile.owner,
+                clientID: currNewMissile.clientID
             }
             transmitMessageToAllClients(message,'missile-new');
         }
