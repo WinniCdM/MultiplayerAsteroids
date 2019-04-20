@@ -20,7 +20,6 @@ MyGame.Menu = (function(){
             case "playgame-button":
                 that.Push(that.MenuItemsEnums.INGAME);
                 MyGame.main.handleJoinGame();
-                MyGame.main.initialize();
                 break;
             case "highscore-button":
                 that.Push(that.MenuItemsEnums.HIGHSCORES);
