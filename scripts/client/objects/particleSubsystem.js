@@ -21,7 +21,7 @@ MyGame.components.ParticleSubsystem = function(spec){
             let currParticle = particles[index];
             currParticle.update(elapsedTime);
 
-            if(particle.alive > particle.lifetime){
+            if(currParticle.alive > currParticle.lifetime){
                 particlesToDelete.push(index);
             }
         }
@@ -41,7 +41,7 @@ MyGame.components.ParticleSubsystem = function(spec){
     function create(){//need random working
         let size = MyGame.utilities.Random.nextGaussian(spec.size.mean, spec.size.stdev);
         if (spec.type === "cone"){
-            return TheGame.objects.Particle({
+            return MyGame.components.Particle({
                 center: { x: spec.center.x, y: spec.center.y },
                 size: { width: size, height: size },
                 direction: spec.direction, 
@@ -52,7 +52,7 @@ MyGame.components.ParticleSubsystem = function(spec){
                 type: spec.type
             });
         }
-        return TheGame.objects.Particle({
+        return MyGame.components.Particle({
             center: { x: spec.center.x, y: spec.center.y },
             size: { width: size, height: size },
             direction: MyGame.utilities.Random.nextCircleVector(), 

@@ -306,7 +306,6 @@ function informNewClientAboutExistingUFOs(clientSocket){
             type: "ufo-new",
             message: currFos.state
         })
-        console.log('old UFO message sent: ', currFos.state);
     }
 }
 

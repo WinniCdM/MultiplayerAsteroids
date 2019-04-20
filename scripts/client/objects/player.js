@@ -97,8 +97,8 @@ MyGame.components.Player = function() {
     //
     //------------------------------------------------------------------
     that.getThrustDirection = function(){
-        let vectorX = Math.cos(state.orientation);
-        let vectorY = Math.sin(state.orientation);
+        let vectorX = Math.cos(direction);
+        let vectorY = Math.sin(direction);
         return { x: -vectorX, y: -vectorY}
     }
 

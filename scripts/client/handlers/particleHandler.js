@@ -6,8 +6,8 @@ MyGame.handlers.ParticleHandler = (function(){
 
     that.update = function(elapsedTime){
         let subsystemsToDelete = [];
-        for (let index in localParticleSubsystems){
-            let currSubSys = localParticleSubsystems[index];
+        for (let index in that.localParticleSubsystems){
+            let currSubSys = that.localParticleSubsystems[index];
             currSubSys.update(elapsedTime);
 
             if (currSubSys.duration <= -10000){ // wait 10 seconds for particle effect to finish, then delete
@@ -17,28 +17,28 @@ MyGame.handlers.ParticleHandler = (function(){
         }
         
         for (let i = 0; i < subsystemsToDelete.length; i++){
-            localParticleSubsystems.splice(i, 1);
+            that.localParticleSubsystems.splice(i, 1);
         }
     }
 
     that.render = function(){
-        for(let index in localParticleSubsystems){
-            localParticleSubsystems[index].render();
+        for(let index in that.localParticleSubsystems){
+            that.localParticleSubsystems[index].render();
         }
     }
 
     that.resetLocal = function(elapsedTime){
-        localParticleSubsystems = [];
+        that.localParticleSubsystems = [];
     }
     that.resetGlobal = function(elapsedTime){
-        globalParticlSubsystems = [];
+        that.globalParticleSubsystems = [];
     }
 
     //Spec contains
     //center in Global World Units 0->10
     //type
     that.handleNewGlobalParticleSubsytem = function(spec){
-        globalParticleSubsystems.push(spec);
+        that.globalParticleSubsystems.push(spec);
     }
 
     //Spec contains:
@@ -47,33 +47,170 @@ MyGame.handlers.ParticleHandler = (function(){
     that.handlNewLocalParticleSubsystem = function(spec){
         switch (spec.type){
             case 'thrust':
-                createThrust(spec.center)
+                createThrust(spec.center);
                 break;
             case 'asteroid-breakup':
+                createAsteroidBreakup(spec.center);
+                //call sound manager here
                 break;
             case 'asteroid-destroyed':
+                createAsteroidDestroyed(spec.center);
+                //call sound manager here
                 break;
             case 'player-explosion':
+                createPlayerDestroyed(spec.center);
+                //call sound manager here
                 break;
             case 'ufo-explosion':
+                createUFODestroyed(spec.center);
+                //call sound manager here
                 break;
             case 'hyperspace':
+                createHyperspaceWarp(spec.center);
+                //call sound manager here
+                break;
+            case 'powerup-pickup':
+                createPowerupPickup(spec.center);
+                //call sound manager here
                 break;
         }
     }
 
     function createThrust(center){
-        localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['fire'],
+            numPerUpdate: 2,
+            duration: 50,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .00165, stdev: .00035 },
+            lifetime: { mean: 500, stdev: 100 },
+            direction: MyGame.main.playerSelf.model.getThrustDirection(),
+            type: "cone"
+        }));
+    }
+    function createAsteroidBreakup(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['asteroid'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+    }
+    function createAsteroidDestroyed(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['asteroid'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['fire'],
             numPerUpdate: 2,
             duration: 100,
             center: { x: center.x, y: center.y },
-            size: { mean: .1, stdev: .022 },
-            speed: { mean: .000165, stdev: .000035 },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
             lifetime: { mean: 500, stdev: 100 },
-            direction: MyGame.main.playerSelf.getThrustDirection(),
-            type: "cone"
+            type: "explosion"
         }));
     }
+    function createPlayerDestroyed(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['smoke'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['fire'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+    }
+    function createUFODestroyed(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['smoke'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['fire'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+    }
+    function createHyperspaceWarp(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['blue'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['white'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+    }
+    function createPowerupPickup(center){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['blue'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['white'],
+            numPerUpdate: 2,
+            duration: 100,
+            center: { x: center.x, y: center.y },
+            size: { mean: .05, stdev: .01},
+            speed: { mean: .003, stdev: .002 },
+            lifetime: { mean: 500, stdev: 100 },
+            type: "explosion"
+        }));
+    }
+    
     return that;
 }());

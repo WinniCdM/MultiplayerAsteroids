@@ -17,7 +17,7 @@ function ufoHandler(missileHandler,activeClients){
     let timeSinceLastSmallUFOSpawn = 0;
     let timeSinceLastLargeUFOSpawn = 0;
     let smallUFOSpawnRate = 60000;
-    let largeUFOSpawnRate = 4000;
+    let largeUFOSpawnRate = 40000;
 
     let nextID = 0;
     let newUFOs = [];

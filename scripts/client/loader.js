@@ -104,6 +104,18 @@ MyGame.loader = (function () {
             key: 'player-missile',
             source: 'assets/images/other/playermissile.png'
         }, {
+            key: 'fire',
+            source: 'assets/images/other/fire.png'
+        }, {
+            key: 'blue',
+            source: 'assets/images/other/blue.png'
+        }, {
+            key: 'smoke',
+            source: 'assets/images/other/smoke.png'
+        }, {
+            key: 'white',
+            source: 'assets/images/other/white.png'
+        }, {
             key: 'green-powerup',
             source: 'assets/images/powerups/green.png'
         }, {
