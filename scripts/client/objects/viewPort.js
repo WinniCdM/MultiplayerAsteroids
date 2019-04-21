@@ -177,7 +177,8 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
                 }
                 MyGame.handlers.ParticleHandler.handlNewLocalParticleSubsystem({
                     center: localCenter,
-                    type: currSystem.type
+                    type: currSystem.type,
+                    clientId: currSystem.clientId
                 })
             }
         }
@@ -215,6 +216,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
 
         return isWithinViewPort;
     }
+    
 
     return that;
 };

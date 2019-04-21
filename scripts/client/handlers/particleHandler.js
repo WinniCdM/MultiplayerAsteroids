@@ -50,6 +50,9 @@ MyGame.handlers.ParticleHandler = (function(){
             case 'thrust':
                 createThrust(spec.center);
                 break;
+            case 'other-thrust':
+                createOtherThrust(spec);
+                break;
             case 'asteroid-breakup':
                 createAsteroidBreakup(spec.center);
                 break;
@@ -81,6 +84,20 @@ MyGame.handlers.ParticleHandler = (function(){
             speed: { mean: .00165, stdev: .00035 },
             lifetime: { mean: 500, stdev: 100 },
             direction: MyGame.main.playerSelf.model.getThrustDirection(),
+            type: "cone"
+        }));
+    }
+    //This one is special, it needs the clientID as well as the center
+    function createOtherThrust(spec){
+        that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
+            texture: MyGame.assets['fire'],
+            numPerUpdate: 2,
+            duration: 50,
+            center: { x: spec.center.x, y: spec.center.y },
+            size: { mean: .025, stdev: .01},
+            speed: { mean: .00165, stdev: .00035 },
+            lifetime: { mean: 500, stdev: 100 },
+            direction: MyGame.main.playerOthers[spec.clientId].model.getThrustDirection(),
             type: "cone"
         }));
     }
