@@ -62,6 +62,9 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         playerLocalPosition.x = playerGlobalPosition.x - position.x 
         playerLocalPosition.y = playerGlobalPosition.y - position.y
 
+        let deltaX = 0;
+        let deltaY = 0;
+
         if (!initialSetupComplete){ // if the port hasn't been setup, center the player on the view port
             position.x = playerGlobalPosition.x - 1;
             position.y = playerGlobalPosition.y - .5
@@ -69,17 +72,22 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         }
 
         if (playerLocalPosition.x < slidingWindowMargin){ // nudge left
-            position.x -= slidingWindowMargin - playerLocalPosition.x; //nudges the viewport to the left
+            deltaX = slidingWindowMargin - playerLocalPosition.x;
+            position.x -= deltaX; //nudges the viewport to the left
             if (position.x < 0){ // if its beyond the left bound, return viewport to left bound, and do not update player local position
                 position.x = 0;
+                deltaX = 0;
             }
             else{   //else update player local position
                 playerLocalPosition.x = slidingWindowMargin;
             }
         } else if (playerLocalPosition.x > 2 - slidingWindowMargin){ // nudge right
-            position.x += playerLocalPosition.x - (2 - slidingWindowMargin); //nudges the viewport to the right
+            deltaX = playerLocalPosition.x - (2 - slidingWindowMargin);
+            position.x +=  deltaX;//nudges the viewport to the right
+            deltaX *= -1;
             if (position.x + 2 > 10){ // if its beyond the right bound, return viewport to left bound, and do not update player local position
                 position.x = 8;
+                deltaX = 0;
             }
             else{   //else update player local position
                 playerLocalPosition.x = 2 - slidingWindowMargin;
@@ -87,22 +95,30 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
         }
 
         if (playerLocalPosition.y < slidingWindowMargin){ // nudge up
-            position.y -= slidingWindowMargin - playerLocalPosition.y; //nudges the viewport up
+            deltaY = slidingWindowMargin - playerLocalPosition.y; 
+            position.y -= deltaY;//nudges the viewport up
             if (position.y < 0){ // if its beyond the north bound, return viewport to north bound, and do not update player local position
                 position.y = 0;
+                deltaY = 0
             }
             else{   //else update player local position
                 playerLocalPosition.y = slidingWindowMargin;
             }
         } else if (playerLocalPosition.y > 1 - slidingWindowMargin){ //nudge down
-            position.y += playerLocalPosition.y - (1 - slidingWindowMargin); //nudges the viewport down
+            deltaY = playerLocalPosition.y - (1 - slidingWindowMargin);
+            position.y += deltaY; //nudges the viewport down
+            deltaY *= -1;
             if (position.y + 1 > 10){ // if its beyond the south bound, return viewport to south bound, and do not update player local position
                 position.y = 9;
+                deltaY = 0;
             }
             else{   //else update player local position
                 playerLocalPosition.y = 1 - slidingWindowMargin;
             }
         }
+
+        MyGame.handlers.ParticleHandler.moveParticleSubsystems(deltaX,deltaY);
+        
     }
 
     //------------------------------------------------------------------
@@ -177,7 +193,8 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
                 }
                 MyGame.handlers.ParticleHandler.handlNewLocalParticleSubsystem({
                     center: localCenter,
-                    type: currSystem.type
+                    type: currSystem.type,
+                    clientId: currSystem.clientId
                 })
             }
         }
@@ -215,6 +232,7 @@ MyGame.components.ViewPort = function(playerGlobalPosition) {
 
         return isWithinViewPort;
     }
+    
 
     return that;
 };

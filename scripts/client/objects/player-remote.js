@@ -31,6 +31,7 @@ MyGame.components.PlayerRemote = function() {
     };
     that.username = '';
     that.score = 0;
+    that.clientId;
 
     that.crashed = false;
 
@@ -67,6 +68,21 @@ MyGame.components.PlayerRemote = function() {
             state.position.y -= ((state.position.y - goal.position.y) * updateFraction);
 
             goal.updateWindow -= goalTime;
+
+            //trying to simply call particle effect here. 
+            if(state.position !== goal.position){
+                let vectorX = Math.cos(state.direction);
+                let vectorY = Math.sin(state.direction);
+                MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                    center: {
+                        x:  state.position.x - (vectorX*.015),
+                        y:  state.position.y - (vectorY*.015)
+                    },
+                    type:'other-thrust',
+                    clientId: that.clientId, 
+        
+                });
+            }
         } else {
             // Ship is only floating along, only need to update its position
             state.position.x += (state.momentum.x * elapsedTime);
@@ -77,6 +93,15 @@ MyGame.components.PlayerRemote = function() {
         if (state.position.y < 0) { state.position.y = 0; state.momentum.y = 0; } //lower up bound
         if (state.position.y > 10) { state.position.y = 10; state.momentum.y = 0; } //upper down bound
     };
-
+    //------------------------------------------------------------------
+    //
+    // Public function that gives the direction of the thrust
+    //
+    //------------------------------------------------------------------
+    that.getThrustDirection = function(){
+        let vectorX = Math.cos(state.direction);
+        let vectorY = Math.sin(state.direction);
+        return { x: -vectorX, y: -vectorY}
+    }
     return that;
 };
