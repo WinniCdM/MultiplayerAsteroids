@@ -2,6 +2,7 @@ MyGame.handlers.StatusHandler = (function(graphics){
     'use strict';
     let that = {};
     let updates = [];
+    let reportedMessages = [];
 
     let UPDATE_TIMEOUT = 5000;
 
@@ -11,12 +12,15 @@ MyGame.handlers.StatusHandler = (function(graphics){
     let fillStyle = 'rgba(255, 255, 255, .3)';
 
 
-    that.createUpdate = function(message){
-        let newStatusUpdate = {
-            message: message,
-            time: UPDATE_TIMEOUT
+    that.createUpdate = function(message, multTimes){
+        if ((!reportedMessages.includes(message)) || multTimes){
+            let newStatusUpdate = {
+                message: message,
+                time: UPDATE_TIMEOUT
+            }
+            updates.push(newStatusUpdate);
+            reportedMessages.push(message);
         }
-        updates.push(newStatusUpdate);
     }
 
     that.update = function(elapsedTime){
