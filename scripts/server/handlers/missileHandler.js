@@ -62,7 +62,7 @@ function missileHandler(){
         let id = getNextID();
         let newMissile = missile.create({
             state : {
-                size:{width:.075, height:.025},
+                size:{width:.065, height:.015},
                 momentum: {
                     x: spaceState.momentum.x + (vectorX * missileSpeed),
                     y: spaceState.momentum.y + (vectorY * missileSpeed)
@@ -90,7 +90,7 @@ function missileHandler(){
         let id = getNextID();
         let newMissile = missile.create({
             state : {
-                size: { width:.075, height:.025 },
+                size: { width:.065, height:.015 },
                 momentum: {
                     x: vectorX * missileSpeed,
                     y: vectorY * missileSpeed
