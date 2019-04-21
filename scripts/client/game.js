@@ -196,6 +196,45 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
     //------------------------------------------------------------------
     //
+    // Checks to see if the current player has crashed and 
+    // triggers an explosion and sound
+    //
+    //------------------------------------------------------------------
+    function checkCrashed(playerModel, player){
+        if (playerModel.crashed){
+            if (player){
+                handlers.StatusHandler.createUpdate("You have crashed and been transported to a new body and ship. Shiny!", true);
+            }
+            else {
+                handlers.StatusHandler.createUpdate(playerModel.username + " bit the big one. Better them than you, right?", true);
+            }
+            playerModel.crashed = false;
+            //Call correct Audio
+            let position = null;
+            if (player){
+                position = { x: playerModel.position.x, y: playerModel.position.y }
+            } else {
+                position = { x: playerModel.state.position.x, y: playerModel.state.position.y }
+            }
+            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                type:'asteroid-explosion',
+                center:{
+                    x: position.x,
+                    y: position.y
+                }
+            })
+            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                type:'respawn',
+                center:{
+                    x: position.x,
+                    y: position.y
+                }
+            })
+        }
+    }
+
+    //------------------------------------------------------------------
+    //
     // Handler for receiving state updates about the self player.
     //
     //------------------------------------------------------------------
@@ -206,6 +245,9 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         playerSelf.model.position.y = data.position.y;
         playerSelf.model.direction = data.direction;
         playerSelf.model.score = data.score;
+        playerSelf.model.crashed = data.crashed;
+
+        checkCrashed(playerSelf.model, true);
 
         //
         // Remove messages from the queue up through the last one identified
@@ -271,6 +313,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
             model.score = data.score;
             model.username = data.username;
+            model.crashed = data.crashed;
+            checkCrashed(model, false);
             model.state.momentum.x = data.momentum.x;
             model.state.momentum.y = data.momentum.y
             model.goal.position.x = data.position.x;
@@ -525,6 +569,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
+            checkCrashed(playerOthers[id].model);
         }
 
         minimap.update();

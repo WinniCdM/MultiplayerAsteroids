@@ -6,8 +6,6 @@
 MyGame.renderer.PlayerRemote = (function(graphics) {
     'use strict';
     let that = {};
-
-    
     
     // ------------------------------------------------------------------
     //

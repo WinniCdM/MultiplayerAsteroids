@@ -82,7 +82,7 @@ MyGame.handlers.AudioHandler = (function(){
 
     that.playRespawn = function(){
         let respawn = MyGame.assets['respawn'];
-        playRespawn.load();
+        respawn.load();
         respawn.volume = 1;
         respawn.play();
     }
