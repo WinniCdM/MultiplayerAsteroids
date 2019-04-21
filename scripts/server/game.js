@@ -64,6 +64,9 @@ function processInput() {
             case 'join-game':
                 handleJoinGame(input);
                 break;
+            case 'hyperspace':
+                client.player.hyperspace(input);
+                break;
         }
     }
 }
@@ -262,7 +265,8 @@ function updateClients(elapsedTime) {
             position: client.player.position,
             username: client.player.username,
             score: client.player.score,
-            updateWindow: elapsedTime
+            hyperspaceJump: client.player.reportHyperspaceJump,
+            updateWindow: elapsedTime,
         };
         if (client.player.reportUpdate) {
             client.socket.emit('message', update);
@@ -282,6 +286,7 @@ function updateClients(elapsedTime) {
 
     for (let clientId in activeClients) {
         activeClients[clientId].player.reportUpdate = false;
+        activeClients[clientId].player.reportHyperspaceJump = false;
     }
     lastUpdateTime = present();
 }
@@ -455,9 +460,8 @@ function initializeSocketIO(httpServer) {
     
     io.on('connection', function(socket) {
         console.log('Connection established: ', socket.id);
-        //
         // Create an entry in our list of connected clients
-        let newPlayer = Player.create(missilesHandler,socket.id)
+        let newPlayer = Player.create(missilesHandler,asteroidsHandler,ufosHandler,socket.id)
         newPlayer.clientId = socket.id;
         activeClients[socket.id] = {
             socket: socket,

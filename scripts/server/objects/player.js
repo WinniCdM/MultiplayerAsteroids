@@ -14,7 +14,7 @@ let helper = require ('../helper/helperFunctions');
 // at some random location.
 //
 //------------------------------------------------------------------
-function createPlayer(MissileHandler,clientID) {
+function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
     let that = {};
 
     let position = {
@@ -41,6 +41,10 @@ function createPlayer(MissileHandler,clientID) {
     let missileSpeed = .001;
     let fireRate = 350;
     that.username = '';
+    that.inRespawn = false;
+    let hyperspaceRate = 15000;
+    let hyperspaceStatus = 15000;
+    that.reportHyperspaceJump = false;
 
     let rapidFire = false;
     let splitShot = false;
@@ -147,6 +151,12 @@ function createPlayer(MissileHandler,clientID) {
             elapsedTime -= lastUpdateDiff;
             lastUpdateDiff = 0;
         }
+        if(hyperspaceStatus < hyperspaceRate){
+            hyperspaceStatus += elapsedTime;
+        }
+        else{
+            hyperspaceStatus = hyperspaceRate;
+        }
 
         position.x += (momentum.x * elapsedTime);
         if (position.x < 0) { position.x = 0; momentum.x = 0; } //lower left bound
@@ -156,9 +166,33 @@ function createPlayer(MissileHandler,clientID) {
         if (position.y > 10) { position.y = 10; momentum.y = 0; } //upper down bound
     };
 
+
+    that.hyperspace = function(elapsedTime){
+        //reset location to a safe place
+        if(hyperspaceStatus >= hyperspaceRate && !that.inRespawn){
+            let newCenter = helper.findSafeSpot(
+                AsteroidHandler.aseroids,
+                UFOHandler.ufos,
+                MissileHandler.missiels);
+
+            position.x = newCenter.x;
+            position.y = newCenter.y;
+            hyperspaceStatus= 0;
+            reportUpdate = true;
+            momentum.x = 0;
+            momentum.y = 0;
+            that.reportHyperspaceJump = true;
+        }
+        
+    }
+
+
+
+
+
     //------------------------------------------------------------------
     //
-    // Function used to fire missiles.
+    // Functions used to fire missiles.
     //
     //------------------------------------------------------------------
     that.fire = function(elapsedTime) {
@@ -171,7 +205,7 @@ function createPlayer(MissileHandler,clientID) {
                     x:momentum.x,
                     y:momentum.y
                 },
-                maxSpeed: .002,//???
+                maxSpeed: .002,
                 center:{
                     x: position.x,
                     y: position.y
@@ -240,4 +274,12 @@ function createPlayer(MissileHandler,clientID) {
     return that;
 }
 
-module.exports.create = (MissileHandler,clientID) => createPlayer(MissileHandler,clientID);
+module.exports.create = (
+    MissileHandler,
+    AsteroidHandler,
+    UFOHandler,
+    clientID) => createPlayer(
+        MissileHandler,
+        AsteroidHandler,
+        UFOHandler,
+        clientID);

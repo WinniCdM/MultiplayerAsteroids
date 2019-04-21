@@ -21,6 +21,17 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         socket = io(),
         that = {};
 
+    let hyperspaceBar = components.HyperspaceBar({
+        value: 0,
+        maxVal: 15000,
+        size: { width: .35, height: .045 },
+        barColor: 'rgba(255, 255, 255, .5)',
+        barOutlineColor: 'rgba(255, 255, 255, .7)',
+        position: { x: .75, y: .01 },//ViewPort Units
+        text: 'Hyperspace',
+        font: "12pt \'Press Start 2P\'",
+    });
+
     Object.defineProperty(that, 'playerSelf', {
         get: () => playerSelf
     });
@@ -66,9 +77,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     break;
                 case 'update-self':
                     handleUpdateSelf(message.data);
+                    //hyperspace?
                     break;
                 case 'update-other':
                     handleUpdateOther(message.data);
+                    //hyperspace?
                     break;
                 case 'asteroid-new':
                     handleAsteroidNew(message.data);
@@ -222,6 +235,25 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             memory.enqueue(message);
         }
         messageHistory = memory;
+
+
+        if(data.hyperspaceJump){
+            playerSelf.model.hyperSpaceStatus = 0;
+            handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+            handlers.AudioHandler.handleNewGlobalAudio({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+        }
     }
 
     //------------------------------------------------------------------
@@ -245,6 +277,22 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             if (model.goal.position.y < 0) { model.goal.position.y = 0; model.state.momentum.y = 0; } //lower up bound
             if (model.goal.position.y > 10) { model.goal.position.y = 10; model.state.momentum.y = 0; } //upper down bound
             model.goal.direction = data.direction;
+        }
+        if(data.hyperspaceJump){
+            handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
+            handlers.AudioHandler.handleNewGlobalAudio({
+                center:{
+                    x: data.position.x,
+                    y: data.position.y
+                },
+                type: 'hyperspace'
+            });
         }
     }
 
@@ -435,6 +483,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         viewPort.update(elapsedTime);
         playerSelf.model.update(elapsedTime);
         handlers.ScoreHandler.update(elapsedTime);
+        hyperspaceBar.update(playerSelf.model.hyperSpaceStatus);
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
@@ -449,7 +498,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function render() {
         graphics.clear();
         renderer.ViewPort.render(viewPort); 
-        handlers.ScoreHandler.render();       
+        handlers.ScoreHandler.render();   
+        renderer.HyperspaceBar.render(hyperspaceBar);    
     }
 
     //------------------------------------------------------------------
@@ -527,6 +577,16 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                 messageHistory.enqueue(message);
             },
             ' ', true);
+        myKeyboard.registerHandler(elapsedTime => {
+                let message = {
+                    id: messageId++,
+                    elapsedTime: elapsedTime,
+                    type: 'hyperspace'
+                };
+                socket.emit('input', message);
+                messageHistory.enqueue(message);
+            },
+            'z', true);
 
         myKeyboard.registerHandler(
             () => MyGame.Menu.HandleEscPress(), 'Escape', true);
