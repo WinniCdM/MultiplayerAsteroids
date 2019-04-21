@@ -188,6 +188,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleDisconnectOther(data){
+        handlers.StatusHandler.createUpdate(playerOthers[data.clientId].model.username + " has disconnected");
         delete playerOthers[data.clientId];
     }
 
@@ -420,6 +421,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handlePowerupNew(data){
+        handlers.StatusHandler.createUpdate("A power up has appeared", true);
         MyGame.handlers.PowerupHandler.createPowerup(data);
     }
 
@@ -448,7 +450,22 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
             }
         })
 
+        handlers.StatusHandler.createUpdate(getPowerUpString(handlers.PowerupHandler.powerups[data.message.key].type), true);
+
         MyGame.handlers.PowerupHandler.deletePowerup(data.message.key);
+    }
+
+    function getPowerUpString(type){
+        switch (type){
+            case "no-shot":
+                return "Sucks to suck, looks like a player is without missiles for a bit"
+            case "rapid-fire":
+                return "A player has picked up a rapid fire boost. Pew pew"
+            case "spread-shot":
+                return "A player has picked up a spread shot boost. Fear them"
+            case "split-shot":
+                return "A player has picked up a split shot boost. Somehow, this is wrong"
+        }
     }
 
     //------------------------------------------------------------------
@@ -459,6 +476,22 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handleMissileDestroyed(data){
         MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of missile
     }
+
+    //------------------------------------------------------------------
+    //
+    // Process Score updates on the status menu
+    //
+    //------------------------------------------------------------------
+    function statusUpdateScores(){
+        for (let i in playerOthers){
+            let currPlayer = playerOthers[i];
+            let currPlayerScoreRounded = Math.floor(currPlayer.model.score/10000) * 10000
+            if (Math.floor(currPlayerScoreRounded / 10000) > 0){
+                handlers.StatusHandler.createUpdate(currPlayer.model.username + " has reached a score of: " + currPlayerScoreRounded, false);
+            }
+        }
+    }
+
     //------------------------------------------------------------------
     //
     // Process the registered input handlers here.
@@ -484,6 +517,9 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         playerSelf.model.update(elapsedTime);
         handlers.ScoreHandler.update(elapsedTime);
         hyperspaceBar.update(playerSelf.model.hyperSpaceStatus);
+        
+        statusUpdateScores();
+        handlers.StatusHandler.update(elapsedTime);
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
@@ -499,6 +535,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         graphics.clear();
         renderer.ViewPort.render(viewPort); 
         handlers.ScoreHandler.render();   
+        handlers.StatusHandler.render();    
         renderer.HyperspaceBar.render(hyperspaceBar);    
     }
 

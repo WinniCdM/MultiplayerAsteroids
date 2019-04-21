@@ -81,6 +81,7 @@ MyGame.loader = (function () {
                 'handlers/particleHandler',
                 'handlers/audioHandler',
                 'handlers/scoreHandler',
+                'handlers/statusHandler'
             ],
             message: 'Handlers loaded',
             onComplete: null
