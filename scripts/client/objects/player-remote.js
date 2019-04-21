@@ -68,9 +68,6 @@ MyGame.components.PlayerRemote = function() {
             goal.updateWindow -= goalTime;
 
             //trying to simply call particle effect here. 
-
-            console.log('state: ', state);
-            console.log('goal: ', goal);
             if(state.position !== goal.position){
                 let vectorX = Math.cos(state.direction);
                 let vectorY = Math.sin(state.direction);
