@@ -19,7 +19,7 @@ function asteroidHandler(){
     let deletedAsteroids = []; //list of ids
     let id = 0;
     
-    let asteroidGenerationRate = 3 / 10000; // however many every 10000 milliseconds
+    let asteroidGenerationRate = 1 / 10000; // however many every 10000 milliseconds
     let timeSinceLastAsteroid = 10000; // immediately spawn one
 
     Object.defineProperty(that, 'asteroids', {

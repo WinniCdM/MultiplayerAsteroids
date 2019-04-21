@@ -94,22 +94,22 @@ MyGame.loader = (function () {
         }],
         assetOrder = [{
             key: 'player-self',
-            source: 'assets/images/players/playerShip1_blue.png'
+            source: 'assets/images/players/playerShip2_blue.png'
         }, {
             key: 'player-other',
-            source: 'assets/images/players/playerShip1_red.png'
+            source: 'assets/images/players/playerShip2_red.png'
         }, {
             key: 'asteroid',
-            source: 'assets/images/other/asteroid.png'
+            source: 'assets/images/other/meteorGrey_big3.png'
         }, {
             key: 'ufo-1',
             source: 'assets/images/other/ufo1.png'
         }, {
             key: 'enemy-missile',
-            source: 'assets/images/other/enemymissile.png'
+            source: 'assets/images/other/laserRed01.png'
         }, {
             key: 'player-missile',
-            source: 'assets/images/other/playermissile.png'
+            source: 'assets/images/other/laserBlue01.png'
         }, {
             key: 'fire',
             source: 'assets/images/other/fire.png'

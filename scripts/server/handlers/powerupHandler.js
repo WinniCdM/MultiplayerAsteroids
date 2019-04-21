@@ -18,7 +18,7 @@ function powerupHandler(){
     let destroyedPowerups = [];
     let id = 0;
 
-    let powerupGenerationRate = 1 / 20000; // however many every 20000 milliseconds
+    let powerupGenerationRate = 1 / 30000; // however many every 20000 milliseconds
     let timeSinceLastPowerup = 0; 
 
     Object.defineProperty(that, 'powerups', {
