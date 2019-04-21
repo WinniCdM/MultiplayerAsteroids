@@ -33,6 +33,8 @@ MyGame.components.PlayerRemote = function() {
     that.score = 0;
     that.clientId;
 
+    that.crashed = false;
+
     Object.defineProperty(that, 'state', {
         get: () => state
     });

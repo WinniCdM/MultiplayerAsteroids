@@ -52,12 +52,17 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
 
     function playersAgainstEverythingElse(){
         let powerups = powerupHandler.powerups;
+        let missiles = missileHandler.missiles;
+        let ufos = ufoHandler.ufos;
+        let asteroids = asteroidHandler.asteroids;
+
         for (let id in players){
             let currPlayer = players[id].player;
             let currPlayerState = {
                 size: currPlayer.size,
                 center: currPlayer.position
             }
+
             // against powerups
             for (let i in powerups){
                 let currPowerup = powerups[i];
@@ -66,7 +71,52 @@ function collisionHandler(asteroidHandler, missileHandler, powerupHandler, ufoHa
                     powerupHandler.deletePowerup(i);
                 }
             }
+
+            // against ufos
+            for (let k in ufos){
+                let currUFO = ufos[k];
+                if (haveCollided(currUFO.state, currPlayerState)){
+                    currPlayer.score += calculateUFOScore(currUFO.isSmart);
+
+                    ufoHandler.deleteUFO(k);
+                    handlePlayerCollision(currPlayer);
+                }
+            }
+
+            //against asteroids
+            for (let j in asteroids){
+                let currAsteroid = asteroids[j];
+                if (haveCollided(currPlayerState, currAsteroid.state)){
+                    currPlayer.score += calculateAsteroidScore(currAsteroid.asteroidSize);
+
+                    asteroidHandler.handleAsteroidBreak(currAsteroid);
+                    asteroidHandler.deleteAsteroid(j);
+                    handlePlayerCollision(currPlayer);
+                }
+            }
+
+            //against missiles
+            for (let i in missiles){
+                let currMissile = missiles[i];
+                if (haveCollided(currMissile.state, currPlayerState)){
+                    if (currMissile.owner != "player"){
+                        missileHandler.deleteMissile(i);
+                        handlePlayerCollision(currPlayer);
+                    }
+                }
+            }
         }
+    }
+
+    function handlePlayerCollision(player){
+        player.score -= Math.floor(player.score * .20);
+        if (player.score < 0){
+            player.score = 0;
+        }
+        player.reset();
+
+        player.crashed = true;
+        player.reportUpdate = true;
     }
 
     function haveCollided(state1, state2){

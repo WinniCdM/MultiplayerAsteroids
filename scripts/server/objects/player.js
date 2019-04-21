@@ -17,9 +17,11 @@ let helper = require ('../helper/helperFunctions');
 function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
     let that = {};
 
+    let safePosition = helper.findSafeSpot(MissileHandler.missiles, AsteroidHandler.asteroids, UFOHandler.ufos);
+
     let position = {
-        x: random.nextRange(1, 8), // TODO: randomly generate a safe space for this.
-        y: random.nextRange(1, 9)
+        x: safePosition.x,
+        y: safePosition.y
     };
 
     let size = {
@@ -54,7 +56,8 @@ function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
     let powerupTime = 0;
 
     Object.defineProperty(that, 'momentum', {
-        get: () => momentum
+        get: () => momentum,
+        set: value => momentum = value
     });
 
     Object.defineProperty(that, 'direction', {
@@ -62,7 +65,8 @@ function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
     });
 
     Object.defineProperty(that, 'position', {
-        get: () => position
+        get: () => position,
+        set: value => position = value 
     });
 
     Object.defineProperty(that, 'size', {
@@ -186,10 +190,6 @@ function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
         
     }
 
-
-
-
-
     //------------------------------------------------------------------
     //
     // Functions used to fire missiles.
@@ -221,6 +221,7 @@ function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
                 normalFire(state);
             }
         }
+        crashed = false; //set back to false after crash occurred, really only for client side rendering/sound
 
     };
 
@@ -261,6 +262,17 @@ function createPlayer(MissileHandler, AsteroidHandler, UFOHandler,clientID) {
                 powerupTime = 60000;
                 break;
         }
+    }
+
+    that.reset = function(){
+        position = helper.findSafeSpot(
+            AsteroidHandler.aseroids,
+            UFOHandler.ufos,
+            MissileHandler.missiels);
+        momentum.x = 0;
+        momentum.y = 0;
+        direction = random.nextDouble() * 2 * Math.PI
+        resetPowerups();
     }
 
     function resetPowerups(){
