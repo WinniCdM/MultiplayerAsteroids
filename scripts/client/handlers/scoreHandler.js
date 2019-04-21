@@ -32,7 +32,7 @@ MyGame.handlers.ScoreHandler = (function () {
 
     that.render = function () {
         let center = {
-            x: 0.005,
+            x: 0.007,
             y: 0.005
         }
 
