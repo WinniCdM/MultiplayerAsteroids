@@ -459,6 +459,22 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     function handleMissileDestroyed(data){
         MyGame.handlers.MissileHandler.destroyMissile(data.message);//pass in only id of missile
     }
+
+    //------------------------------------------------------------------
+    //
+    // Process Score updates on the status menu
+    //
+    //------------------------------------------------------------------
+    function statusUpdateScores(){
+        for (let i in playerOthers){
+            let currPlayer = playerOthers[i];
+            let currPlayerScoreRounded = Math.floor(currPlayer.score/1000) * 1000
+            if (Math.floor(currPlayerScoreRounded / 1000) > 0){
+                handlers.StatusHandler.createUpdate(currPlayer.username + " has reached a score of: " + currPlayerScoreRounded);
+            }
+        }
+    }
+
     //------------------------------------------------------------------
     //
     // Process the registered input handlers here.
@@ -484,6 +500,9 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         playerSelf.model.update(elapsedTime);
         handlers.ScoreHandler.update(elapsedTime);
         hyperspaceBar.update(playerSelf.model.hyperSpaceStatus);
+        
+        statusUpdateScores();
+        handlers.StatusHandler.update(elapsedTime);
 
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
@@ -499,6 +518,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         graphics.clear();
         renderer.ViewPort.render(viewPort); 
         handlers.ScoreHandler.render();   
+        handlers.StatusHandler.render();    
         renderer.HyperspaceBar.render(hyperspaceBar);    
     }
 
