@@ -1,9 +1,12 @@
 MyGame.components.ParticleSubsystem = function(spec){
     let that = {};
     that.duration = spec.duration;
+    that.center = spec.center;
+    that.type = spec.type;
     let particles = [];
 
     let renderer = MyGame.renderer.ParticleSubSystem(MyGame.graphics,particles,spec.texture)
+
 
     that.update = function(elapsedTime){
         that.duration -= elapsedTime;
@@ -38,11 +41,11 @@ MyGame.components.ParticleSubsystem = function(spec){
 
 
 //Center and size need to be in ViewPort Units {x:0->2, y:0->1}
-    function create(){//need random working
+    function create(){
         let size = MyGame.utilities.Random.nextGaussian(spec.size.mean, spec.size.stdev);
         if (spec.type === "cone"){
             return MyGame.components.Particle({
-                center: { x: spec.center.x, y: spec.center.y },
+                center: { x: that.center.x, y: that.center.y },
                 size: { width: size, height: size },
                 direction: spec.direction, 
                 speed: MyGame.utilities.Random.nextGaussian(spec.speed.mean, spec.speed.stdev),
@@ -53,7 +56,7 @@ MyGame.components.ParticleSubsystem = function(spec){
             });
         }
         return MyGame.components.Particle({
-            center: { x: spec.center.x, y: spec.center.y },
+            center: { x: that.center.x, y: that.center.y },
             size: { width: size, height: size },
             direction: MyGame.utilities.Random.nextCircleVector(.1), 
             speed: MyGame.utilities.Random.nextGaussian(spec.speed.mean, spec.speed.stdev),

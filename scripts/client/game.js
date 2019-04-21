@@ -175,6 +175,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
 
         model.size.x = data.size.x;
         model.size.y = data.size.y;
+        model.clientId = data.clientId;
 
         playerOthers[data.clientId] = {
             model: model,
