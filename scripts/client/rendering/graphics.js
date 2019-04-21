@@ -185,9 +185,58 @@ MyGame.graphics = (function() {
         context.strokeStyle = spec.barOutlineColor;
         context.rect(localPosition.x, localPosition.y, localSize.width, localSize.height);
         context.stroke();
+        
+        context.restore();
+
+    }
+
+    function drawSquare(position,spec){
+        context.save();
+        // context.lineWidth = 6;
+        let localPosition = {
+            x: position.x/2 * canvas.width,
+            y: position.y * canvas.height
+        };
+        let localSize = {
+            width: spec.size.width * canvas.width / 2,
+            height: spec.size.height * canvas.height
+        };
+
+
+        //draw the inside
+        context.fillStyle = spec.fillStyle;
+        context.fillRect(localPosition.x,localPosition.y,localSize.width,localSize.height);
+
+        //draw the outline
+        context.beginPath();
+        context.strokeStyle = spec.strokeStyle;
+        context.rect(localPosition.x,localPosition.y,localSize.width,localSize.height);
+        context.stroke();
         context.restore();
     }
 
+    function drawCircle(center,spec){
+        
+        context.save();
+        let localCenter = {
+            x: center.x/2 * canvas.width,
+            y: center.y * canvas.height
+        }
+
+        let localRadius = spec.radius * canvas.height;
+
+        context.beginPath();
+        context.moveTo(localCenter.x + localRadius, localCenter.y + localRadius);
+        context.fillStyle = spec.fillStyle;
+        context.strokeStyle = spec.fillStyle;
+        context.arc(localCenter.x, localCenter.y, localRadius, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+
+
+
+        context.restore();
+    }
     return {
         clear: clear,
         saveContext: saveContext,
@@ -198,5 +247,7 @@ MyGame.graphics = (function() {
         drawSprite:drawSprite,
         drawText:drawText,
         drawProgressBar: drawProgressBar,
+        drawSquare:drawSquare,
+        drawCircle:drawCircle,
     };
 }());

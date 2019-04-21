@@ -31,6 +31,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         text: 'Hyperspace',
         font: "12pt \'Press Start 2P\'",
     });
+    let minimap = components.Minimap(viewPort,handlers);
 
     Object.defineProperty(that, 'playerSelf', {
         get: () => playerSelf
@@ -525,6 +526,8 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         for (let id in playerOthers) {
             playerOthers[id].model.update(elapsedTime);
         }
+
+        minimap.update();
     }
 
     //------------------------------------------------------------------
@@ -538,6 +541,7 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
         handlers.ScoreHandler.render();   
         handlers.StatusHandler.render();    
         renderer.HyperspaceBar.render(hyperspaceBar);    
+        renderer.Minimap.render(minimap);
     }
 
     //------------------------------------------------------------------

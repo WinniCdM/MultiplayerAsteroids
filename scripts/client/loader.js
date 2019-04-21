@@ -45,7 +45,8 @@ MyGame.loader = (function () {
                 'objects/powerup',
                 'objects/particleSubsystem',
                 'objects/particle',
-                'objects/hyperspaceBar'
+                'objects/hyperspaceBar',
+                'objects/minimap',
             ],
             message: 'Object models loaded',
             onComplete: null
@@ -68,7 +69,8 @@ MyGame.loader = (function () {
                 'rendering/powerup',
                 'rendering/missile',
                 'rendering/particleSubsystem',
-                'rendering/hyperspaceBar'
+                'rendering/hyperspaceBar',
+                'rendering/minimap',
             ],
             message: 'Renderers loaded',
             onComplete: null
