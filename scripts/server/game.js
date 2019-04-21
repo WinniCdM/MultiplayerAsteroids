@@ -173,6 +173,8 @@ function updateClientsAboutMissiles(elapsedTime){
 //------------------------------------------------------------------
 function updateClientsAboutAsteroids(elapsedTime){
     // new asteroids
+    let messageGroup = {};
+    let i = 0;
     let newAsteroids = asteroidsHandler.newAsteroids;
     for (let i in newAsteroids){
         if (asteroidsHandler.newAsteroids[i] in asteroidsHandler.asteroids){
@@ -182,10 +184,14 @@ function updateClientsAboutAsteroids(elapsedTime){
                 asteroidState: currNewAsteroid.state,
                 key: key
             }
-            transmitMessageToAllClients(message, 'asteroid-new');
+            messageGroup[i] = message;
+            i++
         }
     }
-
+    transmitMessageToAllClients(messageGroup, 'asteroid-new');
+    
+    messageGroup = {};
+    i=0;
     // deleted asteroids
     let deletedAsteroids = asteroidsHandler.deletedAsteroids;
     for (let i in deletedAsteroids){
@@ -193,8 +199,10 @@ function updateClientsAboutAsteroids(elapsedTime){
         let message = {
             key: key
         }
-        transmitMessageToAllClients(message, 'asteroid-delete');
+        messageGroup[i] = message
+        i++
     }
+    transmitMessageToAllClients(messageGroup, 'asteroid-delete');
 
     asteroidsHandler.clearNewAndDeletedAsteroids();
 }
@@ -302,6 +310,9 @@ function updateClients(elapsedTime) {
 //
 //------------------------------------------------------------------
 function informNewClientAboutExistingAsteroids(clientSocket){
+    let messageGroup = {};
+    let i = 0;
+
     let rocks = asteroidsHandler.asteroids;
     for( let key in rocks ){
         let currRock = rocks[key];
@@ -309,11 +320,12 @@ function informNewClientAboutExistingAsteroids(clientSocket){
             asteroidState: currRock.state,
             key: key
         }
-        clientSocket.emit('message', {
-            type: "asteroid-new",
-            message: message
-        });
+        messageGroup[i++] = message; 
     }
+    clientSocket.emit('message', {
+        type: "asteroid-new",
+        message: messageGroup
+    });
 }
 
 //------------------------------------------------------------------

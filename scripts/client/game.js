@@ -229,6 +229,13 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
                     x: position.x,
                     y: position.y
                 }
+            });
+            MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                type:'ufo-explosion',
+                center:{
+                    x: position.x,
+                    y: position.y
+                }
             })
         }
     }
@@ -349,7 +356,11 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidNew(data){
-        handlers.AsteroidHandler.createAsteroid(data.message);
+        for (let i in data.message){
+            if (data.message[i] != null){
+                handlers.AsteroidHandler.createAsteroid(data.message[i]);
+            }
+        }
     }
 
     //------------------------------------------------------------------
@@ -358,42 +369,44 @@ MyGame.main = (function(graphics, renderer, input, components, handlers) {
     //
     //------------------------------------------------------------------
     function handleAsteroidDelete(data){
-        //Call correct particle system
-        let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message.key];
+        for (let i in data.message){
+            //Call correct particle system
+            let asteroid = MyGame.handlers.AsteroidHandler.asteroids[data.message[i].key];
 
-        if (asteroid != null){
-            //Call correct Particle System
-            if(asteroid.state.size.width == .05){
-                MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
-                    type:'asteroid-destroyed',
-                    center:{
-                        x: asteroid.state.center.x,
-                        y: asteroid.state.center.y
-                    }
-                })
-            }
-            else{
-                MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
-                    type:'asteroid-breakup',
-                    center:{
-                        x: asteroid.state.center.x,
-                        y: asteroid.state.center.y
-                    }
-                })
-            }
-    
-            //Call correct Audio
-            MyGame.handlers.AudioHandler.handleNewGlobalAudio({
-                type:'asteroid-explosion',
-                center:{
-                    x: asteroid.state.center.x,
-                    y: asteroid.state.center.y
+            if (asteroid != null){
+                //Call correct Particle System
+                if(asteroid.state.size.width == .05){
+                    MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                        type:'asteroid-destroyed',
+                        center:{
+                            x: asteroid.state.center.x,
+                            y: asteroid.state.center.y
+                        }
+                    })
                 }
-            })
-        }
+                else{
+                    MyGame.handlers.ParticleHandler.handleNewGlobalParticleSubsytem({
+                        type:'asteroid-breakup',
+                        center:{
+                            x: asteroid.state.center.x,
+                            y: asteroid.state.center.y
+                        }
+                    })
+                }
 
-        //Delete Asteroid
-        handlers.AsteroidHandler.deleteAsteroid(data.message.key);
+                //Call correct Audio
+                MyGame.handlers.AudioHandler.handleNewGlobalAudio({
+                    type:'asteroid-explosion',
+                    center:{
+                        x: asteroid.state.center.x,
+                        y: asteroid.state.center.y
+                    }
+                })
+            }
+        
+            //Delete Asteroid
+            handlers.AsteroidHandler.deleteAsteroid(data.message[i].key);
+        }
     }
 
     //------------------------------------------------------------------
