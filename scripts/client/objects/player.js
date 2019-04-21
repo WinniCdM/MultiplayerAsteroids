@@ -23,6 +23,14 @@ MyGame.components.Player = function() {
     let thrustRate = 0;
     that.username = '';
     that.score = 0;
+    
+    let hyperSpaceStatus = 15000;
+    let hyperSpaceRate = 15000;
+
+    Object.defineProperty(that, 'hyperSpaceStatus', {
+        get: () => hyperSpaceStatus,
+        set: (value) => { hyperSpaceStatus = value }
+    });
 
     Object.defineProperty(that, 'momentum', {
         get: () => momentum
@@ -112,6 +120,11 @@ MyGame.components.Player = function() {
         position.y += (momentum.y * elapsedTime);
         if (position.y < 0) { position.y = 0; momentum.y = 0; } //lower up bound
         if (position.y > 10) { position.y = 10; momentum.y = 0; } //upper down bound
+
+        if (hyperSpaceStatus < hyperSpaceRate){
+            hyperSpaceStatus += elapsedTime;
+        }
+        else { hyperSpaceStatus = hyperSpaceRate; }
     };
 
     return that;

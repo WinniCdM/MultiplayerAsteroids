@@ -165,6 +165,28 @@ MyGame.graphics = (function() {
         context.restore();
     }
 
+    function drawProgressBar(spec){
+        context.save();
+        let localPosition = {
+            x: spec.position.x/2 * canvas.width,
+            y: spec.position.y * canvas.height
+        };
+        let localSize = {
+            width: spec.size.width * canvas.width / 2,
+            height: spec.size.height * canvas.height
+        };
+        //draw the bar
+        context.fillStyle = spec.barColor;
+        let fillVal = Math.min(Math.max(spec.value/spec.maxVal, 0), 1);
+        context.fillRect(localPosition.x, localPosition.y, fillVal * localSize.width, localSize.height);
+        
+        context.beginPath();
+        //draw the outline
+        context.strokeStyle = spec.barOutlineColor;
+        context.rect(localPosition.x, localPosition.y, localSize.width, localSize.height);
+        context.stroke();
+        context.restore();
+    }
 
     return {
         clear: clear,
@@ -175,5 +197,6 @@ MyGame.graphics = (function() {
         drawSubTexture:drawSubTexture,
         drawSprite:drawSprite,
         drawText:drawText,
+        drawProgressBar: drawProgressBar,
     };
 }());
