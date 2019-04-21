@@ -23,6 +23,8 @@ MyGame.components.Player = function() {
     let thrustRate = 0;
     that.username = '';
     that.score = 0;
+
+    that.crashed = false;
     
     let hyperSpaceStatus = 15000;
     let hyperSpaceRate = 15000;

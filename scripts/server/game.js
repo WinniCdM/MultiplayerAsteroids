@@ -82,6 +82,8 @@ function handleJoinGame(input){
         gameStarted = true;
     }
     activeClients[input.clientId].player.username = input.message.username;
+    activeClients[input.clientId].player.reset();
+    activeClients[input.clientId].player.score = 0;
     for (let id in activeClients){
         activeClients[id].player.reportUpdate = true;
     }
@@ -266,6 +268,7 @@ function updateClients(elapsedTime) {
             username: client.player.username,
             score: client.player.score,
             hyperspaceJump: client.player.reportHyperspaceJump,
+            crashed: client.player.crashed,
             updateWindow: elapsedTime,
         };
         if (client.player.reportUpdate) {
@@ -282,6 +285,7 @@ function updateClients(elapsedTime) {
                 }
             }
         }
+        if (client.player.crashed){ client.player.crashed = false; } //reset crashed after it was sent
     }
 
     for (let clientId in activeClients) {
