@@ -38,9 +38,7 @@ MyGame.handlers.ParticleHandler = (function(){
     that.moveParticleSubsystems = function(deltaX,deltaY){
         // console.log("moveX: ", deltaX, "   moveY: ", deltaY);
         for(let index in that.localParticleSubsystems){
-            console.log(that.localParticleSubsystems[index].type);
             if(that.localParticleSubsystems[index].type == 'explosion'){
-                console.log('got here');
                 that.localParticleSubsystems[index].center.x += deltaX;
                 that.localParticleSubsystems[index].center.y += deltaY;
             }
@@ -60,7 +58,7 @@ MyGame.handlers.ParticleHandler = (function(){
     that.handlNewLocalParticleSubsystem = function(spec){
         switch (spec.type){
             case 'thrust':
-                //createThrust(spec.center);
+                createThrust(spec.center);
                 break;
             case 'other-thrust':
                 createOtherThrust(spec);
@@ -117,7 +115,7 @@ MyGame.handlers.ParticleHandler = (function(){
         that.localParticleSubsystems.push(MyGame.components.ParticleSubsystem({
             texture: MyGame.assets['asteroid'],
             numPerUpdate: 2,
-            duration: 2000,
+            duration: 200,
             center: { x: center.x, y: center.y },
             size: { mean: .01, stdev: .01},
             speed: { mean: .00625, stdev: .0035 },
