@@ -48,40 +48,47 @@ MyGame.handlers.AudioHandler = (function(){
     that.resetLocal = function(elapsedTime){
         that.localAudio = [];
     }
+
     that.resetGlobal = function(elapsedTime){
         that.globalAudio = [];
     }
 
     that.playLaserShot = function(){
         let laserShot = MyGame.assets['laser'];
+        laserShot.load();
         laserShot.volume = .7;
         laserShot.play();
     }
     that.playEnemyLaserShot = function(){
         let enemyLaserShot = MyGame.assets['enemy-laser'];
+        enemyLaserShot.load();
         enemyLaserShot.volume = .7;
         enemyLaserShot.play();
     }
     that.playExplosion = function(){
         let explosion = MyGame.assets['explosion'];
+        explosion.load();
         explosion.volume = 1;
         explosion.play();
     }
 
     that.playAsteroidExplosion = function(){
         let explosion = MyGame.assets['asteroid-explosion'];
+        explosion.load();
         explosion.volume = 1;
         explosion.play();
     }
 
     that.playRespawn = function(){
         let respawn = MyGame.assets['respawn'];
+        playRespawn.load();
         respawn.volume = 1;
         respawn.play();
     }
 
     that.playHyperspace = function(){
         let hyperspace = MyGame.assets['hyperspace'];
+        hyperspace.load();
         hyperspace.volume = 1;
         hyperspace.play();
     }
