@@ -12,6 +12,7 @@ let UFOHandler = require('./handlers/ufoHandler');
 let MissileHandler = require('./handlers/missileHandler');
 let PowerupHandler = require("./handlers/powerupHandler");
 let CollisionHandler = require("./handlers/collisionHandler");
+let HighScoreHandler = require("./handlers/highScoreHandler");
 
 const UPDATE_RATE_MS = 50;
 let quit = false;
@@ -25,7 +26,7 @@ let missilesHandler = MissileHandler.createMissileHandler();
 let ufosHandler = UFOHandler.createUFOHandler(missilesHandler,activeClients);
 let powerupHandler = PowerupHandler.create();
 let collisionHandler = CollisionHandler.create(asteroidsHandler, missilesHandler, powerupHandler, ufosHandler, activeClients);
-
+let highScoreHandler = HighScoreHandler.create(activeClients);
 //------------------------------------------------------------------
 //
 // Process the network inputs we have received since the last time
@@ -108,6 +109,10 @@ function update(elapsedTime) {
     }
     updateClients(elapsedTime);
     collisionHandler.handleCollisions(elapsedTime);
+    highScoreHandler.update();
+    if(highScoreHandler.updatePlayers){
+        updateClientsAboutHighScores();
+    }
 }
 
 //------------------------------------------------------------------
@@ -249,6 +254,14 @@ function transmitMessageToAllClients(message, type){
     }
 }
 
+function updateClientsAboutHighScores(){
+
+    let message = {
+        highScores: highScoreHandler.highScores
+    }
+
+    transmitMessageToAllClients(message, 'high-scores');
+}
 
 //------------------------------------------------------------------
 //
@@ -499,6 +512,14 @@ function initializeSocketIO(httpServer) {
         informNewClientAboutExistingUFOs(socket);
         informNewClientAboutExistingMissiles(socket);
         informNewClientAboutExistingPowerups(socket);
+        //Send them highscores
+        let message = {
+            highScores: highScoreHandler.highScores
+        }
+        socket.emit('message',{
+            type: 'high-scores',
+            message:message
+        })
     });
 }
 
@@ -508,6 +529,7 @@ function initializeSocketIO(httpServer) {
 //
 //------------------------------------------------------------------
 function initialize(httpServer) {
+    highScoreHandler.loadHighScores();
     initializeSocketIO(httpServer);
     gameLoop(present(), 0);
 }
