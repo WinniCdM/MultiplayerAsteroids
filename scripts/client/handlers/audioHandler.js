@@ -1,5 +1,9 @@
 MyGame.handlers.AudioHandler = (function(){
     'use strict';
+    let mainTheme = MyGame.assets['main-music'];
+    mainTheme.loop = true;
+    mainTheme.volume = .6;
+    mainTheme.play();
 
     let that = {}
     that.localAudio = [];//list of types
@@ -29,11 +33,8 @@ MyGame.handlers.AudioHandler = (function(){
             }
         }
         that.resetLocal();
-        
     }
 
-
-    
     //spec contains:
     //center in Global World Units 0->10
     //type
